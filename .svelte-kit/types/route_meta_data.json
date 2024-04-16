@@ -1,0 +1,28 @@
+{
+	"/(sidebar)": [
+		"src/routes/(sidebar)/+page.js"
+	],
+	"/(no-sidebar)": [],
+	"/": [],
+	"/(sidebar)/crud/products": [],
+	"/(sidebar)/crud/users": [],
+	"/(sidebar)/dashboard": [
+		"src/routes/(sidebar)/dashboard/+page.js"
+	],
+	"/errors/[code]": [
+		"src/routes/errors/[code]/+page.js"
+	],
+	"/(sidebar)/layouts/sidebar": [
+		"src/routes/(sidebar)/layouts/sidebar/+page.js"
+	],
+	"/(no-sidebar)/layouts/stacked": [
+		"src/routes/(no-sidebar)/layouts/stacked/+page.js"
+	],
+	"/(no-layout)/pages/pricing": [],
+	"/(no-sidebar)/pages/[slug]": [
+		"src/routes/(no-sidebar)/pages/[slug]/+page.js"
+	],
+	"/(sidebar)/playground/sidebar": [],
+	"/(no-sidebar)/playground/stacked": [],
+	"/(sidebar)/settings": []
+}
