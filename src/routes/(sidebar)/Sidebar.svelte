@@ -56,9 +56,18 @@
 			icon: DatabaseOutline,
 			children: {
 				Historical: '/crud/products',
-				Realtime: '/crud/users'
+				Realtime: '/crud/users',
 			}
 		},
+		{
+			name:'Semantic Web', icon: MagicWandSolid, href: '/crud/semantic-web'
+		},
+		{
+			name:'Discovery', icon: LockSolid, href: '/crud/discovery'
+		},
+		{
+			name:'Insights', icon: LifeSaverSolid, href:'/crud/insights'
+		}
 	];
 
 	let links = [
