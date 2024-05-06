@@ -25,8 +25,8 @@ body:
   - type: textarea
     id: system-info
     attributes:
-      label: Flowbite version and System Info
-      description: Output of `npx envinfo --system --npmPackages svelte,@sveltejs/kit,flowbite-svelte,flowbite-svelte-icons,tailwind,tailwind-merge,vite,rollup,webpack --binaries --browsers`
+      label: Querent version and System Info
+      description: Output of `npx envinfo --system --npmPackages svelte,@sveltejs/kit,querent-svelte,querent-svelte-icons,tailwind,tailwind-merge,vite,rollup,webpack --binaries --browsers`
       render: shell
       placeholder: Version, System, Binaries, Browsers
     validations:
