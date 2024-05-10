@@ -55,7 +55,7 @@
 			name: 'Data Sources',
 			icon: DatabaseOutline,
 			children: {
-				Historical: '/crud/products',
+				Historical: '/crud/collectors/',
 				Realtime: '/crud/users',
 			}
 		},

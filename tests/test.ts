@@ -17,7 +17,7 @@ test('layout stacked page has expected h3', async ({ page }) => {
 
 // CRUD
 test('products page has expected h1', async ({ page }) => {
-	await page.goto('crud/products');
+	await page.goto('crud/collectors');
 	expect(await page.textContent('h1')).toContain('All users');
 });
 
