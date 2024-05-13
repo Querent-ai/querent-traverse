@@ -8,7 +8,7 @@
         "formComponent": "AzureForm"
     },
     {
-        "name": "GoogleDrive",
+        "name": "Google Drive",
         "formComponent": "DriveForm"
     },
     {

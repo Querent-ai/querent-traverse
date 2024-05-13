@@ -46,7 +46,7 @@
 			/>
 		</Label>
 
-		<div class="bottom-0 left-0 flex w-full justify-center space-x-4 pb-4 md:absolute md:px-4">
+		<div class="flex w-full justify-center space-x-4 pb-4">
 			<Button type="submit" class="w-full">Save Configuration</Button>
 			<Button color="alternative" class="w-full" on:click={() => (hidden = true)}>
 				<CloseSolid />
