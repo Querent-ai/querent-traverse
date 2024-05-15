@@ -29,6 +29,16 @@
   const title: string = 'Querent Admin Dashboard - Collectors';
   const subtitle: string = 'Collectors';
   let collectors_list: any[] = [];
+    function handleCollectorSaved(event: { detail: { name: any; technology: any; description: any; }; }) {
+		console.log("Event details ",event.detail);
+        collectors_list.push({
+            name: event.detail.name,
+            technology: event.detail.technology,
+            description: event.detail.description
+        });
+		collectors_list = collectors_list;
+    }
+  
 </script>
 
 <MetaTag {path} {description} {title} {subtitle} />
@@ -115,5 +125,9 @@
 </main>
 
 <Drawer placement="right" transitionType="fly" bind:hidden>
-	<svelte:component this={drawerComponent} bind:hidden />
+    {#if drawerComponent === CollectorsList}
+        <CollectorsList bind:hidden={hidden} on:collectorSaved={handleCollectorSaved} />
+    {:else}
+        <svelte:component this={drawerComponent} bind:hidden={hidden} />
+    {/if}
 </Drawer>

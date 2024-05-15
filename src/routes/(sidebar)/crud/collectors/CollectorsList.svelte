@@ -1,6 +1,17 @@
-<script>
-// @ts-nocheck
+<script lang="ts">
+    import { createEventDispatcher, SvelteComponent} from 'svelte';
+    const dispatch = createEventDispatcher();
 
+    function handleSave(event: { detail: { name: any; technology: any; description: any; }; }) {
+        // Dispatch the event upwards with more details if needed
+        console.log(event.detail)
+        dispatch('collectorSaved', {
+            name: event.detail.name,
+            technology: "GCS",  // This could be dynamic based on the form used
+            description: "Configured GCS Collector"
+        });
+    }
+    export let hidden: boolean;
     import Collectors from '../../../data/collectors.json';
     import DriveForm from './Drive.svelte';
     import AzureForm from './Azure.svelte';
@@ -13,10 +24,15 @@
     import SlackForm from './Slack.svelte';
     import NewsForm from './News.svelte';
     import CollectorComponent from '../../../data/collector-component.json';
+	import { Drawer } from 'flowbite-svelte';
 
-    let selectedCollector = null;
+    let selectedCollector: null = null;
 
-    const formComponents = {
+    interface FormComponents {
+        [key: string]: typeof SvelteComponent<any, any, any>;
+    }
+
+    const formComponents: FormComponents = {
         'AWSForm': S3Form,
         'AzureForm': AzureForm,
         'DriveForm': DriveForm,
@@ -29,11 +45,13 @@
         'SlackForm': SlackForm,
     };
 
-    function getFormComponent(name) {
+    function getFormComponent(name: string) {
       const entry = CollectorComponent.find(c => c.name === name);
       return entry ? formComponents[entry.formComponent] : null;
     }
 </script>
+
+
 
 <style>
     .form-container {
@@ -54,7 +72,7 @@
 {#if selectedCollector}
     <div class="form-container">
         {#if getFormComponent(selectedCollector)}
-            <svelte:component this={getFormComponent(selectedCollector)} />
+            <svelte:component this={getFormComponent(selectedCollector)} bind:hidden={hidden} on:saveCollector={handleSave} />
         {/if}
     </div>
 {/if}

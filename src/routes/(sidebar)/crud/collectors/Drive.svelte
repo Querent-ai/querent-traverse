@@ -2,6 +2,24 @@
 	import { Button, CloseButton, Heading, Input, Label, Select, Textarea } from 'flowbite-svelte';
 	import { CloseSolid } from 'flowbite-svelte-icons';
 	export let hidden: boolean = true; // modal control
+
+	import { createEventDispatcher } from 'svelte';
+	const dispatch = createEventDispatcher();
+    
+    export let collectorName: string = 'Google Drive'; // this should be passed as a prop for reusability
+    
+    let bucketName: string = '';
+    let credentials: string = '';
+
+    function saveConfiguration() {
+        // Dispatch event with collected data
+        dispatch('saveCollector', {
+            name: collectorName,
+            technology: 'Google',
+            description: 'Configured Google Drive: ' + bucketName
+        });
+        hidden = true; // Optionally close the modal/form after saving
+    }
 </script>
 
 <Heading tag="h5" class="mb-6 text-sm font-semibold uppercase">Configure Drive Collector</Heading>
