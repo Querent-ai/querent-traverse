@@ -13,6 +13,7 @@
 			configuration: event.detail.configuration
 		});
 	}
+	// Exported for use in parent components
 	export let configuration: {};
 	export let hidden: boolean;
 	import Collectors from '../../../data/collectors.json';
