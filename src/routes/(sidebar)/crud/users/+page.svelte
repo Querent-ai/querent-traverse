@@ -18,13 +18,12 @@
 	};
 
 	const path: string = '/crud/collectors';
-  const description: string = 'CRUD products examaple - Querent Admin Dashboard';
-  const title: string = 'Querent Admin Dashboard - CRUD Products';
-  const subtitle: string = 'CRUD Products';
+	const description: string = 'CRUD products examaple - Querent Admin Dashboard';
+	const title: string = 'Querent Admin Dashboard - CRUD Products';
+	const subtitle: string = 'CRUD Products';
 </script>
 
 <MetaTag {path} {description} {title} {subtitle} />
-
 
 <main class="relative h-full w-full overflow-y-auto bg-white dark:bg-gray-800">
 	<div class="p-4">
@@ -63,7 +62,6 @@
 			>
 				<DotsVerticalSolid size="lg" />
 			</ToolbarButton>
-
 		</Toolbar>
 	</div>
 	<Table>
@@ -72,29 +70,30 @@
 			{#each ['Product Name', 'Company', 'Description'] as title}
 				<TableHeadCell class="ps-4 font-normal">{title}</TableHeadCell>
 			{/each}
-			<TableHeadCell class="ps-4 pe-100 font-normal text-right">Actions</TableHeadCell>
+			<TableHeadCell class="pe-100 ps-4 text-right font-normal">Actions</TableHeadCell>
 		</TableHead>
 		<TableBody>
 			{#each RealtimeCollectors as collector}
 				<TableBodyRow class="text-base">
-				<TableBodyCell class="w-4 p-4"><Checkbox /></TableBodyCell>
-				<TableBodyCell class="flex items-center space-x-6 whitespace-nowrap p-4">
-					<div class="text-sm font-normal text-gray-500 dark:text-gray-400">
-					<div class="text-base font-semibold text-gray-900 dark:text-white">
-						{collector.name}
-					</div>
-					</div>
-				</TableBodyCell>
-				<TableBodyCell class="p-4">{collector.technology}</TableBodyCell>
-				<TableBodyCell
-					class="max-w-md overflow-hidden truncate p-4 text-base font-normal text-gray-500 dark:text-gray-400 xl:max-w-lg"
-				>{collector.description}</TableBodyCell>
+					<TableBodyCell class="w-4 p-4"><Checkbox /></TableBodyCell>
+					<TableBodyCell class="flex items-center space-x-6 whitespace-nowrap p-4">
+						<div class="text-sm font-normal text-gray-500 dark:text-gray-400">
+							<div class="text-base font-semibold text-gray-900 dark:text-white">
+								{collector.name}
+							</div>
+						</div>
+					</TableBodyCell>
+					<TableBodyCell class="p-4">{collector.technology}</TableBodyCell>
+					<TableBodyCell
+						class="max-w-md overflow-hidden truncate p-4 text-base font-normal text-gray-500 dark:text-gray-400 xl:max-w-lg"
+						>{collector.description}</TableBodyCell
+					>
 
-				<TableBodyCell class="flex justify-end space-x-2 p-4">
-					<Button size="sm" class="gap-2 px-3" on:click={() => toggle(Collector)}>
-					<EditOutline size="sm" /> Add
-					</Button>
-				</TableBodyCell>
+					<TableBodyCell class="flex justify-end space-x-2 p-4">
+						<Button size="sm" class="gap-2 px-3" on:click={() => toggle(Collector)}>
+							<EditOutline size="sm" /> Add
+						</Button>
+					</TableBodyCell>
 				</TableBodyRow>
 			{/each}
 		</TableBody>

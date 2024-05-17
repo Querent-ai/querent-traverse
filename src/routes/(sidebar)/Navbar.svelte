@@ -29,11 +29,7 @@
 			class="m-0 me-3 md:block lg:hidden"
 		/>
 		<NavBrand href="/" class={list ? 'w-40' : 'lg:w-60'}>
-			<img
-				src="/images/querent-horizontol-blue.svg"
-				class="me-2.5 h-6 sm:h-8"
-				alt="Querent Logo"
-			/>
+			<img src="/images/querent-horizontol-blue.svg" class="me-2.5 h-6 sm:h-8" alt="Querent Logo" />
 			<span
 				class="ml-px self-center whitespace-nowrap text-xl font-semibold dark:text-white sm:text-2xl"
 			>
@@ -62,7 +58,6 @@
 				</form>
 			{/if}
 		</div>
-		<div class="ms-auto flex items-center text-gray-500 dark:text-gray-400 sm:order-2">
-		</div>
+		<div class="ms-auto flex items-center text-gray-500 dark:text-gray-400 sm:order-2"></div>
 	</NavContainer>
 </Navbar>

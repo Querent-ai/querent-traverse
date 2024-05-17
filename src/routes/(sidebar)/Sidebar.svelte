@@ -56,17 +56,23 @@
 			icon: DatabaseOutline,
 			children: {
 				Historical: '/crud/collectors/',
-				Realtime: '/crud/users',
+				Realtime: '/crud/users'
 			}
 		},
 		{
-			name:'Semantic Web', icon: MagicWandSolid, href: '/crud/semantic-web'
+			name: 'Semantic Web',
+			icon: MagicWandSolid,
+			href: '/crud/semantic-web'
 		},
 		{
-			name:'Discovery', icon: LockSolid, href: '/crud/discovery'
+			name: 'Discovery',
+			icon: LockSolid,
+			href: '/crud/discovery'
 		},
 		{
-			name:'Insights', icon: LifeSaverSolid, href:'/crud/insights'
+			name: 'Insights',
+			icon: LifeSaverSolid,
+			href: '/crud/insights'
 		}
 	];
 

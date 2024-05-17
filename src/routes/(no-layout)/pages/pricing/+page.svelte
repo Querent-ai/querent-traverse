@@ -16,9 +16,9 @@
 	import MetaTag from '../../../utils/MetaTag.svelte';
 
 	const path: string = '/pages/pricing';
-  const description: string = 'Pricing examaple - Querent Admin Dashboard';
-  const title: string = 'Querent Admin Dashboard - Pricing';
-  const subtitle: string = 'Pricing';
+	const description: string = 'Pricing examaple - Querent Admin Dashboard';
+	const title: string = 'Querent Admin Dashboard - Pricing';
+	const subtitle: string = 'Pricing';
 </script>
 
 <MetaTag {path} {description} {title} {subtitle} />
@@ -29,8 +29,7 @@
 >
 	<NavBrand href="/">
 		<img src="/images/flowbite-svelte-icon-logo.svg" class="me-3 h-6 sm:h-9" alt="Querent Logo" />
-		<span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white">Querent</span
-		>
+		<span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white">Querent</span>
 	</NavBrand>
 	<NavHamburger />
 	<NavUl class="me-auto ms-8">

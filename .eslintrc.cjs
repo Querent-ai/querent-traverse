@@ -8,10 +8,7 @@ module.exports = {
 		'prettier'
 	],
 	parser: '@typescript-eslint/parser',
-	plugins: [
-		'@typescript-eslint', 
-		'svelte3',
-		'prettier'],
+	plugins: ['@typescript-eslint', 'svelte3', 'prettier'],
 	parserOptions: {
 		sourceType: 'module',
 		ecmaVersion: 2020,
@@ -32,6 +29,6 @@ module.exports = {
 		}
 	],
 	settings: {
-        'svelte3/ignore-styles': () => true
-    },
+		'svelte3/ignore-styles': () => true
+	}
 };

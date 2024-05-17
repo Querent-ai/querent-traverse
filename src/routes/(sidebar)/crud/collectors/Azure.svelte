@@ -5,48 +5,48 @@
 
 	import { createEventDispatcher } from 'svelte';
 	const dispatch = createEventDispatcher();
-    
-    export let collectorName: string = 'Azure'; // this should be passed as a prop for reusability
-    
-    let account_url: string = '';
-    let connection_url: string = '';
+
+	export let collectorName: string = 'Azure'; // this should be passed as a prop for reusability
+
+	let account_url: string = '';
+	let connection_url: string = '';
 	let credentials: string = '';
 	let container: string = '';
 	let prefix: string = '';
 
-	export let configuration: { 
-		'Connection URL': string, 
-		'Account URL': string,
-		'Credentials': string,
-		'Container': string,
-		'Prefix': string
+	export let configuration: {
+		'Connection URL': string;
+		'Account URL': string;
+		Credentials: string;
+		Container: string;
+		Prefix: string;
 	};
 	$: {
-        if (configuration) {
-            account_url = configuration['Account URL'] || '';
-            connection_url = configuration['Connection URL'] || '';
+		if (configuration) {
+			account_url = configuration['Account URL'] || '';
+			connection_url = configuration['Connection URL'] || '';
 			credentials = configuration['Credentials'] || '';
 			container = configuration['Container'] || '';
 			prefix = configuration['Prefix'] || '';
-        }
-    }
+		}
+	}
 
-    function saveConfiguration() {
-        // Dispatch event with collected data
-        dispatch('saveCollector', {
-            name: collectorName,
-            technology: 'Azure',
-            description: 'Configured Azure bucket',
+	function saveConfiguration() {
+		// Dispatch event with collected data
+		dispatch('saveCollector', {
+			name: collectorName,
+			technology: 'Azure',
+			description: 'Configured Azure bucket',
 			configuration: {
 				'Connection URL': connection_url,
 				'Account URL': account_url,
-				'Credentials': credentials,
-				'Container': container,
-				'Prefix': prefix,
+				Credentials: credentials,
+				Container: container,
+				Prefix: prefix
 			}
-        });
-        hidden = true; // Optionally close the modal/form after saving
-    }
+		});
+		hidden = true; // Optionally close the modal/form after saving
+	}
 </script>
 
 <Heading tag="h5" class="mb-6 text-sm font-semibold uppercase">Configure Azure Collector</Heading>
@@ -69,10 +69,15 @@
 
 		<Label class="space-y-2">
 			<span>Account URL</span>
-			<Input bind:value={account_url} class="border font-normal outline-none" placeholder="Type account url" required />
+			<Input
+				bind:value={account_url}
+				class="border font-normal outline-none"
+				placeholder="Type account url"
+				required
+			/>
 		</Label>
 
-        <Label class="space-y-2">
+		<Label class="space-y-2">
 			<span>Credentials</span>
 			<Input
 				bind:value={credentials}
@@ -81,7 +86,7 @@
 				required
 			/>
 		</Label>
-        <Label class="space-y-2">
+		<Label class="space-y-2">
 			<span>Container</span>
 			<Input
 				bind:value={container}
@@ -90,7 +95,7 @@
 				required
 			/>
 		</Label>
-        <Label class="space-y-2">
+		<Label class="space-y-2">
 			<span>Prefix</span>
 			<Input
 				bind:value={prefix}
@@ -107,6 +112,5 @@
 				Cancel
 			</Button>
 		</div>
-
 	</div>
 </form>

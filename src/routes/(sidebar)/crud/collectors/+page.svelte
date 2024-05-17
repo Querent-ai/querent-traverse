@@ -42,41 +42,41 @@
 	};
 	const nameToCollector: CollectorComponents = {
 		'Google Cloud Storage': GCSForm,
-		'Azure': AzureForm,
+		Azure: AzureForm,
 		'Google Drive': DriveForm,
-		'Dropbox': DropboxForm,
-		'Email': EmailForm,
-		'Github': GithubForm,
-		'Jira': JiraForm,
-		'News': NewsForm,
+		Dropbox: DropboxForm,
+		Email: EmailForm,
+		Github: GithubForm,
+		Jira: JiraForm,
+		News: NewsForm,
 		'AWS S3': AWSForm,
-		'Slack': SlackForm,
-	}
+		Slack: SlackForm
+	};
 
 	const path: string = '/crud/collectors';
 	const description: string = 'Collectors examaple - Querent Admin Dashboard';
 	const title: string = 'Querent Admin Dashboard - Collectors';
 	const subtitle: string = 'Collectors';
 	let collectors_list: any[] = [];
-    function handleCollectorSaved(event: { detail: { name: any; technology: any; description: any; configuration: any; }; }) {
-        collectors_list.push({
-            name: event.detail.name,
-            technology: event.detail.technology,
-            description: event.detail.description,
-			configuration: event.detail.configuration,
-        });
+	function handleCollectorSaved(event: {
+		detail: { name: any; technology: any; description: any; configuration: any };
+	}) {
+		collectors_list.push({
+			name: event.detail.name,
+			technology: event.detail.technology,
+			description: event.detail.description,
+			configuration: event.detail.configuration
+		});
 		configuration = configuration;
 		collectors_list = collectors_list;
-    }
+	}
 	function getComponent(name: string): typeof SvelteComponent | undefined {
-		console.log(name)
+		console.log(name);
 		return nameToCollector[name as keyof typeof nameToCollector] || undefined;
 	}
-  
 </script>
 
 <MetaTag {path} {description} {title} {subtitle} />
-
 
 <main class="relative h-full w-full overflow-y-auto bg-white dark:bg-gray-800">
 	<div class="p-4">
@@ -119,8 +119,6 @@
 			<div slot="end" class="space-x-2">
 				<Button class="whitespace-nowrap" on:click={toggleList}>Add new collector</Button>
 			</div>
-
-			
 		</Toolbar>
 	</div>
 	<Table>
@@ -129,29 +127,34 @@
 			{#each ['Collector', 'Company', 'Description'] as title}
 				<TableHeadCell class="ps-4 font-normal">{title}</TableHeadCell>
 			{/each}
-			<TableHeadCell class="ps-4 pe-100 font-normal text-right">Actions</TableHeadCell>
+			<TableHeadCell class="pe-100 ps-4 text-right font-normal">Actions</TableHeadCell>
 		</TableHead>
 		<TableBody>
 			{#each collectors_list as collector}
 				<TableBodyRow class="text-base">
-				<TableBodyCell class="w-4 p-4"><Checkbox /></TableBodyCell>
-				<TableBodyCell class="flex items-center space-x-6 whitespace-nowrap p-4">
-					<div class="text-sm font-normal text-gray-500 dark:text-gray-400">
-					<div class="text-base font-semibold text-gray-900 dark:text-white">
-						{collector.name}
-					</div>
-					</div>
-				</TableBodyCell>
-				<TableBodyCell class="p-4">{collector.technology}</TableBodyCell>
-				<TableBodyCell
-					class="max-w-md overflow-hidden truncate p-4 text-base font-normal text-gray-500 dark:text-gray-400 xl:max-w-lg"
-				>{collector.description}</TableBodyCell>
+					<TableBodyCell class="w-4 p-4"><Checkbox /></TableBodyCell>
+					<TableBodyCell class="flex items-center space-x-6 whitespace-nowrap p-4">
+						<div class="text-sm font-normal text-gray-500 dark:text-gray-400">
+							<div class="text-base font-semibold text-gray-900 dark:text-white">
+								{collector.name}
+							</div>
+						</div>
+					</TableBodyCell>
+					<TableBodyCell class="p-4">{collector.technology}</TableBodyCell>
+					<TableBodyCell
+						class="max-w-md overflow-hidden truncate p-4 text-base font-normal text-gray-500 dark:text-gray-400 xl:max-w-lg"
+						>{collector.description}</TableBodyCell
+					>
 
-				<TableBodyCell class="flex justify-end space-x-2 p-4">
-					<Button size="sm" class="gap-2 px-3" on:click={() => toggle(getComponent(collector.name), collector.configuration)}>
-						<EditOutline size="sm" /> Edit
-					</Button>
-				</TableBodyCell>
+					<TableBodyCell class="flex justify-end space-x-2 p-4">
+						<Button
+							size="sm"
+							class="gap-2 px-3"
+							on:click={() => toggle(getComponent(collector.name), collector.configuration)}
+						>
+							<EditOutline size="sm" /> Edit
+						</Button>
+					</TableBodyCell>
 				</TableBodyRow>
 			{/each}
 		</TableBody>
@@ -159,9 +162,9 @@
 </main>
 
 <Drawer placement="right" transitionType="fly" bind:hidden>
-    {#if drawerComponent === CollectorsList}
-        <CollectorsList bind:hidden={hidden} bind:configuration={configuration} on:collectorSaved={handleCollectorSaved} />
-    {:else}
-        <svelte:component this={drawerComponent} bind:hidden={hidden} bind:configuration={configuration} />
-    {/if}
+	{#if drawerComponent === CollectorsList}
+		<CollectorsList bind:hidden bind:configuration on:collectorSaved={handleCollectorSaved} />
+	{:else}
+		<svelte:component this={drawerComponent} bind:hidden bind:configuration />
+	{/if}
 </Drawer>
