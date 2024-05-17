@@ -5,44 +5,44 @@
 
 	import { createEventDispatcher } from 'svelte';
 	const dispatch = createEventDispatcher();
-    
-    export let collectorName: string = 'AWS S3'; // this should be passed as a prop for reusability
-    
-    let bucket: string = '';
-    let region: string = '';
+
+	export let collectorName: string = 'AWS S3'; // this should be passed as a prop for reusability
+
+	let bucket: string = '';
+	let region: string = '';
 	let access_key: string = '';
 	let secret_key: string = '';
 
-	export let configuration: { 
-		'Bucket': string,
-		'Region': string,
-		'Access Key': string,
-		'Secret Key': string
+	export let configuration: {
+		Bucket: string;
+		Region: string;
+		'Access Key': string;
+		'Secret Key': string;
 	};
 	$: {
-        if (configuration) {
-            bucket = configuration['Bucket'] || '';
-            region = configuration['Region'] || '';
+		if (configuration) {
+			bucket = configuration['Bucket'] || '';
+			region = configuration['Region'] || '';
 			access_key = configuration['Access Key'] || '';
 			secret_key = configuration['Secret Key'] || '';
-        }
-    }
+		}
+	}
 
-    function saveConfiguration() {
-        // Dispatch event with collected data
-        dispatch('saveCollector', {
-            name: collectorName,
-            technology: 'AWS S3',
-            description: 'Configured S3 bucket',
+	function saveConfiguration() {
+		// Dispatch event with collected data
+		dispatch('saveCollector', {
+			name: collectorName,
+			technology: 'AWS S3',
+			description: 'Configured S3 bucket',
 			configuration: {
-				'Bucket': bucket,
-				'Region': region,
+				Bucket: bucket,
+				Region: region,
 				'Access Key': access_key,
 				'Secret Key': secret_key
 			}
-        });
-        hidden = true; // Optionally close the modal/form after saving
-    }
+		});
+		hidden = true; // Optionally close the modal/form after saving
+	}
 </script>
 
 <Heading tag="h5" class="mb-6 text-sm font-semibold uppercase">Configure S3 Collector</Heading>
@@ -65,10 +65,15 @@
 
 		<Label class="space-y-2">
 			<span>Region</span>
-			<Input bind:value={region} class="border font-normal outline-none" placeholder="Type region of your bucket" required />
+			<Input
+				bind:value={region}
+				class="border font-normal outline-none"
+				placeholder="Type region of your bucket"
+				required
+			/>
 		</Label>
 
-        <Label class="space-y-2">
+		<Label class="space-y-2">
 			<span>Access Key</span>
 			<Input
 				bind:value={access_key}
@@ -77,7 +82,7 @@
 				required
 			/>
 		</Label>
-        <Label class="space-y-2">
+		<Label class="space-y-2">
 			<span>Secret Key</span>
 			<Input
 				bind:value={secret_key}

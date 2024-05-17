@@ -1,162 +1,150 @@
 <script lang="ts">
-    import { Button, CloseButton, Heading, Input, Label, Select, Textarea } from 'flowbite-svelte';
-    import { CloseSolid } from 'flowbite-svelte-icons';
-    export let hidden: boolean = true; // modal control
+	import { Button, CloseButton, Heading, Input, Label, Select, Textarea } from 'flowbite-svelte';
+	import { CloseSolid } from 'flowbite-svelte-icons';
+	export let hidden: boolean = true; // modal control
 
-    import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher } from 'svelte';
 	const dispatch = createEventDispatcher();
-    
-    export let collectorName: string = 'News'; // this should be passed as a prop for reusability
-    
-    let api_key: string = '';
-    let query: string = '';
-    let from_date: string = '';
-    let to_date: string = '';
-    let language: string = '';
-    let sort_by: string = '';
-    let page_size: string = '';
-    let page: string = '';
 
+	export let collectorName: string = 'News'; // this should be passed as a prop for reusability
 
-    export let configuration: { 
-		'API Key': string,
-        'Query Topic': string,
-        'Date Range From': string,
-        'Date Range To': string,
-        'Language': string,
-        'Sort By': string,
-        'Page Size': string,
-        'Page Number': string,
+	let api_key: string = '';
+	let query: string = '';
+	let from_date: string = '';
+	let to_date: string = '';
+	let language: string = '';
+	let sort_by: string = '';
+	let page_size: string = '';
+	let page: string = '';
+
+	export let configuration: {
+		'API Key': string;
+		'Query Topic': string;
+		'Date Range From': string;
+		'Date Range To': string;
+		Language: string;
+		'Sort By': string;
+		'Page Size': string;
+		'Page Number': string;
 	};
 	$: {
-        if (configuration) {
-            api_key = configuration['API Key'] || '';
-            query = configuration['Query Topic'] || '';
-            from_date = configuration['Date Range From'] || '';
-            
-        }
-    }
+		if (configuration) {
+			api_key = configuration['API Key'] || '';
+			query = configuration['Query Topic'] || '';
+			from_date = configuration['Date Range From'] || '';
+		}
+	}
 
-    function saveConfiguration() {
-        // Dispatch event with collected data
-        dispatch('saveCollector', {
-            name: collectorName,
-            technology: 'News',
-            description: 'Configured News Collector',
-            configuration: {
-                'API Key': api_key,
-                'Query Topic': query,
-                'Date Range From': from_date,
-                'Date Range To': to_date,
-                'Language': language,
-                'Sort By': sort_by,
-                'Page Size': page_size,
-                'Page Number': page,
-            }
-        });
-        hidden = true; // Optionally close the modal/form after saving
-    }
+	function saveConfiguration() {
+		// Dispatch event with collected data
+		dispatch('saveCollector', {
+			name: collectorName,
+			technology: 'News',
+			description: 'Configured News Collector',
+			configuration: {
+				'API Key': api_key,
+				'Query Topic': query,
+				'Date Range From': from_date,
+				'Date Range To': to_date,
+				Language: language,
+				'Sort By': sort_by,
+				'Page Size': page_size,
+				'Page Number': page
+			}
+		});
+		hidden = true; // Optionally close the modal/form after saving
+	}
 </script>
 
 <Heading tag="h5" class="mb-6 text-sm font-semibold uppercase">Configure News API</Heading>
 <CloseButton
-    on:click={() => (hidden = true)}
-    class="absolute right-2.5 top-2.5 text-gray-400 hover:text-black dark:text-white"
+	on:click={() => (hidden = true)}
+	class="absolute right-2.5 top-2.5 text-gray-400 hover:text-black dark:text-white"
 />
 
 <form on:submit|preventDefault={saveConfiguration}>
-    <div class="space-y-4">
-        <Label class="space-y-2">
-            <span>API Key</span>
-            <Input
-                bind:value={api_key}
-                type="password"
-                class="border font-normal outline-none"
-                placeholder="Enter your API key"
-                required
-            />
-        </Label>
+	<div class="space-y-4">
+		<Label class="space-y-2">
+			<span>API Key</span>
+			<Input
+				bind:value={api_key}
+				type="password"
+				class="border font-normal outline-none"
+				placeholder="Enter your API key"
+				required
+			/>
+		</Label>
 
-        <Label class="space-y-2">
-            <span>Query Topic</span>
-            <Input
-                bind:value={query}
-                class="border font-normal outline-none"
-                placeholder="Enter topic (e.g., technology)"
-                required
-            />
-        </Label>
+		<Label class="space-y-2">
+			<span>Query Topic</span>
+			<Input
+				bind:value={query}
+				class="border font-normal outline-none"
+				placeholder="Enter topic (e.g., technology)"
+				required
+			/>
+		</Label>
 
-        <Label class="space-y-2">
-            <span>Date Range From</span>
-            <Input
-                bind:value={from_date}
-                type="date"
-                class="border font-normal outline-none"
-                required
-            />
-        </Label>
+		<Label class="space-y-2">
+			<span>Date Range From</span>
+			<Input bind:value={from_date} type="date" class="border font-normal outline-none" required />
+		</Label>
 
-        <Label class="space-y-2">
-            <span>Date Range To</span>
-            <Input
-                bind:value={to_date}
-                type="date"
-                class="border font-normal outline-none"
-                required
-            />
-        </Label>
+		<Label class="space-y-2">
+			<span>Date Range To</span>
+			<Input bind:value={to_date} type="date" class="border font-normal outline-none" required />
+		</Label>
 
-        <Label class="space-y-2">
-            <span>Language</span>
-            <Select bind:value={language} class="border-gray-300 font-normal outline-none">
-                <option value="en">English</option>
-                <option value="es">Spanish</option>
-                <option value="fr">French</option>
-                <!-- Add other languages as needed -->
-            </Select>
-        </Label>
+		<Label class="space-y-2">
+			<span>Language</span>
+			<Select bind:value={language} class="border-gray-300 font-normal outline-none">
+				<option value="en">English</option>
+				<option value="es">Spanish</option>
+				<option value="fr">French</option>
+				<!-- Add other languages as needed -->
+			</Select>
+		</Label>
 
-        <Label class="space-y-2">
-            <span>Sort By</span>
-            <Select bind:value={sort_by} class="border-gray-300 font-normal outline-none">
-                <option value="publishedAt">Published At</option>
-                <option value="relevancy">Relevancy</option>
-                <option value="popularity">Popularity</option>
-            </Select>
-        </Label>
+		<Label class="space-y-2">
+			<span>Sort By</span>
+			<Select bind:value={sort_by} class="border-gray-300 font-normal outline-none">
+				<option value="publishedAt">Published At</option>
+				<option value="relevancy">Relevancy</option>
+				<option value="popularity">Popularity</option>
+			</Select>
+		</Label>
 
-        <Label class="space-y-2">
-            <span>Page Size</span>
-            <Input
-                bind:value={page_size}
-                type="number"
-                class="border font-normal outline-none"
-                placeholder="Enter page size (e.g., 5)"
-                min="1"
-                max="100"
-                required
-            />
-        </Label>
+		<Label class="space-y-2">
+			<span>Page Size</span>
+			<Input
+				bind:value={page_size}
+				type="number"
+				class="border font-normal outline-none"
+				placeholder="Enter page size (e.g., 5)"
+				min="1"
+				max="100"
+				required
+			/>
+		</Label>
 
-        <Label class="space-y-2">
-            <span>Page Number</span>
-            <Input
-                bind:value={page}
-                type="number"
-                class="border font-normal outline-none"
-                placeholder="Enter page number (e.g., 1)"
-                min="1"
-                required
-            />
-        </Label>
+		<Label class="space-y-2">
+			<span>Page Number</span>
+			<Input
+				bind:value={page}
+				type="number"
+				class="border font-normal outline-none"
+				placeholder="Enter page number (e.g., 1)"
+				min="1"
+				required
+			/>
+		</Label>
 
-        <div class="flex w-full justify-center space-x-4 pb-4">
+		<div class="flex w-full justify-center space-x-4 pb-4">
 			<Button type="submit" class="w-full">Save Configuration</Button>
 			<Button color="alternative" class="w-full" on:click={() => (hidden = true)}>
 				<CloseSolid />
 				Cancel
 			</Button>
 		</div>
-    </div>
+	</div>
 </form>

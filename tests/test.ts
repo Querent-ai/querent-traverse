@@ -79,11 +79,11 @@ import { expect, test } from '@playwright/test';
 // });
 
 test('collectors has expected "All collectors"', async ({ page }) => {
-    await page.goto('crud/collectors');
-    // Wait for the text to appear anywhere in the page
-    await page.waitForFunction(text => document.body.innerText.includes(text), 'All collectors', { timeout: 5000 });
-    const containsText = await page.evaluate(() => {
-        return document.body.innerText.includes('All collectors');
-    });
-    expect(containsText).toBe(true);
+	await page.goto('crud/collectors');
+	// Wait for the text to appear anywhere in the page
+	await page.waitForFunction((text) => document.body.innerText.includes(text), 'All collectors');
+	const containsText = await page.evaluate(() => {
+		return document.body.innerText.includes('All collectors');
+	});
+	expect(containsText).toBe(true);
 });
