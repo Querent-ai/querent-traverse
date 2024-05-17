@@ -1,4 +1,4 @@
-name: Build and Lint Svelte Project
+name: Build and Lint Querent Svelte Project
 
 on:
   push:
@@ -19,6 +19,9 @@ jobs:
       with:
         node-version: '16'
         cache: 'pnpm'
+
+    - name: Install pnpm
+      run: npm install -g pnpm
 
     - name: Install dependencies
       run: pnpm install
