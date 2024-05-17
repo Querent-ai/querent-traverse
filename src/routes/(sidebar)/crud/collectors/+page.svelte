@@ -4,18 +4,31 @@
 	import { TableHeadCell, Toolbar, ToolbarButton } from 'flowbite-svelte';
 	import { CogSolid, DotsVerticalSolid, EditOutline } from 'flowbite-svelte-icons';
 	import { ExclamationCircleSolid, TrashBinSolid } from 'flowbite-svelte-icons';
-	import Collectors from '../../../data/collectors.json';
 	import Collector from './Collectors.svelte';
 	import CollectorsList from './CollectorsList.svelte';
-	import Delete from './Delete.svelte';
-	import type { ComponentType } from 'svelte';
+	import GCSForm from './GCS.svelte';
+	import AzureForm from './Azure.svelte';
+	import DriveForm from './Drive.svelte';
+	import DropboxForm from './Dropbox.svelte';
+	import EmailForm from './Email.svelte';
+	import GithubForm from './Github.svelte';
+	import JiraForm from './Jira.svelte';
+	import NewsForm from './News.svelte';
+	import AWSForm from './S3.svelte';
+	import SlackForm from './Slack.svelte';
+	import type { ComponentType, SvelteComponent } from 'svelte';
 	import MetaTag from '../../../utils/MetaTag.svelte';
 
 	let hidden: boolean = true; // modal control
 	let drawerComponent: ComponentType = Collector; // drawer component
 
-	const toggle = (component: ComponentType) => {
+	const toggle = (component: typeof SvelteComponent | undefined, config: any) => {
+		if (!component) {
+			console.error('No component found for this collector type:');
+			return; // Handle this case appropriately, maybe show an error message
+		}
 		drawerComponent = component;
+		configuration = config; // Directly use the provided configuration
 		hidden = !hidden;
 	};
 
@@ -23,21 +36,42 @@
 		drawerComponent = CollectorsList;
 		hidden = !hidden;
 	}
+	let configuration = {};
+	type CollectorComponents = {
+		[key: string]: any;
+	};
+	const nameToCollector: CollectorComponents = {
+		'Google Cloud Storage': GCSForm,
+		'Azure': AzureForm,
+		'Google Drive': DriveForm,
+		'Dropbox': DropboxForm,
+		'Email': EmailForm,
+		'Github': GithubForm,
+		'Jira': JiraForm,
+		'News': NewsForm,
+		'AWS S3': AWSForm,
+		'Slack': SlackForm,
+	}
 
 	const path: string = '/crud/collectors';
-  const description: string = 'Collectors examaple - Querent Admin Dashboard';
-  const title: string = 'Querent Admin Dashboard - Collectors';
-  const subtitle: string = 'Collectors';
-  let collectors_list: any[] = [];
-    function handleCollectorSaved(event: { detail: { name: any; technology: any; description: any; }; }) {
-		console.log("Event details ",event.detail);
+	const description: string = 'Collectors examaple - Querent Admin Dashboard';
+	const title: string = 'Querent Admin Dashboard - Collectors';
+	const subtitle: string = 'Collectors';
+	let collectors_list: any[] = [];
+    function handleCollectorSaved(event: { detail: { name: any; technology: any; description: any; configuration: any; }; }) {
         collectors_list.push({
             name: event.detail.name,
             technology: event.detail.technology,
-            description: event.detail.description
+            description: event.detail.description,
+			configuration: event.detail.configuration,
         });
+		configuration = configuration;
 		collectors_list = collectors_list;
     }
+	function getComponent(name: string): typeof SvelteComponent | undefined {
+		console.log(name)
+		return nameToCollector[name as keyof typeof nameToCollector] || undefined;
+	}
   
 </script>
 
@@ -114,8 +148,8 @@
 				>{collector.description}</TableBodyCell>
 
 				<TableBodyCell class="flex justify-end space-x-2 p-4">
-					<Button size="sm" class="gap-2 px-3" on:click={() => toggle(Collector)}>
-					<EditOutline size="sm" /> Add
+					<Button size="sm" class="gap-2 px-3" on:click={() => toggle(getComponent(collector.name), collector.configuration)}>
+						<EditOutline size="sm" /> Edit
 					</Button>
 				</TableBodyCell>
 				</TableBodyRow>
@@ -126,8 +160,8 @@
 
 <Drawer placement="right" transitionType="fly" bind:hidden>
     {#if drawerComponent === CollectorsList}
-        <CollectorsList bind:hidden={hidden} on:collectorSaved={handleCollectorSaved} />
+        <CollectorsList bind:hidden={hidden} bind:configuration={configuration} on:collectorSaved={handleCollectorSaved} />
     {:else}
-        <svelte:component this={drawerComponent} bind:hidden={hidden} />
+        <svelte:component this={drawerComponent} bind:hidden={hidden} bind:configuration={configuration} />
     {/if}
 </Drawer>

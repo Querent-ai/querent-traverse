@@ -8,15 +8,50 @@
     
     export let collectorName: string = 'Google Drive'; // this should be passed as a prop for reusability
     
-    let bucketName: string = '';
-    let credentials: string = '';
+    let drive_refresh_token: string = '';
+    let drive_token: string = '';
+	let drive_scopes: string='';
+	let drive_client_id: string = '';
+	let drive_client_secret: string = '';
+	let specific_file_type: string = '';
+	let folder_to_crawl: string = '';
+
+	export let configuration: { 
+		'Refresh Token': string,
+		'Token': string,
+		'Scopes': string,
+		'Client ID': string,
+		'Client Secret': string,
+		'Specific file type': string,
+		'Folder to crawl': string,
+	};
+	$: {
+        if (configuration) {
+            drive_refresh_token = configuration['Refresh Token'] || '';
+            drive_token = configuration['Token'] || '';
+			drive_scopes = configuration['Scopes'] || '';
+			drive_client_id = configuration['Client ID'] || '';
+			drive_client_secret = configuration['Client Secret'] || '';
+			specific_file_type = configuration['Specific file type'] || '';
+			folder_to_crawl = configuration['Folder to crawl'] || '';
+        }
+    }
 
     function saveConfiguration() {
         // Dispatch event with collected data
         dispatch('saveCollector', {
             name: collectorName,
             technology: 'Google',
-            description: 'Configured Google Drive: ' + bucketName
+            description: 'Configured Google Drive',
+			configuration: {
+				'Refresh Token': drive_refresh_token,
+				'Token': drive_token,
+				'Scopes': drive_scopes,
+				'Client ID': drive_client_id,
+				'Client Secret': drive_client_secret,
+				'Specific file type': specific_file_type,
+				'Folder to crawl': folder_to_crawl,
+			}
         });
         hidden = true; // Optionally close the modal/form after saving
     }
@@ -28,12 +63,12 @@
 	class="absolute right-2.5 top-2.5 text-gray-400 hover:text-black dark:text-white"
 />
 
-<form action="#">
+<form on:submit|preventDefault={saveConfiguration}>
 	<div class="space-y-4">
 		<Label class="space-y-2">
 			<span>Refresh Token</span>
 			<Input
-				name="drive_refresh_token"
+				bind:value={drive_refresh_token}
 				class="border font-normal outline-none"
 				placeholder="Type drive refresh token"
 				required
@@ -42,7 +77,8 @@
 
 		<Label class="space-y-2">
 			<span>Token</span>
-			<Input name="drive_token" 
+			<Input 
+			bind:value={drive_token}
             class="border font-normal outline-none" 
             placeholder="Type drive token" 
             required />
@@ -51,7 +87,7 @@
         <Label class="space-y-2">
 			<span>Scopes</span>
 			<Input
-				name="drive_scopes"
+				bind:value={drive_scopes}
 				class="border font-normal outline-none"
 				placeholder="Type drive scopes"
 				required
@@ -60,7 +96,7 @@
         <Label class="space-y-2">
 			<span>Client ID</span>
 			<Input
-				name="drive_client_id"
+				bind:value={drive_client_id}
 				class="border font-normal outline-none"
 				placeholder="Type drive client id"
 				required
@@ -69,7 +105,7 @@
         <Label class="space-y-2">
 			<span>Client Secret</span>
 			<Input
-				name="drive_client_secret"
+				bind:value={drive_client_secret}
 				class="border font-normal outline-none"
 				placeholder="Type drive client secret"
 				required
@@ -78,7 +114,7 @@
         <Label class="space-y-2">
 			<span>Specific file type</span>
 			<Input
-				name="specific_file_type"
+				bind:value={specific_file_type}
 				class="border font-normal outline-none"
 				placeholder="Type specific file type"
 				required
@@ -87,7 +123,7 @@
         <Label class="space-y-2">
 			<span>Folder to crawl</span>
 			<Input
-				name="folder_to_crawl"
+				bind:value={folder_to_crawl}
 				class="border font-normal outline-none"
 				placeholder="Type folder to crawl"
 				required

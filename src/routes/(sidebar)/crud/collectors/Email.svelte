@@ -7,15 +7,50 @@
     
     export let collectorName: string = 'Email'; // this should be passed as a prop for reusability
     
-    let bucketName: string = '';
-    let credentials: string = '';
+    let imap_server: string = '';
+    let imap_port: string = '';
+    let imap_username: string = '';
+    let imap_password: string = '';
+    let imap_folder: string = '';
+    let imap_certfile: string = '';
+    let imap_keyfile: string = '';
+
+    export let configuration: { 
+		'IMAP Server': string,
+        'Port': string,
+        'Username': string,
+        'Password': string,
+        'Folder': string,
+        'Certificate File (optional)': string,
+        'Key File (optional)': string,
+	};
+	$: {
+        if (configuration) {
+            imap_server = configuration['IMAP Server'] || '';
+            imap_port = configuration['Port'] || '';
+            imap_username = configuration['Username'] || '';
+            imap_password = configuration['Password'] || '';
+            imap_folder = configuration['Folder'] || '';
+            imap_certfile = configuration['Certificate File (optional)'] || '';
+            imap_keyfile = configuration['Key File (optional)'] || '';
+        }
+    }
 
     function saveConfiguration() {
         // Dispatch event with collected data
         dispatch('saveCollector', {
             name: collectorName,
             technology: 'Email',
-            description: 'Configured Email collector: ' + bucketName
+            description: 'Configured Email collector',
+            configuration: {
+                'IMAP Server': imap_server,
+                'Port': imap_port,
+                'Username': imap_username,
+                'Password': imap_password,
+                'Folder': imap_folder,
+                'Certificate File (optional)': imap_certfile,
+                'Key File (optional)': imap_keyfile,
+            }
         });
         hidden = true; // Optionally close the modal/form after saving
     }
@@ -27,12 +62,12 @@
     class="absolute right-2.5 top-2.5 text-gray-400 hover:text-black dark:text-white"
 />
 
-<form action="#">
+<form on:submit|preventDefault={saveConfiguration}>
     <div class="space-y-4">
         <Label class="space-y-2">
             <span>IMAP Server</span>
             <Input
-                name="imap_server"
+                bind:value={imap_server}
                 class="border font-normal outline-none"
                 placeholder="e.g., imap.gmail.com"
                 required
@@ -42,7 +77,7 @@
         <Label class="space-y-2">
             <span>Port</span>
             <Input
-                name="imap_port"
+                bind:value={imap_port}
                 type="number"
                 class="border font-normal outline-none"
                 placeholder="993"
@@ -53,7 +88,7 @@
         <Label class="space-y-2">
             <span>Username</span>
             <Input
-                name="imap_username"
+                bind:value={imap_username}
                 class="border font-normal outline-none"
                 placeholder="Enter your IMAP username"
                 required
@@ -63,7 +98,7 @@
         <Label class="space-y-2">
             <span>Password</span>
             <Input
-                name="imap_password"
+                bind:value={imap_password}
                 type="password"
                 class="border font-normal outline-none"
                 placeholder="Enter your IMAP password"
@@ -74,7 +109,7 @@
         <Label class="space-y-2">
             <span>Folder</span>
             <Input
-                name="imap_folder"
+                bind:value={imap_folder}
                 class="border font-normal outline-none"
                 placeholder="Enter IMAP folder path"
                 required
@@ -84,7 +119,7 @@
         <Label class="space-y-2">
             <span>Certificate File (optional)</span>
             <Input
-                name="imap_certfile"
+                bind:value={imap_certfile}
                 class="border font-normal outline-none"
                 placeholder="Path to certificate file"
             />
@@ -93,7 +128,7 @@
         <Label class="space-y-2">
             <span>Key File (optional)</span>
             <Input
-                name="imap_keyfile"
+                bind:value={imap_keyfile}
                 class="border font-normal outline-none"
                 placeholder="Path to key file"
             />

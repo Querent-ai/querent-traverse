@@ -8,15 +8,20 @@
     
     export let collectorName: string = 'Slack'; // this should be passed as a prop for reusability
     
-    let bucketName: string = '';
-    let credentials: string = '';
+    let channel_name: string = '';
+    let cursor: string = '';
+    let include_all_metadata: string = '';
+    let inclusive: string = '';
+    let latest: string = '';
+    let limit: string = '';
+    let access_token: string = '';
 
     function saveConfiguration() {
         // Dispatch event with collected data
         dispatch('saveCollector', {
             name: collectorName,
             technology: 'Slack',
-            description: 'Configured Slack collector: ' + bucketName
+            description: 'Configured Slack collector'
         });
         hidden = true; // Optionally close the modal/form after saving
     }
@@ -28,12 +33,12 @@
     class="absolute right-2.5 top-2.5 text-gray-400 hover:text-black dark:text-white"
 />
 
-<form action="#">
+<form on:submit|preventDefault={saveConfiguration}>
     <div class="space-y-4">
         <Label class="space-y-2">
             <span>Channel Name</span>
             <Input
-                name="channel_name"
+                bind:value={channel_name}
                 class="border font-normal outline-none"
                 placeholder="Enter Slack channel ID (e.g., C05TA5R7D88)"
                 required
@@ -43,7 +48,7 @@
         <Label class="space-y-2">
             <span>Cursor (optional)</span>
             <Input
-                name="cursor"
+                bind:value={cursor}
                 class="border font-normal outline-none"
                 placeholder="Enter cursor for pagination"
             />
@@ -51,18 +56,18 @@
 
         <Label class="space-y-2">
             <span>Include All Metadata</span>
-            <Checkbox name="include_all_metadata" class="border font-normal outline-none" />
+            <Checkbox bind:value={include_all_metadata} class="border font-normal outline-none" />
         </Label>
 
         <Label class="space-y-2">
             <span>Inclusive (Include messages with latest or oldest timestamp)</span>
-            <Checkbox name="inclusive" class="border font-normal outline-none" />
+            <Checkbox bind:value={inclusive} class="border font-normal outline-none" />
         </Label>
 
         <Label class="space-y-2">
             <span>Latest (timestamp)</span>
             <Input
-                name="latest"
+                bind:value={latest}
                 class="border font-normal outline-none"
                 placeholder="Enter latest timestamp (e.g., 0 for now)"
                 required
@@ -72,7 +77,7 @@
         <Label class="space-y-2">
             <span>Limit</span>
             <Input
-                name="limit"
+                bind:value={limit}
                 type="number"
                 class="border font-normal outline-none"
                 placeholder="Enter limit for fetched messages (e.g., 100)"
@@ -85,7 +90,7 @@
         <Label class="space-y-2">
             <span>Access Token</span>
             <Input
-                name="access_token"
+                bind:value={access_token}
                 type="password"
                 class="border font-normal outline-none"
                 placeholder="Paste your Slack access token"

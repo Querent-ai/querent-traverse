@@ -2,27 +2,39 @@
     import { createEventDispatcher } from 'svelte';
     import { Button, CloseButton, Heading, Input, Label, Textarea } from 'flowbite-svelte';
     import { CloseSolid } from 'flowbite-svelte-icons';
-    
-    export let hidden: boolean = true; // modal control
+
+    export let hidden: boolean;
     const dispatch = createEventDispatcher();
-    
-    export let collectorName: string = 'Google Cloud Storage'; // this should be passed as a prop for reusability
-    
-    let bucketName: string = '';
-    let credentials: string = '';
+
+    export let collectorName: string = 'Google Cloud Storage';
+    export let configuration: { 'Bucket Name': string, 'Credentials': string };
+
+    let bucketName = '';
+    let credentials = '';
+
+    // Ensure the component initializes with correct values from the configuration
+    $: {
+        if (configuration) {
+            bucketName = configuration['Bucket Name'] || '';
+            credentials = configuration['Credentials'] || '';
+        }
+    }
 
     function saveConfiguration() {
         dispatch('saveCollector', {
             name: collectorName,
             technology: 'Google Cloud Storage',
-            description: 'Configured GCS bucket: ' + bucketName
+            description: 'Configured GCS bucket: ' + bucketName,
+            configuration: {
+                'Bucket Name': bucketName,
+                'Credentials': credentials,
+            }
         });
-        hidden = true; // Optionally close the modal/form after saving
+        hidden = !hidden;
     }
 
     function closePanel() {
-        console.log("Closing panel...");
-        hidden = true; // This should now reflect in the parent component
+        hidden = !hidden;
     }
 </script>
 

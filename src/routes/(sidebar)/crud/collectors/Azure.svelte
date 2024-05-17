@@ -8,15 +8,42 @@
     
     export let collectorName: string = 'Azure'; // this should be passed as a prop for reusability
     
-    let bucketName: string = '';
-    let credentials: string = '';
+    let account_url: string = '';
+    let connection_url: string = '';
+	let credentials: string = '';
+	let container: string = '';
+	let prefix: string = '';
+
+	export let configuration: { 
+		'Connection URL': string, 
+		'Account URL': string,
+		'Credentials': string,
+		'Container': string,
+		'Prefix': string
+	};
+	$: {
+        if (configuration) {
+            account_url = configuration['Account URL'] || '';
+            connection_url = configuration['Connection URL'] || '';
+			credentials = configuration['Credentials'] || '';
+			container = configuration['Container'] || '';
+			prefix = configuration['Prefix'] || '';
+        }
+    }
 
     function saveConfiguration() {
         // Dispatch event with collected data
         dispatch('saveCollector', {
             name: collectorName,
             technology: 'Azure',
-            description: 'Configured Azure bucket: ' + bucketName
+            description: 'Configured Azure bucket',
+			configuration: {
+				'Connection URL': connection_url,
+				'Account URL': account_url,
+				'Credentials': credentials,
+				'Container': container,
+				'Prefix': prefix,
+			}
         });
         hidden = true; // Optionally close the modal/form after saving
     }
@@ -28,12 +55,12 @@
 	class="absolute right-2.5 top-2.5 text-gray-400 hover:text-black dark:text-white"
 />
 
-<form action="#">
+<form on:submit|preventDefault={saveConfiguration}>
 	<div class="space-y-4">
 		<Label class="space-y-2">
 			<span>Connection URL</span>
 			<Input
-				name="connection_url"
+				bind:value={connection_url}
 				class="border font-normal outline-none"
 				placeholder="Type connection url"
 				required
@@ -42,13 +69,13 @@
 
 		<Label class="space-y-2">
 			<span>Account URL</span>
-			<Input name="account_url" class="border font-normal outline-none" placeholder="Type account url" required />
+			<Input bind:value={account_url} class="border font-normal outline-none" placeholder="Type account url" required />
 		</Label>
 
         <Label class="space-y-2">
 			<span>Credentials</span>
 			<Input
-				name="credentials"
+				bind:value={credentials}
 				class="border font-normal outline-none"
 				placeholder="Type credentials"
 				required
@@ -57,7 +84,7 @@
         <Label class="space-y-2">
 			<span>Container</span>
 			<Input
-				name="container"
+				bind:value={container}
 				class="border font-normal outline-none"
 				placeholder="Type container"
 				required
@@ -66,7 +93,7 @@
         <Label class="space-y-2">
 			<span>Prefix</span>
 			<Input
-				name="prefix"
+				bind:value={prefix}
 				class="border font-normal outline-none"
 				placeholder="Type prefix"
 				required

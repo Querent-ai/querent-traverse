@@ -8,15 +8,38 @@
     
     export let collectorName: string = 'S3'; // this should be passed as a prop for reusability
     
-    let bucketName: string = '';
-    let credentials: string = '';
+    let bucket: string = '';
+    let region: string = '';
+	let access_key: string = '';
+	let secret_key: string = '';
+
+	export let configuration: { 
+		'Bucket': string,
+		'Region': string,
+		'Access Key': string,
+		'Secret Key': string
+	};
+	$: {
+        if (configuration) {
+            bucket = configuration['Bucket'] || '';
+            region = configuration['Region'] || '';
+			access_key = configuration['Access Key'] || '';
+			secret_key = configuration['Secret Key'] || '';
+        }
+    }
 
     function saveConfiguration() {
         // Dispatch event with collected data
         dispatch('saveCollector', {
             name: collectorName,
             technology: 'AWS S3',
-            description: 'Configured S3 bucket: ' + bucketName
+            description: 'Configured S3 bucket',
+			configuration: {
+				'Bucket': bucket,
+				'Region': region,
+				'Access Key': access_key,
+				'Secret Key': secret_key
+			}
         });
         hidden = true; // Optionally close the modal/form after saving
     }
@@ -28,12 +51,12 @@
 	class="absolute right-2.5 top-2.5 text-gray-400 hover:text-black dark:text-white"
 />
 
-<form action="#">
+<form on:submit|preventDefault={saveConfiguration}>
 	<div class="space-y-4">
 		<Label class="space-y-2">
 			<span>Bucket</span>
 			<Input
-				name="bucket"
+				bind:value={bucket}
 				class="border font-normal outline-none"
 				placeholder="Type bucket name"
 				required
@@ -42,13 +65,13 @@
 
 		<Label class="space-y-2">
 			<span>Region</span>
-			<Input name="region" class="border font-normal outline-none" placeholder="Type region of your bucket" required />
+			<Input bind:value={region} class="border font-normal outline-none" placeholder="Type region of your bucket" required />
 		</Label>
 
         <Label class="space-y-2">
 			<span>Access Key</span>
 			<Input
-				name="access_key"
+				bind:value={access_key}
 				class="border font-normal outline-none"
 				placeholder="Type access key"
 				required
@@ -57,7 +80,7 @@
         <Label class="space-y-2">
 			<span>Secret Key</span>
 			<Input
-				name="secret_key"
+				bind:value={secret_key}
 				class="border font-normal outline-none"
 				placeholder="Type secret_key"
 				required

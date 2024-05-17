@@ -2,15 +2,16 @@
     import { createEventDispatcher, SvelteComponent} from 'svelte';
     const dispatch = createEventDispatcher();
 
-    function handleSave(event: { detail: { name: any; technology: any; description: any; }; }) {
+    function handleSave(event: { detail: { name: any; technology: any; description: any; configuration: any; }; }) {
         // Dispatch the event upwards with more details if needed
-        console.log(event.detail)
         dispatch('collectorSaved', {
             name: event.detail.name,
-            technology: "GCS",  // This could be dynamic based on the form used
-            description: "Configured GCS Collector"
+            technology: event.detail.technology,
+            description: event.detail.description,
+            configuration: event.detail.configuration
         });
     }
+    export let configuration: {};
     export let hidden: boolean;
     import Collectors from '../../../data/collectors.json';
     import DriveForm from './Drive.svelte';

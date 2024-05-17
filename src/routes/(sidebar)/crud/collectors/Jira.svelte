@@ -8,15 +8,42 @@
     
     export let collectorName: string = 'Jira'; // this should be passed as a prop for reusability
     
-    let bucketName: string = '';
-    let credentials: string = '';
+    let jira_server: string = '';
+    let jira_username: string = '';
+    let jira_api_token: string = '';
+    let jira_project: string = '';
+    let jira_query: string = '';
+
+    export let configuration: { 
+		'Jira Server URL': string,
+        'Jira Username': string,
+        'Jira API Token': string,
+        'Jira Project': string,
+        'Jira Query': string,
+	};
+	$: {
+        if (configuration) {
+            jira_server = configuration['Jira Server URL'] || '';
+            jira_username = configuration['Jira Username'] || '';
+            jira_api_token = configuration['Jira API Token'] || '';
+            jira_project = configuration['Jira Project'] || '';
+            jira_query = configuration['Jira Query'] || '';
+        }
+    }
 
     function saveConfiguration() {
         // Dispatch event with collected data
         dispatch('saveCollector', {
             name: collectorName,
             technology: 'Jira',
-            description: 'Configured Jira collector: ' + bucketName
+            description: 'Configured Jira collector',
+            configuration: {
+                'Jira Server URL': jira_server,
+                'Jira Username': jira_username,
+                'Jira API Token': jira_api_token,
+                'Jira Project': jira_project,
+                'Jira Query': jira_query,
+            }
         });
         hidden = true; // Optionally close the modal/form after saving
     }
@@ -28,12 +55,12 @@
     class="absolute right-2.5 top-2.5 text-gray-400 hover:text-black dark:text-white"
 />
 
-<form action="#">
+<form on:submit|preventDefault={saveConfiguration}>
     <div class="space-y-4">
         <Label class="space-y-2">
             <span>Jira Server URL</span>
             <Input
-                name="jira_server"
+                bind:value={jira_server}
                 class="border font-normal outline-none"
                 placeholder="Enter your Jira server URL"
                 required
@@ -43,7 +70,7 @@
         <Label class="space-y-2">
             <span>Jira Username</span>
             <Input
-                name="jira_username"
+                bind:value={jira_username}
                 class="border font-normal outline-none"
                 placeholder="Enter your Jira username"
                 required
@@ -53,7 +80,7 @@
         <Label class="space-y-2">
             <span>Jira API Token</span>
             <Input
-                name="jira_api_token"
+                bind:value={jira_api_token}
                 type="password"
                 class="border font-normal outline-none"
                 placeholder="Paste your Jira API token"
@@ -64,7 +91,7 @@
         <Label class="space-y-2">
             <span>Jira Project</span>
             <Input
-                name="jira_project"
+                bind:value={jira_project}
                 class="border font-normal outline-none"
                 placeholder="Enter your Jira project key"
                 required
@@ -74,7 +101,7 @@
         <Label class="space-y-2">
             <span>Jira Query</span>
             <Textarea
-                name="jira_query"
+                bind:value={jira_query}
                 class="border font-normal outline-none"
                 placeholder="Enter your Jira query"
                 rows="3"

@@ -8,15 +8,21 @@
     
     export let collectorName: string = 'News'; // this should be passed as a prop for reusability
     
-    let bucketName: string = '';
-    let credentials: string = '';
+    let api_key: string = '';
+    let query: string = '';
+    let from_date: string = '';
+    let to_date: string = '';
+    let language: string = '';
+    let sort_by: string = '';
+    let page_size: string = '';
+    let page: string = '';
 
     function saveConfiguration() {
         // Dispatch event with collected data
         dispatch('saveCollector', {
             name: collectorName,
             technology: 'News',
-            description: 'Configured News Collector: ' + bucketName
+            description: 'Configured News Collector'
         });
         hidden = true; // Optionally close the modal/form after saving
     }
@@ -28,12 +34,12 @@
     class="absolute right-2.5 top-2.5 text-gray-400 hover:text-black dark:text-white"
 />
 
-<form action="#">
+<form on:submit|preventDefault={saveConfiguration}>
     <div class="space-y-4">
         <Label class="space-y-2">
             <span>API Key</span>
             <Input
-                name="api_key"
+                bind:value={api_key}
                 type="password"
                 class="border font-normal outline-none"
                 placeholder="Enter your API key"
@@ -44,7 +50,7 @@
         <Label class="space-y-2">
             <span>Query Topic</span>
             <Input
-                name="query"
+                bind:value={query}
                 class="border font-normal outline-none"
                 placeholder="Enter topic (e.g., technology)"
                 required
@@ -54,7 +60,7 @@
         <Label class="space-y-2">
             <span>Date Range From</span>
             <Input
-                name="from_date"
+                bind:value={from_date}
                 type="date"
                 class="border font-normal outline-none"
                 required
@@ -64,7 +70,7 @@
         <Label class="space-y-2">
             <span>Date Range To</span>
             <Input
-                name="to_date"
+                bind:value={to_date}
                 type="date"
                 class="border font-normal outline-none"
                 required
@@ -73,7 +79,7 @@
 
         <Label class="space-y-2">
             <span>Language</span>
-            <Select name="language" class="border-gray-300 font-normal outline-none">
+            <Select bind:value={language} class="border-gray-300 font-normal outline-none">
                 <option value="en">English</option>
                 <option value="es">Spanish</option>
                 <option value="fr">French</option>
@@ -83,7 +89,7 @@
 
         <Label class="space-y-2">
             <span>Sort By</span>
-            <Select name="sort_by" class="border-gray-300 font-normal outline-none">
+            <Select bind:value={sort_by} class="border-gray-300 font-normal outline-none">
                 <option value="publishedAt">Published At</option>
                 <option value="relevancy">Relevancy</option>
                 <option value="popularity">Popularity</option>
@@ -93,7 +99,7 @@
         <Label class="space-y-2">
             <span>Page Size</span>
             <Input
-                name="page_size"
+                bind:value={page_size}
                 type="number"
                 class="border font-normal outline-none"
                 placeholder="Enter page size (e.g., 5)"
@@ -106,7 +112,7 @@
         <Label class="space-y-2">
             <span>Page Number</span>
             <Input
-                name="page"
+                bind:value={page}
                 type="number"
                 class="border font-normal outline-none"
                 placeholder="Enter page number (e.g., 1)"
