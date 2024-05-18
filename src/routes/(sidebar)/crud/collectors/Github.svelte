@@ -1,9 +1,8 @@
 <script lang="ts">
-	import { Button, CloseButton, Heading, Input, Label, Textarea } from 'flowbite-svelte';
+	import { Button, CloseButton, Heading, Input, Label } from 'flowbite-svelte';
 	import { CloseSolid } from 'flowbite-svelte-icons';
 	export let hidden: boolean = true; // modal control
 	import { createEventDispatcher } from 'svelte';
-	import { validators } from 'tailwind-merge';
 	const dispatch = createEventDispatcher();
 
 	export let collectorName: string = 'Github'; // this should be passed as a prop for reusability

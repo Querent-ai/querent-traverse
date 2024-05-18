@@ -3,7 +3,6 @@
 	import ProfilePicture from '$lib/settings/ProfilePicture.svelte';
 	import { Breadcrumb, BreadcrumbItem, Heading } from 'flowbite-svelte';
 	import GeneralInfo from '$lib/settings/GeneralInfo.svelte';
-	import Footer from '../Footer.svelte';
 	import PasswordInfo from '$lib/settings/PasswordInfo.svelte';
 	import Sessions from '$lib/settings/Sessions.svelte';
 	import SocialAccounts from '$lib/settings/SocialAccounts.svelte';

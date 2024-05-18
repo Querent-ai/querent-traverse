@@ -1,8 +1,5 @@
 <script>
-	import AppsMenu from '$lib/widgets/AppsMenu.svelte';
-	import UserMenu from '$lib/widgets/UserMenu.svelte';
 	import {
-		DarkMode,
 		Dropdown,
 		DropdownItem,
 		NavBrand,
@@ -13,8 +10,6 @@
 		Search
 	} from 'flowbite-svelte';
 	import '../../app.pcss';
-	import Users from '../data/users.json';
-	import Notifications from '$lib/dashboard/NotificationList.svelte';
 	import { ChevronDownOutline } from 'flowbite-svelte-icons';
 
 	export let fluid = true;

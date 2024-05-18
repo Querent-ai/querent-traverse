@@ -10,10 +10,10 @@
 		"sourceMap": true,
 		"strict": true,
 		"moduleResolution": "Node",
-		"target": "es2017",
+		"target": "es2019",
 		"module": "es2020",
 		"jsx": "preserve",
-		"lib": ["es2017", "dom"]
+		"lib": ["es2019", "dom"]
 	}
 	// Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
 }

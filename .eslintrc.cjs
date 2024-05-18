@@ -16,7 +16,7 @@ module.exports = {
 	},
 	env: {
 		browser: true,
-		es2017: true,
+		es2019: true,
 		node: true
 	},
 	overrides: [
@@ -30,5 +30,10 @@ module.exports = {
 	],
 	settings: {
 		'svelte3/ignore-styles': () => true
+	},
+	rules: {
+		'@typescript-eslint/no-explicit-any': 'off',
+		'@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+		'svelte/no-at-html-tags': 'off'
 	}
 };

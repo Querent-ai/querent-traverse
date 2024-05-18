@@ -38,5 +38,10 @@
 		"name": "Jira",
 		"technology": "Jira",
 		"description": "Jira is a proprietary issue tracking product developed by Atlassian that allows bug tracking and agile project management."
+	},
+	{
+		"name": "News",
+		"technology": "News API",
+		"description": "News API for fetching news about a company or an event"
 	}
 ]

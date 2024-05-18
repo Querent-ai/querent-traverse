@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Button, CloseButton, Heading, Input, Label, Select, Textarea } from 'flowbite-svelte';
+	import { Button, CloseButton, Heading, Input, Label } from 'flowbite-svelte';
 	import { CloseSolid } from 'flowbite-svelte-icons';
 	export let hidden: boolean = true; // modal control
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Button, Heading } from 'flowbite-svelte';
+	import { Button } from 'flowbite-svelte';
 	import Card from '../widgets/Card.svelte';
 
 	export let title: string;

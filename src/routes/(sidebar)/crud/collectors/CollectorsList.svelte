@@ -3,7 +3,12 @@
 	const dispatch = createEventDispatcher();
 
 	function handleSave(event: {
-		detail: { name: any; technology: any; description: any; configuration: any };
+		detail: {
+			name: string;
+			technology: string;
+			description: string;
+			configuration: Record<string, unknown>;
+		};
 	}) {
 		// Dispatch the event upwards with more details if needed
 		dispatch('collectorSaved', {
@@ -14,7 +19,8 @@
 		});
 	}
 	// Exported for use in parent components
-	export let configuration: {};
+	// eslint-disable-next-line svelte/valid-compile
+	export let configuration: Record<string, string>;
 	export let hidden: boolean;
 	import Collectors from '../../../data/collectors.json';
 	import DriveForm from './Drive.svelte';
@@ -28,7 +34,6 @@
 	import SlackForm from './Slack.svelte';
 	import NewsForm from './News.svelte';
 	import CollectorComponent from '../../../data/collector-component.json';
-	import { Drawer } from 'flowbite-svelte';
 
 	let selectedCollector: null = null;
 
