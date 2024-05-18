@@ -78,12 +78,10 @@ import { expect, test } from '@playwright/test';
 // 	expect(await page.textContent('h1')).toContain('Something has gone seriously wrong');
 // });
 
-test('collectors has expected "All collectors"', async ({ page }) => {
-	await page.goto('crud/collectors');
-	// Wait for the text to appear anywhere in the page
-	await page.waitForFunction((text) => document.body.innerText.includes(text), 'All collectors');
-	const containsText = await page.evaluate(() => {
-		return document.body.innerText.includes('All collectors');
-	});
-	expect(containsText).toBe(true);
+test('Page has expected text "All collectors"', async ({ page }) => {
+    await page.goto('http://localhost:5173/crud/collectors');
+
+    // Check if 'All collectors' text is present on the page
+    const hasText = await page.textContent('body');
+    expect(hasText).toContain('All collectors');
 });
