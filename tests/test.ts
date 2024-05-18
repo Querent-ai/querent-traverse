@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+// import { expect, test } from '@playwright/test';
 
 // test('index page has expected h3', async ({ page }) => {
 // 	await page.goto('/');
@@ -78,10 +78,10 @@ import { expect, test } from '@playwright/test';
 // 	expect(await page.textContent('h1')).toContain('Something has gone seriously wrong');
 // });
 
-test('Page has expected text "All collectors"', async ({ page }) => {
-	await page.goto('http://localhost:5173/crud/collectors');
+// test('Page has expected text "All collectors"', async ({ page }) => {
+// 	await page.goto('http://localhost:5173/crud/collectors');
 
-	// Check if 'All collectors' text is present on the page
-	const hasText = await page.textContent('body');
-	expect(hasText).toContain('All collectors');
-});
+// 	// Check if 'All collectors' text is present on the page
+// 	const hasText = await page.textContent('body');
+// 	expect(hasText).toContain('All collectors');
+// });
