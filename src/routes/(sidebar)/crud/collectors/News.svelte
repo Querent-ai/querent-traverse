@@ -3,7 +3,7 @@
 	import { CloseSolid } from 'flowbite-svelte-icons';
 	export let hidden: boolean = true; // modal control
 
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
 	const dispatch = createEventDispatcher();
 
 	export let collectorName: string = 'News'; // this should be passed as a prop for reusability
@@ -27,7 +27,7 @@
 		'Page Size': string;
 		'Page Number': string;
 	};
-	$: {
+	function initializeForm() {
 		if (configuration) {
 			api_key = configuration['API Key'] || '';
 			query = configuration['Query Topic'] || '';
@@ -37,16 +37,6 @@
 			sort_by = configuration['Sort By'] || '';
 			page_size = configuration['Page Size'] || '';
 			page = configuration['Page Number'] || '';
-		}
-	}
-
-	function initializeForm() {
-		if (configuration) {
-			jira_server = configuration['Jira Server URL'] || '';
-			jira_username = configuration['Jira Username'] || '';
-			jira_api_token = configuration['Jira API Token'] || '';
-			jira_project = configuration['Jira Project'] || '';
-			jira_query = configuration['Jira Query'] || '';
 		}
 	}
 
