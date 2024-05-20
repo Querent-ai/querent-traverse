@@ -3,7 +3,7 @@
 	import { CloseSolid } from 'flowbite-svelte-icons';
 	export let hidden: boolean = true; // modal control
 
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
 	const dispatch = createEventDispatcher();
 
 	export let collectorName: string = 'Jira'; // this should be passed as a prop for reusability
@@ -21,7 +21,7 @@
 		'Jira Project': string;
 		'Jira Query': string;
 	};
-	$: {
+	function initializeForm() {
 		if (configuration) {
 			jira_server = configuration['Jira Server URL'] || '';
 			jira_username = configuration['Jira Username'] || '';
@@ -30,6 +30,14 @@
 			jira_query = configuration['Jira Query'] || '';
 		}
 	}
+
+    onMount(() => {
+        initializeForm();
+    });
+
+    $: if (!hidden && configuration) {
+        initializeForm();
+    }
 
 	function saveConfiguration() {
 		// Dispatch event with collected data

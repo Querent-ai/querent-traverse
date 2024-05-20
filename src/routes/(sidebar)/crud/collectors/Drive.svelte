@@ -3,7 +3,7 @@
 	import { CloseSolid } from 'flowbite-svelte-icons';
 	export let hidden: boolean = true; // modal control
 
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
 	const dispatch = createEventDispatcher();
 
 	export let collectorName: string = 'Google Drive'; // this should be passed as a prop for reusability
@@ -25,7 +25,7 @@
 		'Specific file type': string;
 		'Folder to crawl': string;
 	};
-	$: {
+	function initializeForm() {
 		if (configuration) {
 			drive_refresh_token = configuration['Refresh Token'] || '';
 			drive_token = configuration['Token'] || '';
@@ -36,6 +36,14 @@
 			folder_to_crawl = configuration['Folder to crawl'] || '';
 		}
 	}
+
+    onMount(() => {
+        initializeForm();
+    });
+
+    $: if (!hidden && configuration) {
+        initializeForm();
+    }
 
 	function saveConfiguration() {
 		// Dispatch event with collected data

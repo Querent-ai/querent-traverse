@@ -3,7 +3,7 @@
 	import { CloseSolid } from 'flowbite-svelte-icons';
 	export let hidden: boolean = true; // modal control
 
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
 	const dispatch = createEventDispatcher();
 
 	export let collectorName: string = 'AWS S3'; // this should be passed as a prop for reusability
@@ -19,7 +19,7 @@
 		'Access Key': string;
 		'Secret Key': string;
 	};
-	$: {
+	function initializeForm() {
 		if (configuration) {
 			bucket = configuration['Bucket'] || '';
 			region = configuration['Region'] || '';
@@ -27,6 +27,14 @@
 			secret_key = configuration['Secret Key'] || '';
 		}
 	}
+
+    onMount(() => {
+        initializeForm();
+    });
+
+    $: if (!hidden && configuration) {
+        initializeForm();
+    }
 
 	function saveConfiguration() {
 		// Dispatch event with collected data

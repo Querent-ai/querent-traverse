@@ -2,7 +2,7 @@
 	import { Button, CloseButton, Heading, Input, Label } from 'flowbite-svelte';
 	import { CloseSolid } from 'flowbite-svelte-icons';
 	export let hidden: boolean = true; // modal control
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
 	const dispatch = createEventDispatcher();
 
 	export let collectorName: string = 'Github'; // this should be passed as a prop for reusability
@@ -16,13 +16,21 @@
 		'Repository Name': string;
 		'Access Token': string;
 	};
-	$: {
+	function initializeForm() {
 		if (configuration) {
 			github_username = configuration['GitHub Username'] || '';
 			repository = configuration['Repository Name'] || '';
 			github_access_token = configuration['Access Token'] || '';
 		}
 	}
+
+    onMount(() => {
+        initializeForm();
+    });
+
+    $: if (!hidden && configuration) {
+        initializeForm();
+    }
 
 	function saveConfiguration() {
 		// Dispatch event with collected data

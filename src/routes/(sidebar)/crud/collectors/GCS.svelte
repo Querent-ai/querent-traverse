@@ -1,7 +1,6 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
 	import { Button, CloseButton, Heading, Input, Label, Textarea } from 'flowbite-svelte';
-	import { CloseSolid } from 'flowbite-svelte-icons';
 
 	export let hidden: boolean;
 	const dispatch = createEventDispatcher();
@@ -12,16 +11,23 @@
 	let bucketName = '';
 	let credentials = '';
 
-	// Ensure the component initializes with correct values from the configuration
-	$: {
+	function initializeForm() {
 		if (configuration) {
 			bucketName = configuration['Bucket Name'] || '';
 			credentials = configuration['Credentials'] || '';
 		}
 	}
 
+    onMount(() => {
+        initializeForm();
+    });
+
+    $: if (!hidden && configuration) {
+        initializeForm();
+    }
+
 	function saveConfiguration() {
-		dispatch('saveCollector', {
+		dispatch('collectorSaved', {
 			name: collectorName,
 			technology: 'Google Cloud Storage',
 			description: 'Configured GCS bucket: ' + bucketName,
@@ -51,6 +57,7 @@
 		<Label class="space-y-2">
 			<span>Bucket Name</span>
 			<Input
+			    id="bucket"
 				bind:value={bucketName}
 				class="border font-normal outline-none"
 				placeholder="Enter your storage bucket name"
@@ -61,6 +68,7 @@
 		<Label class="space-y-2">
 			<span>Credentials (Stringified JSON)</span>
 			<Textarea
+				id="credentials"
 				bind:value={credentials}
 				class="border font-normal outline-none"
 				placeholder="Paste your JSON credentials here"
@@ -72,7 +80,6 @@
 		<div class="flex w-full justify-center space-x-4 pb-4">
 			<Button type="submit" class="w-full">Save Configuration</Button>
 			<Button color="alternative" class="w-full" on:click={closePanel}>
-				<CloseSolid />
 				Cancel
 			</Button>
 		</div>

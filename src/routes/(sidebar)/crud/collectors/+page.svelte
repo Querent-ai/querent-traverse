@@ -61,14 +61,16 @@
 	function handleCollectorSaved(event: {
 		detail: { name: any; technology: any; description: any; configuration: any };
 	}) {
-		collectors_list.push({
-			name: event.detail.name,
-			technology: event.detail.technology,
-			description: event.detail.description,
-			configuration: event.detail.configuration
-		});
-		configuration = configuration;
-		collectors_list = collectors_list;
+		const { name, technology, description, configuration } = event.detail;
+		const index = collectors_list.findIndex(collector => collector.name === name);
+
+		if (index !== -1) {
+			collectors_list[index] = { name, technology, description, configuration };
+			collectors_list = [...collectors_list];
+		} else {
+			collectors_list.push({ name, technology, description, configuration });
+			collectors_list = [...collectors_list];
+		}
 	}
 	function getComponent(name: string): typeof SvelteComponent | undefined {
 		console.log(name);
@@ -165,6 +167,6 @@
 	{#if drawerComponent === CollectorsList}
 		<CollectorsList bind:hidden bind:configuration on:collectorSaved={handleCollectorSaved} />
 	{:else}
-		<svelte:component this={drawerComponent} bind:hidden bind:configuration />
+		<svelte:component this={drawerComponent} bind:hidden bind:configuration on:collectorSaved={handleCollectorSaved}/>
 	{/if}
 </Drawer>

@@ -3,7 +3,7 @@
 	import { CloseSolid } from 'flowbite-svelte-icons';
 	export let hidden: boolean = true; // modal control
 
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
 	const dispatch = createEventDispatcher();
 
 	export let collectorName: string = 'Azure'; // this should be passed as a prop for reusability
@@ -21,7 +21,7 @@
 		Container: string;
 		Prefix: string;
 	};
-	$: {
+	function initializeForm() {
 		if (configuration) {
 			account_url = configuration['Account URL'] || '';
 			connection_url = configuration['Connection URL'] || '';
@@ -30,6 +30,14 @@
 			prefix = configuration['Prefix'] || '';
 		}
 	}
+
+    onMount(() => {
+        initializeForm();
+    });
+
+    $: if (!hidden && configuration) {
+        initializeForm();
+    }
 
 	function saveConfiguration() {
 		// Dispatch event with collected data

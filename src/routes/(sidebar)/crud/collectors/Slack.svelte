@@ -3,7 +3,7 @@
 	import { CloseSolid } from 'flowbite-svelte-icons';
 	export let hidden: boolean = true; // modal control
 
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
 	const dispatch = createEventDispatcher();
 
 	export let collectorName: string = 'Slack'; // this should be passed as a prop for reusability
@@ -25,7 +25,7 @@
 		Limit: string;
 		'Access Token': string;
 	};
-	$: {
+	function initializeForm() {
 		if (configuration) {
 			channel_name = configuration['Channel Name'] || '';
 			cursor = configuration['Cursor (optional)'] || '';
@@ -37,6 +37,14 @@
 			access_token = configuration['Access Token'] || '';
 		}
 	}
+
+    onMount(() => {
+        initializeForm();
+    });
+
+    $: if (!hidden && configuration) {
+        initializeForm();
+    }
 
 	function saveConfiguration() {
 		// Dispatch event with collected data

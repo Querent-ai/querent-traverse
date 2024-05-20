@@ -2,7 +2,7 @@
 	import { Button, CloseButton, Heading, Input, Label } from 'flowbite-svelte';
 	import { CloseSolid } from 'flowbite-svelte-icons';
 	export let hidden: boolean = true; // modal control
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
 	const dispatch = createEventDispatcher();
 
 	export let collectorName: string = 'Dropbox'; // this should be passed as a prop for reusability
@@ -18,7 +18,7 @@
 		'Dropbox App Secret': string;
 		'Dropbox Folder Path': string;
 	};
-	$: {
+	function initializeForm() {
 		if (configuration) {
 			dropbox_app_key = configuration['Dropbox App Key'] || '';
 			dropbox_refresh_token = configuration['Dropbox Refresh Token'] || '';
@@ -26,6 +26,14 @@
 			folder_path = configuration['Dropbox Folder Path'] || '';
 		}
 	}
+
+    onMount(() => {
+        initializeForm();
+    });
+
+    $: if (!hidden && configuration) {
+        initializeForm();
+    }
 
 	function saveConfiguration() {
 		// Dispatch event with collected data

@@ -32,8 +32,31 @@
 			api_key = configuration['API Key'] || '';
 			query = configuration['Query Topic'] || '';
 			from_date = configuration['Date Range From'] || '';
+			to_date = configuration['Date Range To'] || '';
+			language = configuration['Language'] || '';
+			sort_by = configuration['Sort By'] || '';
+			page_size = configuration['Page Size'] || '';
+			page = configuration['Page Number'] || '';
 		}
 	}
+
+	function initializeForm() {
+		if (configuration) {
+			jira_server = configuration['Jira Server URL'] || '';
+			jira_username = configuration['Jira Username'] || '';
+			jira_api_token = configuration['Jira API Token'] || '';
+			jira_project = configuration['Jira Project'] || '';
+			jira_query = configuration['Jira Query'] || '';
+		}
+	}
+
+    onMount(() => {
+        initializeForm();
+    });
+
+    $: if (!hidden && configuration) {
+        initializeForm();
+    }
 
 	function saveConfiguration() {
 		// Dispatch event with collected data

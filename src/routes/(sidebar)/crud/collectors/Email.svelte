@@ -2,7 +2,7 @@
 	import { Button, CloseButton, Heading, Input, Label } from 'flowbite-svelte';
 	import { CloseSolid } from 'flowbite-svelte-icons';
 	export let hidden: boolean = true; // modal control
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
 	const dispatch = createEventDispatcher();
 
 	export let collectorName: string = 'Email'; // this should be passed as a prop for reusability
@@ -24,7 +24,7 @@
 		'Certificate File (optional)': string;
 		'Key File (optional)': string;
 	};
-	$: {
+	function initializeForm() {
 		if (configuration) {
 			imap_server = configuration['IMAP Server'] || '';
 			imap_port = configuration['Port'] || '';
@@ -35,6 +35,14 @@
 			imap_keyfile = configuration['Key File (optional)'] || '';
 		}
 	}
+
+    onMount(() => {
+        initializeForm();
+    });
+
+    $: if (!hidden && configuration) {
+        initializeForm();
+    }
 
 	function saveConfiguration() {
 		// Dispatch event with collected data
