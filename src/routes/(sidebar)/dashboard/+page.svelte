@@ -4,9 +4,9 @@
 	export let data;
 
 	const path: string = '/dashboard';
-  const description: string = 'Admin Dashboard example using Flowbite Svelte';
-  const title: string = 'Querent Admin Dashboard - Dashboard';
-  const subtitle: string = 'Admin Dashboard';
+	const description: string = 'Admin Dashboard example using Flowbite Svelte';
+	const title: string = 'Querent Admin Dashboard - Dashboard';
+	const subtitle: string = 'Admin Dashboard';
 </script>
 
 <MetaTag {path} {description} {title} {subtitle} />

@@ -4,8 +4,7 @@
 		FooterCopyright,
 		FooterLinkGroup,
 		FooterLink,
-		FooterBrand,
-		FooterIcon
+		FooterBrand
 	} from 'flowbite-svelte';
 </script>
 

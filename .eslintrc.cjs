@@ -8,7 +8,7 @@ module.exports = {
 		'prettier'
 	],
 	parser: '@typescript-eslint/parser',
-	plugins: ['@typescript-eslint'],
+	plugins: ['@typescript-eslint', 'svelte3', 'prettier'],
 	parserOptions: {
 		sourceType: 'module',
 		ecmaVersion: 2020,
@@ -16,7 +16,7 @@ module.exports = {
 	},
 	env: {
 		browser: true,
-		es2017: true,
+		es2019: true,
 		node: true
 	},
 	overrides: [
@@ -27,5 +27,13 @@ module.exports = {
 				parser: '@typescript-eslint/parser'
 			}
 		}
-	]
+	],
+	settings: {
+		'svelte3/ignore-styles': () => true
+	},
+	rules: {
+		'@typescript-eslint/no-explicit-any': 'off',
+		'@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+		'svelte/no-at-html-tags': 'off'
+	}
 };

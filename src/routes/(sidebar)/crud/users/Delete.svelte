@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Button, CloseButton, Heading, Modal } from 'flowbite-svelte';
+	import { Button, Modal } from 'flowbite-svelte';
 	import { ExclamationCircleOutline } from 'flowbite-svelte-icons';
 	export let open: boolean = false; // modal control
 </script>

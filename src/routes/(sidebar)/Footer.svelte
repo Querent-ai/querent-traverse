@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Card, Frame, type LinkType } from 'flowbite-svelte';
+	import { Frame, type LinkType } from 'flowbite-svelte';
 	import {
 		DiscordSolid,
 		DribbbleSolid,
