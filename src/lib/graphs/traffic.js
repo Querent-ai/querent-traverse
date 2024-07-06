@@ -12,8 +12,8 @@ export default (dark) => {
 	}
 
 	return {
-		series: [70, 5, 25],
-		labels: ['Desktop', 'Tablet', 'Phone'],
+		series: [34, 10, 16],
+		labels: ['Document1', 'Document2', 'Document3'],
 		colors: ['#16BDCA', '#FDBA8C', '#1A56DB'],
 		chart: {
 			type: 'donut',

@@ -38,5 +38,9 @@
 	{
 		"name": "Slack",
 		"formComponent": "SlackForm"
+	},
+	{
+		"name": "Local Storage",
+		"formComponent": "LocalStorageForm"
 	}
 ]

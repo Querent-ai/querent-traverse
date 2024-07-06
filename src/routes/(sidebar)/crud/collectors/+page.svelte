@@ -16,6 +16,7 @@
 	import NewsForm from './News.svelte';
 	import AWSForm from './S3.svelte';
 	import SlackForm from './Slack.svelte';
+	import LocalStorageForm from './LocalStorage.svelte';
 	import type { ComponentType, SvelteComponent } from 'svelte';
 	import MetaTag from '../../../utils/MetaTag.svelte';
 
@@ -50,7 +51,8 @@
 		Jira: JiraForm,
 		News: NewsForm,
 		'AWS S3': AWSForm,
-		Slack: SlackForm
+		Slack: SlackForm,
+		'Local Storage': LocalStorageForm,
 	};
 
 	const path: string = '/crud/collectors';

@@ -23,7 +23,6 @@
 	// eslint-disable-next-line svelte/valid-compile
 	export let configuration: Record<string, string>;
 	export let hidden: boolean;
-	import Collectors from '../../../data/collectors.json';
 	import DriveForm from './Drive.svelte';
 	import AzureForm from './Azure.svelte';
 	import DropboxForm from './Dropbox.svelte';
@@ -35,6 +34,7 @@
 	import SlackForm from './Slack.svelte';
 	import NewsForm from './News.svelte';
 	import CollectorComponent from '../../../data/collector-component.json';
+	import LocalStorageForm from './LocalStorage.svelte';
 
 	let selectedCollector: null = null;
 
@@ -52,7 +52,8 @@
 		GithubForm: GithubForm,
 		JiraForm: JiraForm,
 		NewsForm: NewsForm,
-		SlackForm: SlackForm
+		SlackForm: SlackForm,
+		LocalStorageForm: LocalStorageForm
 	};
 
 	function getFormComponent(name: string) {
@@ -63,7 +64,7 @@
 
 <select bind:value={selectedCollector}>
 	<option disabled selected value={null}>-- Select a collector --</option>
-	{#each Collectors as collector}
+	{#each CollectorComponent as collector}
 		<option value={collector.name}>{collector.name}</option>
 	{/each}
 </select>
