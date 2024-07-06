@@ -11,7 +11,7 @@ interface TokenResponse {
 }
 
 export const GET: RequestHandler = async ({ url }) => {
-	const clientId = process.env.DRIVE_CLIENT_ID;;
+	const clientId = process.env.DRIVE_CLIENT_ID;
 	const clientSecret = process.env.DRIVE_CLIENT_SECRET;
 	const redirectUri = process.env.DRIVE_REDIRECT_URL;
 	const code = url.searchParams.get('code');
