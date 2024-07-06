@@ -9,9 +9,8 @@
 		LayersSolid,
 		RocketSolid
 	} from 'flowbite-svelte-icons';
-	import { fade, fly } from 'svelte/transition';
+	import { fly } from 'svelte/transition';
 	const items = [{}, {}, {}];
-	let animation = (node: Element) => fade(node, { duration: 200 });
 
 	let transitionSlideIn = {
 		x: '100%',

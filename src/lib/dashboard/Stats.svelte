@@ -1,59 +1,94 @@
 <script lang="ts">
-	import { Avatar, Card, Heading, Popover, TabItem, Tabs } from 'flowbite-svelte';
-	import Change from '$lib/dashboard/Change.svelte';
-	import Customers from '../../routes/data/users.json';
-	import { avatarPath, imagesPath } from '$lib/variables';
+	import { Card, Heading, TabItem, Tabs } from 'flowbite-svelte';
+	// import Change from '$lib/dashboard/Change.svelte';
+	// import Customers from '../../routes/data/users.json';
+	import { imagesPath } from '$lib/variables';
 	import LastRange from '$lib/widgets/LastRange.svelte';
 	import More from '$lib/widgets/More.svelte';
-	import { QuestionCircleSolid } from 'flowbite-svelte-icons';
+	// import { QuestionCircleSolid } from 'flowbite-svelte-icons';
 
 	const products = [
 		{
-			src: 'iphone.png',
+			label: 'total_batches',
+			number: 0,
 			image: 'iphone',
-			label: 'iPhone 14 Pro',
-			change: 2.5,
-			price: '$445,467'
+			src: 'iphone.png'
 		},
 		{
-			src: 'imac.png',
-			image: 'imac',
-			label: 'Apple iMac 27',
-			change: 12.5,
-			price: '$256,982'
+			label: 'total_docs',
+			number: 0,
+			image: 'iphone',
+			src: 'iphone.png'
 		},
 		{
-			src: 'watch.png',
-			image: 'watch',
-			label: 'Apple Watch SE',
-			change: -1.35,
-			price: '$201,869'
+			label: 'total_events',
+			number: 0,
+			image: 'iphone',
+			src: 'iphone.png'
 		},
 		{
-			src: 'ipad.png',
-			image: 'ipad',
-			label: 'Apple iPad Air',
-			change: 12.5,
-			price: '$103,967'
+			label: 'total_events_processed',
+			number: 0,
+			image: 'iphone',
+			src: 'iphone.png'
 		},
 		{
-			src: 'imac.png',
-			image: 'imac',
-			label: 'Apple iMac 24',
-			change: -2,
-			price: '$98,543 '
+			label: 'total_events_received',
+			number: 0,
+			image: 'iphone',
+			src: 'iphone.png'
+		},
+		{
+			label: 'total_events_sent',
+			number: 0,
+			image: 'iphone',
+			src: 'iphone.png'
+		},
+		{
+			label: 'total_graph_events',
+			number: 0,
+			image: 'iphone',
+			src: 'iphone.png'
+		},
+		{
+			label: 'total_objects',
+			number: 0,
+			image: 'iphone',
+			src: 'iphone.png'
+		},
+		{
+			label: 'total_predicates',
+			number: 0,
+			image: 'iphone',
+			src: 'iphone.png'
+		},
+		{
+			label: 'total_sentences',
+			number: 0,
+			image: 'iphone',
+			src: 'iphone.png'
+		},
+		{
+			label: 'total_subjects',
+			number: 0,
+			image: 'iphone',
+			src: 'iphone.png'
+		},
+		{
+			label: 'total_vector_events',
+			number: 0,
+			image: 'iphone',
+			src: 'iphone.png'
 		}
 	];
 
-	const customers = Customers.slice(0, 5);
+	// const customers = Customers.slice(0, 5);
 </script>
 
 <Card size="xl">
 	<div class="mb-4 flex items-center gap-2">
-		<Heading tag="h3" class="w-fit text-lg font-semibold dark:text-white">
-			Statistics this month
-		</Heading>
-		<button>
+		<Heading tag="h3" class="w-fit text-lg font-semibold dark:text-white">Pipeline Stats</Heading>
+		<!-- <button>
 			<span class="sr-only">Show information</span>
 			<QuestionCircleSolid size="sm" class="text-gray-400 hover:text-gray-500" />
 		</button>
@@ -61,12 +96,11 @@
 			<div class="w-72 space-y-2 text-sm font-normal text-gray-500 dark:text-gray-400">
 				<h3 class="font-semibold text-gray-900 dark:text-white">Statistics</h3>
 				<p>
-					Statistics is a branch of applied mathematics that involves the collection, description,
-					analysis, and inference of conclusions from quantitative data.
+					Stats about the given pipeline
 				</p>
 				<More title="Read more" href="#top" flat />
 			</div>
-		</Popover>
+		</Popover> -->
 	</div>
 	<Tabs
 		style="full"
@@ -74,9 +108,9 @@
 		contentClass="p-3 mt-4"
 	>
 		<TabItem class="w-full" open>
-			<span slot="title">Top products</span>
+			<span slot="title">Pipeline ID:1234656</span>
 			<ul class="-m-3 divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-800">
-				{#each products as { src, image, label, price, change }}
+				{#each products as { src, image, label, number }}
 					<li class="py-3 sm:py-4">
 						<div class="flex items-center justify-between">
 							<div class="flex min-w-0 items-center">
@@ -89,38 +123,12 @@
 									<p class="truncate font-medium text-gray-900 dark:text-white">
 										{label}
 									</p>
-									<Change value={change} size="sm" equalHeight class="ml-px" />
 								</div>
 							</div>
 							<div
 								class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white"
 							>
-								{price}
-							</div>
-						</div>
-					</li>
-				{/each}
-			</ul>
-		</TabItem>
-		<TabItem class="w-full">
-			<span slot="title">Top customers</span>
-			<ul class="-m-3 divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
-				{#each customers as { email, name, avatar }}
-					<li class="py-3 sm:py-3.5">
-						<div class="flex items-center justify-between">
-							<div class="flex min-w-0 items-center">
-								<Avatar src={imagesPath(avatar, 'users')} />
-								<div class="ml-3">
-									<p class="truncate font-medium text-gray-900 dark:text-white">
-										{name}
-									</p>
-									<span class="text-gray-500">{email}</span>
-								</div>
-							</div>
-							<div
-								class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white"
-							>
-								${Math.floor(Math.random() * 10000)}
+								{number}
 							</div>
 						</div>
 					</li>

@@ -36,7 +36,9 @@
 		"dayjs": "^1.11.10",
 		"eslint": "^8.57.0",
 		"eslint-config-prettier": "^9.1.0",
+		"eslint-plugin-prettier": "^5.1.3",
 		"eslint-plugin-svelte": "^2.35.1",
+		"eslint-plugin-svelte3": "^4.0.0",
 		"postcss": "^8.4.35",
 		"postcss-load-config": "^5.0.3",
 		"prettier": "^3.2.5",
@@ -57,9 +59,12 @@
 		"svelte": "^4.0.0"
 	},
 	"dependencies": {
+		"dotenv": "^16.4.5",
+		"flowbite": "^2.3.0",
 		"flowbite-svelte": "^0.44.24",
 		"flowbite-svelte-admin-dashboard": "^0.1.2",
 		"flowbite-svelte-icons": "^1.4.3",
+		"node-fetch": "^3.3.2",
 		"tailwind-merge": "^2.2.1"
 	},
 	"keywords": [
@@ -107,9 +112,9 @@
 			"types": "./dist/authentication/SignUp.svelte.d.ts",
 			"svelte": "./dist/authentication/SignUp.svelte"
 		},
-		"./Products.svelte": {
-			"types": "./dist/crud/Products.svelte.d.ts",
-			"svelte": "./dist/crud/Products.svelte"
+		"./Collectors.svelte": {
+			"types": "./dist/crud/Collectors.svelte.d.ts",
+			"svelte": "./dist/crud/Collectors.svelte"
 		},
 		"./Users.svelte": {
 			"types": "./dist/crud/Users.svelte.d.ts",

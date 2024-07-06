@@ -13,16 +13,10 @@
 		AngleDownSolid,
 		AngleUpOutline,
 		ClipboardListSolid,
-		CogOutline,
-		FileChartBarSolid,
-		GithubSolid,
-		LayersSolid,
 		LifeSaverSolid,
 		LockSolid,
 		MagicWandSolid,
 		PieChartSolid,
-		RectangleListSolid,
-		TableColumnSolid,
 		DatabaseOutline
 	} from 'flowbite-svelte-icons';
 
@@ -55,10 +49,25 @@
 			name: 'Data Sources',
 			icon: DatabaseOutline,
 			children: {
-				Historical: '/crud/products',
+				Historical: '/crud/collectors/',
 				Realtime: '/crud/users'
 			}
 		},
+		{
+			name: 'Semantic Web',
+			icon: MagicWandSolid,
+			href: '/crud/semantic-web'
+		},
+		{
+			name: 'Discovery',
+			icon: LockSolid,
+			href: '/crud/discovery'
+		},
+		{
+			name: 'Insights',
+			icon: LifeSaverSolid,
+			href: '/crud/insights'
+		}
 	];
 
 	let links = [

@@ -3,9 +3,9 @@
 	import MetaTag from '../../../utils/MetaTag.svelte';
 
 	const path: string = '/playground/stacked';
-  const description: string = 'Playground stacked example - Querent Admin Dashboard';
+	const description: string = 'Playground stacked example - Querent Admin Dashboard';
 	const metaTitle: string = 'Querent Admin Dashboard - Playground stacked';
-  const subtitle: string = 'Playground stacked';
+	const subtitle: string = 'Playground stacked';
 </script>
 
 <MetaTag {path} {description} title={metaTitle} {subtitle} />
