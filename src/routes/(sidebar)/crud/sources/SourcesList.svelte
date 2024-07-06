@@ -11,7 +11,7 @@
 		};
 	}) {
 		// Dispatch the event upwards with more details if needed
-		dispatch('collectorSaved', {
+		dispatch('sourceSaved', {
 			name: event.detail.name,
 			technology: event.detail.technology,
 			description: event.detail.description,
@@ -33,7 +33,7 @@
 	import S3Form from './S3.svelte';
 	import SlackForm from './Slack.svelte';
 	import NewsForm from './News.svelte';
-	import CollectorComponent from '../../../data/collector-component.json';
+	import CollectorComponent from '../../../data/source-component.json';
 	import LocalStorageForm from './LocalStorage.svelte';
 
 	let selectedCollector: null = null;
@@ -63,9 +63,9 @@
 </script>
 
 <select bind:value={selectedCollector}>
-	<option disabled selected value={null}>-- Select a collector --</option>
-	{#each CollectorComponent as collector}
-		<option value={collector.name}>{collector.name}</option>
+	<option disabled selected value={null}>-- Select a source --</option>
+	{#each CollectorComponent as source}
+		<option value={source.name}>{source.name}</option>
 	{/each}
 </select>
 
@@ -75,7 +75,7 @@
 			<svelte:component
 				this={getFormComponent(selectedCollector)}
 				bind:hidden
-				on:collectorSaved={handleSave}
+				on:sourceSaved={handleSave}
 			/>
 		{/if}
 	</div>

@@ -6,7 +6,7 @@
 	import { createEventDispatcher, onMount } from 'svelte';
 	const dispatch = createEventDispatcher();
 
-	export let collectorName: string = 'Jira'; // this should be passed as a prop for reusability
+	export let sourceName: string = 'Jira'; // this should be passed as a prop for reusability
 
 	let jira_server: string = '';
 	let jira_username: string = '';
@@ -41,10 +41,10 @@
 
 	function saveConfiguration() {
 		// Dispatch event with collected data
-		dispatch('saveCollector', {
-			name: collectorName,
+		dispatch('saveSource', {
+			name: sourceName,
 			technology: 'Jira',
-			description: 'Configured Jira collector',
+			description: 'Configured Jira source',
 			configuration: {
 				'Jira Server URL': jira_server,
 				'Jira Username': jira_username,

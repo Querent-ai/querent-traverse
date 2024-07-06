@@ -6,25 +6,28 @@
 	import { createEventDispatcher, onMount } from 'svelte';
 	const dispatch = createEventDispatcher();
 
-	export let collectorName: string = 'AWS S3'; // this should be passed as a prop for reusability
+	export let sourceName: string = 'Azure'; // this should be passed as a prop for reusability
 
-	let bucket: string = '';
-	let region: string = '';
-	let access_key: string = '';
-	let secret_key: string = '';
+	let account_url: string = '';
+	let connection_url: string = '';
+	let credentials: string = '';
+	let container: string = '';
+	let prefix: string = '';
 
 	export let configuration: {
-		Bucket: string;
-		Region: string;
-		'Access Key': string;
-		'Secret Key': string;
+		'Connection URL': string;
+		'Account URL': string;
+		Credentials: string;
+		Container: string;
+		Prefix: string;
 	};
 	function initializeForm() {
 		if (configuration) {
-			bucket = configuration['Bucket'] || '';
-			region = configuration['Region'] || '';
-			access_key = configuration['Access Key'] || '';
-			secret_key = configuration['Secret Key'] || '';
+			account_url = configuration['Account URL'] || '';
+			connection_url = configuration['Connection URL'] || '';
+			credentials = configuration['Credentials'] || '';
+			container = configuration['Container'] || '';
+			prefix = configuration['Prefix'] || '';
 		}
 	}
 
@@ -38,22 +41,23 @@
 
 	function saveConfiguration() {
 		// Dispatch event with collected data
-		dispatch('saveCollector', {
-			name: collectorName,
-			technology: 'AWS S3',
-			description: 'Configured S3 bucket',
+		dispatch('saveSource', {
+			name: sourceName,
+			technology: 'Azure',
+			description: 'Configured Azure bucket',
 			configuration: {
-				Bucket: bucket,
-				Region: region,
-				'Access Key': access_key,
-				'Secret Key': secret_key
+				'Connection URL': connection_url,
+				'Account URL': account_url,
+				Credentials: credentials,
+				Container: container,
+				Prefix: prefix
 			}
 		});
 		hidden = true; // Optionally close the modal/form after saving
 	}
 </script>
 
-<Heading tag="h5" class="mb-6 text-sm font-semibold uppercase">Configure S3 Collector</Heading>
+<Heading tag="h5" class="mb-6 text-sm font-semibold uppercase">Configure Azure Source</Heading>
 <CloseButton
 	on:click={() => (hidden = true)}
 	class="absolute right-2.5 top-2.5 text-gray-400 hover:text-black dark:text-white"
@@ -62,40 +66,49 @@
 <form on:submit|preventDefault={saveConfiguration}>
 	<div class="space-y-4">
 		<Label class="space-y-2">
-			<span>Bucket</span>
+			<span>Connection URL</span>
 			<Input
-				bind:value={bucket}
+				bind:value={connection_url}
 				class="border font-normal outline-none"
-				placeholder="Type bucket name"
+				placeholder="Type connection url"
 				required
 			/>
 		</Label>
 
 		<Label class="space-y-2">
-			<span>Region</span>
+			<span>Account URL</span>
 			<Input
-				bind:value={region}
+				bind:value={account_url}
 				class="border font-normal outline-none"
-				placeholder="Type region of your bucket"
+				placeholder="Type account url"
 				required
 			/>
 		</Label>
 
 		<Label class="space-y-2">
-			<span>Access Key</span>
+			<span>Credentials</span>
 			<Input
-				bind:value={access_key}
+				bind:value={credentials}
 				class="border font-normal outline-none"
-				placeholder="Type access key"
+				placeholder="Type credentials"
 				required
 			/>
 		</Label>
 		<Label class="space-y-2">
-			<span>Secret Key</span>
+			<span>Container</span>
 			<Input
-				bind:value={secret_key}
+				bind:value={container}
 				class="border font-normal outline-none"
-				placeholder="Type secret_key"
+				placeholder="Type container"
+				required
+			/>
+		</Label>
+		<Label class="space-y-2">
+			<span>Prefix</span>
+			<Input
+				bind:value={prefix}
+				class="border font-normal outline-none"
+				placeholder="Type prefix"
 				required
 			/>
 		</Label>

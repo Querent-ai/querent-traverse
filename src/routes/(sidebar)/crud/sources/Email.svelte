@@ -5,7 +5,7 @@
 	import { createEventDispatcher, onMount } from 'svelte';
 	const dispatch = createEventDispatcher();
 
-	export let collectorName: string = 'Email'; // this should be passed as a prop for reusability
+	export let sourceName: string = 'Email'; // this should be passed as a prop for reusability
 
 	let imap_server: string = '';
 	let imap_port: string = '';
@@ -46,10 +46,10 @@
 
 	function saveConfiguration() {
 		// Dispatch event with collected data
-		dispatch('saveCollector', {
-			name: collectorName,
+		dispatch('saveSource', {
+			name: sourceName,
 			technology: 'Email',
-			description: 'Configured Email collector',
+			description: 'Configured Email source',
 			configuration: {
 				'IMAP Server': imap_server,
 				Port: imap_port,

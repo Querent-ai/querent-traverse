@@ -49,7 +49,7 @@
 			name: 'Data Sources',
 			icon: DatabaseOutline,
 			children: {
-				Historical: '/crud/collectors/',
+				Historical: '/crud/sources/',
 				Realtime: '/crud/users'
 			}
 		},

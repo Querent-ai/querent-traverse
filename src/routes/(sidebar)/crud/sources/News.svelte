@@ -6,7 +6,7 @@
 	import { createEventDispatcher, onMount } from 'svelte';
 	const dispatch = createEventDispatcher();
 
-	export let collectorName: string = 'News'; // this should be passed as a prop for reusability
+	export let sourceName: string = 'News'; // this should be passed as a prop for reusability
 
 	let api_key: string = '';
 	let query: string = '';
@@ -50,10 +50,10 @@
 
 	function saveConfiguration() {
 		// Dispatch event with collected data
-		dispatch('saveCollector', {
-			name: collectorName,
+		dispatch('saveSource', {
+			name: sourceName,
 			technology: 'News',
-			description: 'Configured News Collector',
+			description: 'Configured News Source',
 			configuration: {
 				'API Key': api_key,
 				'Query Topic': query,

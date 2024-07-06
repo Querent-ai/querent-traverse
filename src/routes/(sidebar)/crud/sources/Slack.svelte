@@ -6,7 +6,7 @@
 	import { createEventDispatcher, onMount } from 'svelte';
 	const dispatch = createEventDispatcher();
 
-	export let collectorName: string = 'Slack'; // this should be passed as a prop for reusability
+	export let sourceName: string = 'Slack'; // this should be passed as a prop for reusability
 
 	let channel_name: string = '';
 	let cursor: string = '';
@@ -48,10 +48,10 @@
 
 	function saveConfiguration() {
 		// Dispatch event with collected data
-		dispatch('saveCollector', {
-			name: collectorName,
+		dispatch('saveSource', {
+			name: sourceName,
 			technology: 'Slack',
-			description: 'Configured Slack collector',
+			description: 'Configured Slack source',
 			configuration: {
 				'Channel Name': channel_name,
 				'Cursor (optional)': cursor,
@@ -66,7 +66,7 @@
 	}
 </script>
 
-<Heading tag="h5" class="mb-6 text-sm font-semibold uppercase">Configure Slack Collector</Heading>
+<Heading tag="h5" class="mb-6 text-sm font-semibold uppercase">Configure Slack Source</Heading>
 <CloseButton
 	on:click={() => (hidden = true)}
 	class="absolute right-2.5 top-2.5 text-gray-400 hover:text-black dark:text-white"

@@ -5,7 +5,7 @@
 	export let hidden: boolean;
 	const dispatch = createEventDispatcher();
 
-	export let collectorName: string = 'Google Cloud Storage';
+	export let sourceName: string = 'Google Cloud Storage';
 	export let configuration: { 'Bucket Name': string; Credentials: string };
 
 	let bucketName = '';
@@ -27,8 +27,8 @@
 	}
 
 	function saveConfiguration() {
-		dispatch('collectorSaved', {
-			name: collectorName,
+		dispatch('sourceSaved', {
+			name: sourceName,
 			technology: 'Google Cloud Storage',
 			description: 'Configured GCS bucket: ' + bucketName,
 			configuration: {

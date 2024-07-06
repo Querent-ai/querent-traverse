@@ -2,32 +2,28 @@
 	import { Button, CloseButton, Heading, Input, Label } from 'flowbite-svelte';
 	import { CloseSolid } from 'flowbite-svelte-icons';
 	export let hidden: boolean = true; // modal control
-
 	import { createEventDispatcher, onMount } from 'svelte';
 	const dispatch = createEventDispatcher();
 
-	export let collectorName: string = 'Azure'; // this should be passed as a prop for reusability
+	export let sourceName: string = 'Dropbox'; // this should be passed as a prop for reusability
 
-	let account_url: string = '';
-	let connection_url: string = '';
-	let credentials: string = '';
-	let container: string = '';
-	let prefix: string = '';
+	let dropbox_app_key: string = '';
+	let dropbox_refresh_token: string = '';
+	let dropbox_app_secret: string = '';
+	let folder_path: string = '';
 
 	export let configuration: {
-		'Connection URL': string;
-		'Account URL': string;
-		Credentials: string;
-		Container: string;
-		Prefix: string;
+		'Dropbox App Key': string;
+		'Dropbox Refresh Token': string;
+		'Dropbox App Secret': string;
+		'Dropbox Folder Path': string;
 	};
 	function initializeForm() {
 		if (configuration) {
-			account_url = configuration['Account URL'] || '';
-			connection_url = configuration['Connection URL'] || '';
-			credentials = configuration['Credentials'] || '';
-			container = configuration['Container'] || '';
-			prefix = configuration['Prefix'] || '';
+			dropbox_app_key = configuration['Dropbox App Key'] || '';
+			dropbox_refresh_token = configuration['Dropbox Refresh Token'] || '';
+			dropbox_app_secret = configuration['Dropbox App Secret'] || '';
+			folder_path = configuration['Dropbox Folder Path'] || '';
 		}
 	}
 
@@ -41,23 +37,22 @@
 
 	function saveConfiguration() {
 		// Dispatch event with collected data
-		dispatch('saveCollector', {
-			name: collectorName,
-			technology: 'Azure',
-			description: 'Configured Azure bucket',
+		dispatch('saveSource', {
+			name: sourceName,
+			technology: 'Dropbox',
+			description: 'Configured Dropbox',
 			configuration: {
-				'Connection URL': connection_url,
-				'Account URL': account_url,
-				Credentials: credentials,
-				Container: container,
-				Prefix: prefix
+				'Dropbox App Key': dropbox_app_key,
+				'Dropbox Refresh Token': dropbox_refresh_token,
+				'Dropbox App Secret': dropbox_app_secret,
+				'Dropbox Folder Path': folder_path
 			}
 		});
 		hidden = true; // Optionally close the modal/form after saving
 	}
 </script>
 
-<Heading tag="h5" class="mb-6 text-sm font-semibold uppercase">Configure Azure Collector</Heading>
+<Heading tag="h5" class="mb-6 text-sm font-semibold uppercase">Configure Dropbox</Heading>
 <CloseButton
 	on:click={() => (hidden = true)}
 	class="absolute right-2.5 top-2.5 text-gray-400 hover:text-black dark:text-white"
@@ -66,49 +61,41 @@
 <form on:submit|preventDefault={saveConfiguration}>
 	<div class="space-y-4">
 		<Label class="space-y-2">
-			<span>Connection URL</span>
+			<span>Dropbox App Key</span>
 			<Input
-				bind:value={connection_url}
+				bind:value={dropbox_app_key}
 				class="border font-normal outline-none"
-				placeholder="Type connection url"
+				placeholder="Enter your Dropbox App Key"
 				required
 			/>
 		</Label>
 
 		<Label class="space-y-2">
-			<span>Account URL</span>
+			<span>Dropbox Refresh Token</span>
 			<Input
-				bind:value={account_url}
+				bind:value={dropbox_refresh_token}
 				class="border font-normal outline-none"
-				placeholder="Type account url"
+				placeholder="Enter your Dropbox Refresh Token"
 				required
 			/>
 		</Label>
 
 		<Label class="space-y-2">
-			<span>Credentials</span>
+			<span>Dropbox App Secret</span>
 			<Input
-				bind:value={credentials}
+				bind:value={dropbox_app_secret}
 				class="border font-normal outline-none"
-				placeholder="Type credentials"
+				placeholder="Enter your Dropbox App Secret"
 				required
 			/>
 		</Label>
+
 		<Label class="space-y-2">
-			<span>Container</span>
+			<span>Dropbox Folder Path</span>
 			<Input
-				bind:value={container}
+				bind:value={folder_path}
 				class="border font-normal outline-none"
-				placeholder="Type container"
-				required
-			/>
-		</Label>
-		<Label class="space-y-2">
-			<span>Prefix</span>
-			<Input
-				bind:value={prefix}
-				class="border font-normal outline-none"
-				placeholder="Type prefix"
+				placeholder="Enter Dropbox Folder Path"
 				required
 			/>
 		</Label>

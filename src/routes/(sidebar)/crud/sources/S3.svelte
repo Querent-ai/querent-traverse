@@ -2,25 +2,29 @@
 	import { Button, CloseButton, Heading, Input, Label } from 'flowbite-svelte';
 	import { CloseSolid } from 'flowbite-svelte-icons';
 	export let hidden: boolean = true; // modal control
+
 	import { createEventDispatcher, onMount } from 'svelte';
 	const dispatch = createEventDispatcher();
 
-	export let collectorName: string = 'Github'; // this should be passed as a prop for reusability
+	export let sourceName: string = 'AWS S3'; // this should be passed as a prop for reusability
 
-	let github_username: string = '';
-	let repository: string = '';
-	let github_access_token: string = '';
+	let bucket: string = '';
+	let region: string = '';
+	let access_key: string = '';
+	let secret_key: string = '';
 
 	export let configuration: {
-		'GitHub Username': string;
-		'Repository Name': string;
-		'Access Token': string;
+		Bucket: string;
+		Region: string;
+		'Access Key': string;
+		'Secret Key': string;
 	};
 	function initializeForm() {
 		if (configuration) {
-			github_username = configuration['GitHub Username'] || '';
-			repository = configuration['Repository Name'] || '';
-			github_access_token = configuration['Access Token'] || '';
+			bucket = configuration['Bucket'] || '';
+			region = configuration['Region'] || '';
+			access_key = configuration['Access Key'] || '';
+			secret_key = configuration['Secret Key'] || '';
 		}
 	}
 
@@ -34,21 +38,22 @@
 
 	function saveConfiguration() {
 		// Dispatch event with collected data
-		dispatch('saveCollector', {
-			name: collectorName,
-			technology: 'Github',
-			description: 'Configured Github repository',
+		dispatch('saveSource', {
+			name: sourceName,
+			technology: 'AWS S3',
+			description: 'Configured S3 bucket',
 			configuration: {
-				'GitHub Username': github_username,
-				'Repository Name': repository,
-				'Access Token': github_access_token
+				Bucket: bucket,
+				Region: region,
+				'Access Key': access_key,
+				'Secret Key': secret_key
 			}
 		});
 		hidden = true; // Optionally close the modal/form after saving
 	}
 </script>
 
-<Heading tag="h5" class="mb-6 text-sm font-semibold uppercase">Configure GitHub Repository</Heading>
+<Heading tag="h5" class="mb-6 text-sm font-semibold uppercase">Configure S3 Source</Heading>
 <CloseButton
 	on:click={() => (hidden = true)}
 	class="absolute right-2.5 top-2.5 text-gray-400 hover:text-black dark:text-white"
@@ -57,32 +62,40 @@
 <form on:submit|preventDefault={saveConfiguration}>
 	<div class="space-y-4">
 		<Label class="space-y-2">
-			<span>GitHub Username</span>
+			<span>Bucket</span>
 			<Input
-				bind:value={github_username}
+				bind:value={bucket}
 				class="border font-normal outline-none"
-				placeholder="Enter your GitHub username"
+				placeholder="Type bucket name"
 				required
 			/>
 		</Label>
 
 		<Label class="space-y-2">
-			<span>Repository Name</span>
+			<span>Region</span>
 			<Input
-				bind:value={repository}
+				bind:value={region}
 				class="border font-normal outline-none"
-				placeholder="Enter the GitHub repository name"
+				placeholder="Type region of your bucket"
 				required
 			/>
 		</Label>
 
 		<Label class="space-y-2">
-			<span>Access Token</span>
+			<span>Access Key</span>
 			<Input
-				bind:value={github_access_token}
-				type="password"
+				bind:value={access_key}
 				class="border font-normal outline-none"
-				placeholder="Paste your GitHub access token"
+				placeholder="Type access key"
+				required
+			/>
+		</Label>
+		<Label class="space-y-2">
+			<span>Secret Key</span>
+			<Input
+				bind:value={secret_key}
+				class="border font-normal outline-none"
+				placeholder="Type secret_key"
 				required
 			/>
 		</Label>

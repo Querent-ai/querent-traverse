@@ -112,9 +112,9 @@
 			"types": "./dist/authentication/SignUp.svelte.d.ts",
 			"svelte": "./dist/authentication/SignUp.svelte"
 		},
-		"./Collectors.svelte": {
-			"types": "./dist/crud/Collectors.svelte.d.ts",
-			"svelte": "./dist/crud/Collectors.svelte"
+		"./Sources.svelte": {
+			"types": "./dist/crud/Sources.svelte.d.ts",
+			"svelte": "./dist/crud/Sources.svelte"
 		},
 		"./Users.svelte": {
 			"types": "./dist/crud/Users.svelte.d.ts",

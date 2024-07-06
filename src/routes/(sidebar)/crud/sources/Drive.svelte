@@ -16,7 +16,7 @@
 		const code = params.get('code');
 		if (code) {
 			try {
-				const response = await fetch(`/crud/collectors?code=${code}`);
+				const response = await fetch(`/crud/sources?code=${code}`);
 				const data = await response.json();
 				console.log('Access Token:', data.access_token);
 				console.log('Refresh Token:', data.refresh_token);
