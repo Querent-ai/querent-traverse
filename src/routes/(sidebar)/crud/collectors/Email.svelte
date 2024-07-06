@@ -36,13 +36,13 @@
 		}
 	}
 
-    onMount(() => {
-        initializeForm();
-    });
+	onMount(() => {
+		initializeForm();
+	});
 
-    $: if (!hidden && configuration) {
-        initializeForm();
-    }
+	$: if (!hidden && configuration) {
+		initializeForm();
+	}
 
 	function saveConfiguration() {
 		// Dispatch event with collected data

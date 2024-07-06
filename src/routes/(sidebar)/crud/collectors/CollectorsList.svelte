@@ -17,7 +17,7 @@
 			description: event.detail.description,
 			configuration: event.detail.configuration
 		});
-		console.log("Sending data in collevtros slist as ", event.detail.configuration)
+		console.log('Sending data in collevtros slist as ', event.detail.configuration);
 	}
 	// Exported for use in parent components
 	// eslint-disable-next-line svelte/valid-compile

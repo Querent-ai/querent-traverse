@@ -18,13 +18,13 @@
 		}
 	}
 
-    onMount(() => {
-        initializeForm();
-    });
+	onMount(() => {
+		initializeForm();
+	});
 
-    $: if (!hidden && configuration) {
-        initializeForm();
-    }
+	$: if (!hidden && configuration) {
+		initializeForm();
+	}
 
 	function saveConfiguration() {
 		dispatch('collectorSaved', {
@@ -57,7 +57,7 @@
 		<Label class="space-y-2">
 			<span>Bucket Name</span>
 			<Input
-			    id="bucket"
+				id="bucket"
 				bind:value={bucketName}
 				class="border font-normal outline-none"
 				placeholder="Enter your storage bucket name"
@@ -79,9 +79,7 @@
 
 		<div class="flex w-full justify-center space-x-4 pb-4">
 			<Button type="submit" class="w-full">Save Configuration</Button>
-			<Button color="alternative" class="w-full" on:click={closePanel}>
-				Cancel
-			</Button>
+			<Button color="alternative" class="w-full" on:click={closePanel}>Cancel</Button>
 		</div>
 	</div>
 </form>

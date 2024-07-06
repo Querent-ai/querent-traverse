@@ -52,7 +52,7 @@
 		News: NewsForm,
 		'AWS S3': AWSForm,
 		Slack: SlackForm,
-		'Local Storage': LocalStorageForm,
+		'Local Storage': LocalStorageForm
 	};
 
 	const path: string = '/crud/collectors';
@@ -64,7 +64,7 @@
 		detail: { name: any; technology: any; description: any; configuration: any };
 	}) {
 		const { name, technology, description, configuration } = event.detail;
-		const index = collectors_list.findIndex(collector => collector.name === name);
+		const index = collectors_list.findIndex((collector) => collector.name === name);
 
 		if (index !== -1) {
 			collectors_list[index] = { name, technology, description, configuration };
@@ -169,6 +169,11 @@
 	{#if drawerComponent === CollectorsList}
 		<CollectorsList bind:hidden bind:configuration on:collectorSaved={handleCollectorSaved} />
 	{:else}
-		<svelte:component this={drawerComponent} bind:hidden bind:configuration on:collectorSaved={handleCollectorSaved}/>
+		<svelte:component
+			this={drawerComponent}
+			bind:hidden
+			bind:configuration
+			on:collectorSaved={handleCollectorSaved}
+		/>
 	{/if}
 </Drawer>
