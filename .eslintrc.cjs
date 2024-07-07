@@ -34,6 +34,13 @@ module.exports = {
 	rules: {
 		'@typescript-eslint/no-explicit-any': 'off',
 		'@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
-		'svelte/no-at-html-tags': 'off'
+		'svelte/no-at-html-tags': 'off',
+		'svelte/valid-compile': [
+			'error',
+			{
+				ignoreWarnings: true
+			}
+		],
+		'svelte/no-unused-export-let': 'off'
 	}
 };
