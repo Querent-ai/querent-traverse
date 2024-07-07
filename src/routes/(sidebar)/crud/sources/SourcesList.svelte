@@ -10,17 +10,15 @@
 			configuration: Record<string, unknown>;
 		};
 	}) {
-		// Dispatch the event upwards with more details if needed
 		dispatch('sourceSaved', {
 			name: event.detail.name,
 			technology: event.detail.technology,
 			description: event.detail.description,
 			configuration: event.detail.configuration
 		});
-		console.log('Sending data in collevtros slist as ', event.detail.configuration);
+		console.log('Sending data in collectors list as ', event.detail.configuration);
 	}
-	// Exported for use in parent components
-	// eslint-disable-next-line svelte/valid-compile
+
 	export let configuration: Record<string, string>;
 	export let hidden: boolean;
 	import DriveForm from './Drive.svelte';
@@ -33,10 +31,11 @@
 	import S3Form from './S3.svelte';
 	import SlackForm from './Slack.svelte';
 	import NewsForm from './News.svelte';
-	import CollectorComponent from '../../../data/source-component.json';
+	import SourceComponent from '../../../data/source-component.json';
+	import SourceComponentPremium from '../../../data/source-component-premium.json';
 	import LocalStorageForm from './LocalStorage.svelte';
 
-	let selectedCollector: null = null;
+	let selectedSource: string | null = null;
 
 	interface FormComponents {
 		[key: string]: typeof SvelteComponent<any, any, any>;
@@ -57,23 +56,32 @@
 	};
 
 	function getFormComponent(name: string) {
-		const entry = CollectorComponent.find((c) => c.name === name);
+		const entry = [...SourceComponent, ...SourceComponentPremium].find((c) => c.name === name);
 		return entry ? formComponents[entry.formComponent] : null;
+	}
+
+	function isPremiumSource(name: string) {
+		return SourceComponentPremium.some((source) => source.name === name);
 	}
 </script>
 
-<select bind:value={selectedCollector}>
+<select bind:value={selectedSource}>
 	<option disabled selected value={null}>-- Select a source --</option>
-	{#each CollectorComponent as source}
+	{#each SourceComponent as source}
 		<option value={source.name}>{source.name}</option>
+	{/each}
+	{#each SourceComponentPremium as source}
+		<option value={source.name} style="color: #888;">{source.name}</option>
 	{/each}
 </select>
 
-{#if selectedCollector}
+{#if selectedSource}
 	<div class="form-container">
-		{#if getFormComponent(selectedCollector)}
+		{#if isPremiumSource(selectedSource)}
+			<p>This feature is available only in premium.</p>
+		{:else if getFormComponent(selectedSource)}
 			<svelte:component
-				this={getFormComponent(selectedCollector)}
+				this={getFormComponent(selectedSource)}
 				bind:hidden
 				on:sourceSaved={handleSave}
 			/>
