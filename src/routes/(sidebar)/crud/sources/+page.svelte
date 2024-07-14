@@ -19,24 +19,24 @@
 	import LocalStorageForm from './LocalStorage.svelte';
 	import type { ComponentType, SvelteComponent } from 'svelte';
 	import MetaTag from '../../../utils/MetaTag.svelte';
+	import { goto } from '$app/navigation';
 
-	let hidden: boolean = true; // modal control
-	let drawerComponent: ComponentType = Source; // drawer component
+	let hidden: boolean = true;
+	let drawerComponent: ComponentType = Source;
 
 	const toggle = (component: typeof SvelteComponent | undefined, config: any) => {
 		if (!component) {
 			console.error('No component found for this Source type:');
-			return; // Handle this case appropriately, maybe show an error message
+			return;
 		}
 		drawerComponent = component;
-		configuration = config; // Directly use the provided configuration
-		hidden = !hidden;
+		configuration = config;
 	};
 
-	function toggleList() {
-		drawerComponent = SourcesList;
-		hidden = !hidden;
+	function navigateToAddNewSource() {
+		goto('/crud/sources/add');
 	}
+	
 	let configuration = {};
 	type SourceComponents = {
 		[key: string]: any;
@@ -56,7 +56,7 @@
 	};
 
 	const path: string = '/crud/source';
-	const description: string = 'Sources examaple - Querent Admin Dashboard';
+	const description: string = 'Sources example - Querent Admin Dashboard';
 	const title: string = 'Querent Admin Dashboard - Sources';
 	const subtitle: string = 'Sources';
 	let sources_list: any[] = [];
@@ -121,7 +121,7 @@
 			</ToolbarButton>
 
 			<div slot="end" class="space-x-2">
-				<Button class="whitespace-nowrap" on:click={toggleList}>Add new source</Button>
+				<Button class="whitespace-nowrap" on:click={navigateToAddNewSource}>Add new source</Button>
 			</div>
 		</Toolbar>
 	</div>
@@ -164,16 +164,3 @@
 		</TableBody>
 	</Table>
 </main>
-
-<Drawer placement="right" transitionType="fly" bind:hidden>
-	{#if drawerComponent === SourcesList}
-		<SourcesList bind:hidden bind:configuration on:sourceSaved={handleSourceSaved} />
-	{:else}
-		<svelte:component
-			this={drawerComponent}
-			bind:hidden
-			bind:configuration
-			on:sourceSaved={handleSourceSaved}
-		/>
-	{/if}
-</Drawer>

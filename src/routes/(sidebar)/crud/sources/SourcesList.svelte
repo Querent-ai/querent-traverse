@@ -20,7 +20,6 @@
 	}
 
 	export let configuration: Record<string, string>;
-	export let hidden: boolean;
 	import DriveForm from './Drive.svelte';
 	import AzureForm from './Azure.svelte';
 	import DropboxForm from './Dropbox.svelte';
@@ -82,7 +81,6 @@
 		{:else if getFormComponent(selectedSource)}
 			<svelte:component
 				this={getFormComponent(selectedSource)}
-				bind:hidden
 				on:sourceSaved={handleSave}
 			/>
 		{/if}

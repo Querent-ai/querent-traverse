@@ -2,7 +2,6 @@
 	import { createEventDispatcher, onMount } from 'svelte';
 	import { Button, CloseButton, Heading, Input, Label, Textarea } from 'flowbite-svelte';
 
-	export let hidden: boolean;
 	const dispatch = createEventDispatcher();
 
 	export let sourceName: string = 'Google Cloud Storage';
@@ -22,7 +21,7 @@
 		initializeForm();
 	});
 
-	$: if (!hidden && configuration) {
+	$: if (configuration) {
 		initializeForm();
 	}
 
@@ -36,21 +35,12 @@
 				Credentials: credentials
 			}
 		});
-		hidden = !hidden;
-	}
-
-	function closePanel() {
-		hidden = !hidden;
 	}
 </script>
 
 <Heading tag="h5" class="mb-6 text-sm font-semibold uppercase"
 	>Configure Google Cloud Storage Bucket</Heading
 >
-<CloseButton
-	on:click={closePanel}
-	class="absolute right-2.5 top-2.5 text-gray-400 hover:text-black dark:text-white"
-/>
 
 <form on:submit|preventDefault={saveConfiguration}>
 	<div class="space-y-4">
@@ -79,7 +69,6 @@
 
 		<div class="flex w-full justify-center space-x-4 pb-4">
 			<Button type="submit" class="w-full">Save Configuration</Button>
-			<Button color="alternative" class="w-full" on:click={closePanel}>Cancel</Button>
 		</div>
 	</div>
 </form>
