@@ -14,7 +14,16 @@
 	import LocalStorageForm from '../LocalStorage.svelte';
 	import GoogleDriveIcon from './DriveComponent.svelte';
 	import FolderIcon from './FolderComponent.svelte';
+	import DropboxIcon from './DropboxComponent.svelte';
 	import AwsIcon from './AwsComponent.svelte';
+	import AzureIcon from './AzureComponent.svelte';
+	import GithubIcon from './GithubComponent.svelte';
+	import OnedriveIcon from './OnedriveComponent.svelte';
+	import JiraIcon from './JiraComponent.svelte';
+	import SlackIcon from './SlackComponent.svelte';
+	import EmailIcon from './EmailComponent.svelte';
+	import NewsIcon from './NewsComponent.svelte';
+	import GCSIcon from './GCSComponent.svelte';
 	import MetaTag from '../../../../utils/MetaTag.svelte';
 	import type { SvelteComponent } from 'svelte';
 
@@ -37,9 +46,11 @@
 
 	// Initialize configuration objects for each form
 	let configurations: Record<string, any> = {
+		'Local Storage': { 'Storage Path': '' },
+		'Google Drive': { 'Drive ID': '', Credentials: '' },
 		'Google Cloud Storage': { 'Bucket Name': '', Credentials: '' },
 		Azure: { 'Connection URL': '', 'Account URL': '', Credentials: '', Container: '', Prefix: '' },
-		'Google Drive': { 'Drive ID': '', Credentials: '' },
+		
 		Dropbox: {
 			'Dropbox App Key': '',
 			'Dropbox Refresh Token': '',
@@ -82,22 +93,21 @@
 			'Latest (timestamp)': '',
 			Limit: '',
 			'Access Token': ''
-		},
-		'Local Storage': { 'Storage Path': '' }
+		}
 	};
 
 	const iconMapping: Record<string, any> = {
-		'Google Cloud Storage': GoogleDriveIcon,
-		Azure: FolderIcon,
 		'Google Drive': GoogleDriveIcon,
-		Dropbox: FolderIcon,
-		Email: FolderIcon,
-		Github: FolderIcon,
-		Jira: FolderIcon,
-		News: FolderIcon,
+		'Local Storage': FolderIcon,
+		'Google Cloud Storage': GCSIcon,
+		Azure: AzureIcon,
+		Dropbox: DropboxIcon,
+		Email: EmailIcon,
+		Github: GithubIcon,
+		Jira: JiraIcon,
+		News: NewsIcon,
 		'AWS S3': AwsIcon,
-		Slack: FolderIcon,
-		'Local Storage': FolderIcon
+		Slack: SlackIcon
 	};
 
 	const path: string = '/crud/sources/add';
