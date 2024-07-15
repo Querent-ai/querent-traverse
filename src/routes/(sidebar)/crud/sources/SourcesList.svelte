@@ -79,10 +79,7 @@
 		{#if isPremiumSource(selectedSource)}
 			<p>This feature is available only in premium.</p>
 		{:else if getFormComponent(selectedSource)}
-			<svelte:component
-				this={getFormComponent(selectedSource)}
-				on:sourceSaved={handleSave}
-			/>
+			<svelte:component this={getFormComponent(selectedSource)} on:sourceSaved={handleSave} />
 		{/if}
 	</div>
 {/if}

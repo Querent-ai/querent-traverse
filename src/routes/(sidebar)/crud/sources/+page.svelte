@@ -36,7 +36,7 @@
 	function navigateToAddNewSource() {
 		goto('/crud/sources/add');
 	}
-	
+
 	let configuration = {};
 	type SourceComponents = {
 		[key: string]: any;
