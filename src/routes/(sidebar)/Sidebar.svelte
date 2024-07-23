@@ -25,7 +25,7 @@
 	const closeDrawer = () => {
 		drawerHidden = true;
 	};
-
+	let fabric_icon = new URL('assets/images/fabric_icon.png', import.meta.url).href;
 	let iconClass =
 		'flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white';
 	let itemClass =
