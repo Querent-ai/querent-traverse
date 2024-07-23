@@ -50,7 +50,7 @@
 		'Google Drive': { 'Drive ID': '', Credentials: '' },
 		'Google Cloud Storage': { 'Bucket Name': '', Credentials: '' },
 		Azure: { 'Connection URL': '', 'Account URL': '', Credentials: '', Container: '', Prefix: '' },
-		
+
 		Dropbox: {
 			'Dropbox App Key': '',
 			'Dropbox Refresh Token': '',
