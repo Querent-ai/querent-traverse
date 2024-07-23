@@ -17,7 +17,7 @@
 		LockSolid,
 		MagicWandSolid,
 		PieChartSolid,
-		DatabaseOutline
+		DatabaseOutline,
 	} from 'flowbite-svelte-icons';
 
 	export let drawerHidden: boolean = false;
@@ -54,7 +54,7 @@
 			}
 		},
 		{
-			name: 'Semantic Web',
+			name: 'Data Fabric',
 			icon: MagicWandSolid,
 			href: '/crud/semantic-web'
 		},
