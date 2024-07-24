@@ -26,6 +26,7 @@
 	import GCSIcon from './GCSComponent.svelte';
 	import MetaTag from '../../../../utils/MetaTag.svelte';
 	import { onMount } from 'svelte';
+	import Modal from './Modal.svelte';
 
 	const CLIENT_ID = import.meta.env.VITE_DRIVE_CLIENT_ID;
 	const REDIRECT_URI = import.meta.env.VITE_DRIVE_REDIRECT_URL;
@@ -100,6 +101,23 @@
 		}
 	};
 
+	let premiumSources = ['Azure', 'Dropbox', 'Email', 'Github', 'Jira', 'News', 'AWS S3', 'Slack', 'Google Cloud Storage'];
+
+	let showModal = false;
+    let modalMessage = '';
+
+	function selectSource(sourceName: string) {
+		if (sourceName === 'Google Drive') {
+			login();
+		} else if (premiumSources.includes(sourceName)) {
+			modalMessage = 'This feature is only available in the premium version.';
+            showModal = true;
+		}
+    	else {
+            selectedSource = sourceName;
+        }
+    }
+
 	const iconMapping: Record<string, any> = {
 		'Google Drive': GoogleDriveIcon,
 		'Local Storage': FolderIcon,
@@ -137,13 +155,7 @@
 				<button
 					type="button"
 					class="flex cursor-pointer flex-col items-center space-y-2"
-					on:click={() => {
-						if (sourceName === 'Google Drive') {
-							login();
-						} else {
-							selectedSource = sourceName;
-						}
-					}}
+					on:click={() => selectSource(sourceName)}
 					on:keydown={(event) => event.key === 'Enter' && (selectedSource = sourceName)}
 					aria-label={`Select ${sourceName}`}
 				>
@@ -175,5 +187,6 @@
 		{:else if selectedSource === 'Local Storage'}
 			<LocalStorageForm bind:configuration={configurations['Local Storage']} />
 		{/if}
+		<Modal bind:show={showModal} message={modalMessage} />
 	</div>
 </main>
