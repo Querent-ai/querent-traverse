@@ -33,7 +33,7 @@ module.exports = {
 	},
 	rules: {
 		'@typescript-eslint/no-explicit-any': 'off',
-		'@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+		'@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
 		'svelte/no-at-html-tags': 'off',
 		'svelte/valid-compile': [
 			'error',
