@@ -101,22 +101,31 @@
 		}
 	};
 
-	let premiumSources = ['Azure', 'Dropbox', 'Email', 'Github', 'Jira', 'News', 'AWS S3', 'Slack', 'Google Cloud Storage'];
+	let premiumSources = [
+		'Azure',
+		'Dropbox',
+		'Email',
+		'Github',
+		'Jira',
+		'News',
+		'AWS S3',
+		'Slack',
+		'Google Cloud Storage'
+	];
 
 	let showModal = false;
-    let modalMessage = '';
+	let modalMessage = '';
 
 	function selectSource(sourceName: string) {
 		if (sourceName === 'Google Drive') {
 			login();
 		} else if (premiumSources.includes(sourceName)) {
 			modalMessage = 'This feature is only available in the premium version.';
-            showModal = true;
+			showModal = true;
+		} else {
+			selectedSource = sourceName;
 		}
-    	else {
-            selectedSource = sourceName;
-        }
-    }
+	}
 
 	const iconMapping: Record<string, any> = {
 		'Google Drive': GoogleDriveIcon,
