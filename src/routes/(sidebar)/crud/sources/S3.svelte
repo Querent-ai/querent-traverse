@@ -1,12 +1,10 @@
 <script lang="ts">
-	import { Button, CloseButton, Heading, Input, Label } from 'flowbite-svelte';
-	import { CloseSolid } from 'flowbite-svelte-icons';
-	export let hidden: boolean = true; // modal control
+	import { Button, Heading, Input, Label } from 'flowbite-svelte';
 
 	import { createEventDispatcher, onMount } from 'svelte';
 	const dispatch = createEventDispatcher();
 
-	export let collectorName: string = 'AWS S3'; // this should be passed as a prop for reusability
+	export let sourceName: string = 'AWS S3';
 
 	let bucket: string = '';
 	let region: string = '';
@@ -32,14 +30,13 @@
 		initializeForm();
 	});
 
-	$: if (!hidden && configuration) {
+	$: if (configuration) {
 		initializeForm();
 	}
 
 	function saveConfiguration() {
-		// Dispatch event with collected data
-		dispatch('saveCollector', {
-			name: collectorName,
+		dispatch('saveSource', {
+			name: sourceName,
 			technology: 'AWS S3',
 			description: 'Configured S3 bucket',
 			configuration: {
@@ -49,15 +46,10 @@
 				'Secret Key': secret_key
 			}
 		});
-		hidden = true; // Optionally close the modal/form after saving
 	}
 </script>
 
-<Heading tag="h5" class="mb-6 text-sm font-semibold uppercase">Configure S3 Collector</Heading>
-<CloseButton
-	on:click={() => (hidden = true)}
-	class="absolute right-2.5 top-2.5 text-gray-400 hover:text-black dark:text-white"
-/>
+<Heading tag="h5" class="mb-6 text-sm font-semibold uppercase">Configure S3 Source</Heading>
 
 <form on:submit|preventDefault={saveConfiguration}>
 	<div class="space-y-4">
@@ -102,10 +94,6 @@
 
 		<div class="flex w-full justify-center space-x-4 pb-4">
 			<Button type="submit" class="w-full">Save Configuration</Button>
-			<Button color="alternative" class="w-full" on:click={() => (hidden = true)}>
-				<CloseSolid />
-				Cancel
-			</Button>
 		</div>
 	</div>
 </form>

@@ -11,9 +11,9 @@ interface TokenResponse {
 }
 
 export const GET: RequestHandler = async ({ url }) => {
-	const clientId = '4402204563-bmfpspke6cl23j2975hd7dkuf2v4ii3n.apps.googleusercontent.com';
-	const clientSecret = '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';
-	const redirectUri = 'http://localhost:5173/crud/collectors';
+	const clientId = process.env.DRIVE_CLIENT_ID;
+	const clientSecret = process.env.DRIVE_CLIENT_SECRET;
+	const redirectUri = process.env.DRIVE_REDIRECT_URL;
 	const code = url.searchParams.get('code');
 
 	if (!code) {

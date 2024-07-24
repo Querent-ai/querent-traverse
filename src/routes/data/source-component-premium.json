@@ -8,10 +8,6 @@
 		"formComponent": "AzureForm"
 	},
 	{
-		"name": "Google Drive",
-		"formComponent": "DriveForm"
-	},
-	{
 		"name": "Dropbox",
 		"formComponent": "DropboxForm"
 	},
@@ -38,9 +34,5 @@
 	{
 		"name": "Slack",
 		"formComponent": "SlackForm"
-	},
-	{
-		"name": "Local Storage",
-		"formComponent": "LocalStorageForm"
 	}
 ]
