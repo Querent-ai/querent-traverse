@@ -1,11 +1,10 @@
 <script lang="ts">
 	import { Button, Heading, Input, Label, Select } from 'flowbite-svelte';
-	// import { CloseSolid } from 'flowbite-svelte-icons';
 
 	import { createEventDispatcher, onMount } from 'svelte';
 	const dispatch = createEventDispatcher();
 
-	export let sourceName: string = 'News'; // this should be passed as a prop for reusability
+	export let sourceName: string = 'News';
 
 	let api_key: string = '';
 	let query: string = '';
@@ -48,7 +47,6 @@
 	}
 
 	function saveConfiguration() {
-		// Dispatch event with collected data
 		dispatch('saveSource', {
 			name: sourceName,
 			technology: 'News',

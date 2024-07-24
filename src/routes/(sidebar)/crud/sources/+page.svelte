@@ -7,9 +7,6 @@
 	import MetaTag from '../../../utils/MetaTag.svelte';
 	import { goto } from '$app/navigation';
 
-	//let hidden: boolean = true;
-	// let drawerComponent: ComponentType = Source;
-
 	function navigateToAddNewSource() {
 		goto('/crud/sources/add');
 	}

@@ -1,6 +1,5 @@
 <!-- src/components/icons/CustomIcon.svelte -->
 <script lang="ts">
-	// No specific script logic needed unless you want to add dynamic behavior
 </script>
 
 <svg
@@ -31,9 +30,9 @@
 
 <style>
 	.icon {
-		width: 32px; /* Adjusted width */
-		height: 32px; /* Adjusted height to maintain aspect ratio */
-		display: block; /* Ensure SVG is not inline */
-		fill: #000; /* Overall fallback fill color */
+		width: 32px;
+		height: 32px;
+		display: block;
+		fill: #000;
 	}
 </style>

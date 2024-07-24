@@ -1,10 +1,9 @@
 <script>
-	export let configuration = { 'Storage Path': '' }; // Configuration is received and exported
+	export let configuration = { 'Storage Path': '' };
 
-	// Function to handle the button click
 	function updateDirectoryPath() {
 		if (configuration['Storage Path']) {
-			console.log('Directory Path: ', configuration['Storage Path']); // Print the path to the console
+			console.log('Directory Path: ', configuration['Storage Path']);
 		} else {
 			console.log('No directory path entered.');
 		}

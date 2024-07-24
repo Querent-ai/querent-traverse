@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	// 	import { Button, CloseButton, Heading, Input, Label, Textarea } from 'flowbite-svelte';
 
 	export let configuration: {
 		'Folder to crawl': string;

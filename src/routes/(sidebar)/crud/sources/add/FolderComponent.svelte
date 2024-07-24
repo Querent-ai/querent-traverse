@@ -1,6 +1,5 @@
 <!-- src/components/icons/FolderIcon.svelte -->
 <script lang="ts">
-	// No specific script logic needed unless you want to add dynamic behavior
 </script>
 
 <svg enable-background="new 0 0 48 48" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
@@ -13,7 +12,7 @@
 
 <style>
 	svg {
-		width: 32px; /* Responsive width, adjustable via parent container */
-		height: 32px; /* Maintain aspect ratio */
+		width: 32px;
+		height: 32px;
 	}
 </style>

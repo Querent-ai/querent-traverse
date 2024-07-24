@@ -1,6 +1,5 @@
 <!-- src/components/icons/MonochromeIcon.svelte -->
 <script lang="ts">
-	// No specific script logic needed unless you want to add dynamic behavior
 </script>
 
 <svg

@@ -1,6 +1,5 @@
 <!-- src/components/icons/CustomIcon.svelte -->
 <script lang="ts">
-	// No specific script logic needed unless you want to add dynamic behavior
 </script>
 
 <svg class="icon" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
