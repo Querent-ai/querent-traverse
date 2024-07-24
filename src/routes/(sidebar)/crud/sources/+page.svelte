@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { Breadcrumb, BreadcrumbItem, Button, Checkbox, Drawer, Heading } from 'flowbite-svelte';
+	import { Breadcrumb, BreadcrumbItem, Button, Checkbox, Heading } from 'flowbite-svelte';
 	import { Input, Table, TableBody, TableBodyCell, TableBodyRow, TableHead } from 'flowbite-svelte';
 	import { TableHeadCell, Toolbar, ToolbarButton } from 'flowbite-svelte';
 	import { CogSolid, DotsVerticalSolid, EditOutline } from 'flowbite-svelte-icons';
 	import { ExclamationCircleSolid, TrashBinSolid } from 'flowbite-svelte-icons';
 	import Source from './Sources.svelte';
-	import SourcesList from './SourcesList.svelte';
+	// import SourcesList from './SourcesList.svelte';
 	import GCSForm from './GCS.svelte';
 	import AzureForm from './Azure.svelte';
 	import DriveForm from './Drive.svelte';

@@ -1,33 +1,24 @@
 <script>
-	import { writable } from 'svelte/store';
-	import { onMount } from 'svelte';
+	export let configuration = { 'Storage Path': '' }; // Configuration is received and exported
 
-	export let configuration = { 'Storage Path': '' }; // Define the configuration prop type
-
-	let selectedDirectory = writable('');
-
-	function handleSelectFolder() {
-		const input = document.createElement('input');
-		input.type = 'file';
-		input.webkitdirectory = true;
-
-		input.addEventListener('change', (e) => {
-			const files = e.target.files;
-			if (files.length > 0) {
-				const directory = files[0].webkitRelativePath.split('/')[0];
-				selectedDirectory.set(directory);
-				configuration['Storage Path'] = directory; // Update the configuration object
-			}
-		});
-
-		input.click();
+	// Function to handle the button click
+	function updateDirectoryPath() {
+		if (configuration['Storage Path']) {
+			console.log('Directory Path: ', configuration['Storage Path']); // Print the path to the console
+		} else {
+			console.log('No directory path entered.');
+		}
 	}
 </script>
 
 <form on:submit|preventDefault>
-	<button type="button" on:click={handleSelectFolder}>Select the folder</button>
+	<label for="dirPath">Enter Directory Path:</label>
+	<input
+		id="dirPath"
+		type="text"
+		bind:value={configuration['Storage Path']}
+		placeholder="Enter your directory path here"
+	/>
 
-	{#if $selectedDirectory}
-		<p>Selected directory: {$selectedDirectory}</p>
-	{/if}
+	<button type="button" on:click={updateDirectoryPath}>Submit</button>
 </form>

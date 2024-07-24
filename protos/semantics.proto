@@ -1,0 +1,341 @@
+syntax = "proto3";
+
+package querent.semantics;
+
+service SemanticsService {
+  rpc StartPipeline(SemanticPipelineRequest) returns (SemanticPipelineResponse) {}
+  rpc ObservePipeline(EmptyObserve) returns (SemanticServiceCounters) {}
+  rpc GetPipelinesMetadata(EmptyGetPipelinesMetadata) returns (PipelinesMetadata) {}
+  rpc StopPipeline(StopPipelineRequest) returns (BooleanResponse) {}
+  rpc DescribePipeline(DescribePipelineRequest) returns (IndexingStatistics) {}
+  rpc IngestTokens(SendIngestedTokens) returns (BooleanResponse) {}
+  rpc RestartPipeline(RestartPipelineRequest) returns (BooleanResponse) {}
+  rpc PostCollectors(CollectorConfig) returns (CollectorConfigResponse) {}
+  rpc DeleteCollectors(DeleteCollectorRequest) returns (DeleteCollectorResponse) {}
+  rpc ListCollectors(ListCollectorRequest) returns (ListCollectorConfig) {}
+  rpc ListPipelineInfo(EmptyList) returns (PipelineRequestInfoList) {}
+}
+
+message PipelineRequestInfoList {
+  repeated PipelineRequestInfo requests = 1;
+}
+
+message PipelineRequestInfo { 
+  string pipeline_id = 1;
+  SemanticPipelineRequest request = 2;  
+}
+
+message EmptyObserve{}
+message EmptyList{}
+message EmptyGetPipelinesMetadata{}
+
+message StopPipelineRequest {
+  string pipeline_id = 1;
+}
+
+message DescribePipelineRequest {
+  string pipeline_id = 1;
+}
+
+message RestartPipelineRequest {
+  string pipeline_id = 1;
+}
+
+message CollectorConfigResponse {
+  string id = 1;
+}
+
+message DeleteCollectorRequest {
+  repeated string id = 1;
+}
+
+message DeleteCollectorResponse {
+  repeated string id = 1;
+}
+
+message ListCollectorRequest {}
+
+message ListCollectorConfig {
+  repeated CollectorConfig config = 1;
+}
+
+message SemanticPipelineRequest {
+  repeated string collectors = 1;
+  optional FixedEntities fixed_entities = 2;
+  optional SampleEntities sample_entities = 3;
+  optional Model model = 4;
+  optional float attention_threshold = 5;
+}
+
+enum Model {
+  BERT = 0;
+  GeoBert = 1;
+  PubMedBert = 2;
+}
+
+message FixedEntities {
+  repeated string entities = 1;
+}
+
+message SampleEntities {
+  repeated string entities = 1;
+}
+
+message SemanticPipelineResponse {
+  string pipeline_id = 1;
+}
+
+message SemanticServiceCounters {
+  int32 num_running_pipelines = 1;
+  int32 num_successful_pipelines = 2;
+  int32 num_failed_pipelines = 3;
+}
+
+message IngestedTokens {
+  string file = 1;
+  repeated string data = 2;
+  bool is_token_stream = 3;
+  string doc_source = 4;
+  string source_id = 5;
+}
+
+message SendIngestedTokens {
+  string pipeline_id = 1;
+  repeated IngestedTokens tokens = 2;
+}
+
+message IndexingStatistics {
+  uint64 total_docs = 1;
+  uint64 total_events = 2;
+  uint64 total_events_processed = 3;
+  uint64 total_events_received = 4;
+  uint64 total_events_sent = 5;
+  uint64 total_batches = 6;
+  uint64 total_sentences = 7;
+  uint64 total_subjects = 8;
+  uint64 total_predicates = 9;
+  uint64 total_objects = 10;
+  uint64 total_graph_events = 11;
+  uint64 total_vector_events = 12;
+  uint64 total_data_processed_size = 13;
+}
+
+message PipelineMetadata {
+  string pipeline_id = 1;
+}
+
+message PipelinesMetadata {
+  repeated PipelineMetadata pipelines = 1;
+}
+
+message BooleanResponse {
+  bool response = 1;
+}
+
+// Collectors 
+
+// CollectorConfig is a message to hold configuration for a collector.
+// Defines a collector with a specific configuration.
+message CollectorConfig {
+  string name = 1;
+  oneof backend {
+    AzureCollectorConfig azure = 2;
+    GCSCollectorConfig gcs = 3;
+    S3CollectorConfig s3 = 4;
+    JiraCollectorConfig jira = 5;
+    GoogleDriveCollectorConfig drive = 6;
+    EmailCollectorConfig email = 7;
+    DropBoxCollectorConfig dropbox = 8;
+    GithubCollectorConfig github = 9;
+    SlackCollectorConfig slack = 10;
+    NewsCollectorConfig news = 11;
+    FileCollectorConfig files = 12;
+    OneDriveConfig onedrive = 13;
+  }
+}
+
+// FileCollectorConfig is a message to hold configuration for a file collector.
+message FileCollectorConfig {
+  string root_path = 1;
+  // Id for the collector
+  string id = 2;
+}
+
+// AzureCollectorConfig is a message to hold configuration for an Azure collector.
+message AzureCollectorConfig {
+  // Connection string of the Azure collector.
+  string connection_string = 2;
+  // Container of the Azure collector.
+  string container = 3;
+  // Credentials of the Azure collector.
+  string credentials = 4;
+  // Prefix of the Azure collector.
+  string prefix = 5;
+  // Chunk size of the Azure collector.
+  int64 chunk_size = 6;
+  // Id for the collector
+  string id = 7;
+}
+
+// GCSCollectorConfig is a message to hold configuration for a GCS collector.
+message GCSCollectorConfig {
+  // Bucket of the GCS collector.
+  string bucket = 1;
+  // Credentials of the GCS collector.
+  string credentials = 2;
+  // Id for the collector
+  string id = 3;
+}
+
+// S3CollectorConfig is a message to hold configuration for an S3 collector.
+message S3CollectorConfig {
+  // Access key of the S3 collector.
+  string access_key = 1;
+  // Secret key of the S3 collector.
+  string secret_key = 2;
+  // Region of the S3 collector.
+  string region = 3;
+  // Bucket of the S3 collector.
+  string bucket = 4;
+  // Id for the collector
+  string id = 5;
+}
+
+// JiraCollectorConfig is a message to hold configuration for a Jira collector.
+message JiraCollectorConfig {
+  // Server of the Jira collector.
+  string jira_server = 1;
+  // Username of the Jira collector.
+  string jira_username = 2;
+  // Password of the Jira collector.
+  string jira_password = 3;
+  // API token of the Jira collector.
+  string jira_api_token = 4;
+  // Certificate file of the Jira collector.
+  string jira_certfile = 5;
+  // Key file of the Jira collector.
+  string jira_keyfile = 6;
+  // Verify of the Jira collector.
+  bool jira_verify = 7;
+  // Project of the Jira collector.
+  string jira_project = 8;
+  // Query of the Jira collector.
+  string jira_query = 9;
+  // Start at of the Jira collector.
+  int32 jira_start_at = 10;
+  // Max results of the Jira collector.
+  int32 jira_max_results = 11;
+  // Id for the collector
+  string id = 12;
+}
+
+// GoogleDriveCollectorConfig is a message to hold configuration for a Google Drive collector.
+message GoogleDriveCollectorConfig {
+  // Client ID of the Google Drive collector.
+  string drive_client_id = 1;
+  // Client secret of the Google Drive collector.
+  string drive_client_secret = 2;
+  // Refresh token of the Google Drive collector.
+  string drive_refresh_token = 3;
+  // Folder to crawl of the Google Drive collector.
+  string folder_to_crawl = 4;
+  // Id for the collector
+  string id = 5;
+}
+
+// EmailCollectorConfig is a message to hold configuration for an Email collector.
+message EmailCollectorConfig {
+  // Server of the Email collector.
+  string imap_server = 1;
+  // Port of the Email collector.
+  int32 imap_port = 2;
+  // Username of the Email collector.
+  string imap_username = 3;
+  // Password of the Email collector.
+  string imap_password = 4;
+  // Folder of the Email collector.
+  string imap_folder = 5;
+  // Id for the collector
+  string id = 6;
+}
+
+// DropBoxCollectorConfig is a message to hold configuration for a DropBox collector.
+message DropBoxCollectorConfig {
+  // App key of the DropBox collector.
+  string dropbox_app_key = 1;
+  // App secret of the DropBox collector.
+  string dropbox_app_secret = 2;
+  // Refresh token of the DropBox collector.
+  string dropbox_refresh_token = 3;
+  // Folder path of the DropBox collector.
+  string folder_path = 4;
+  // Id for the collector
+  string id = 5;
+}
+
+// GithubCollectorConfig is a message to hold configuration for a Github collector.
+message GithubCollectorConfig {
+  // Username of the Github collector.
+  string github_username = 1;
+  // Access token of the Github collector.
+  string github_access_token = 2;
+  // Repository of the Github collector.
+  string repository = 3;
+  // Id for the collector
+  string id = 4;
+}
+
+// SlackCollectorConfig is a message to hold configuration for a Slack collector.
+message SlackCollectorConfig {
+  // Access token of the Slack collector.
+  string access_token = 1;
+  // Channel name of the Slack collector.
+  string channel_name = 2;
+  // Cursor of the Slack collector.
+  string cursor = 3;
+  // Include all metadata of the Slack collector.
+  bool include_all_metadata = 4;
+  // Includive of the Slack collector.
+  bool includive = 5;
+  // Limit of the Slack collector.
+  int64 limit = 6;
+  // Id for the collector
+  string id = 7;
+}
+
+// NewsCollectorConfig is a message to hold configuration for a News collector.
+message NewsCollectorConfig {
+  // API key of the News collector.
+  string api_key = 1;
+  // Query of the News collector.
+  string query = 2;
+  // From date of the News collector.
+  string from_date = 3;
+  // To date of the News collector.
+  string to_date = 4;
+  // Language of the News collector.
+  string language = 5;
+  // Domains of the News collector.
+  string domains = 6;
+  // Exclude domains of the News collector.
+  string exclude_domains = 7;
+  // Sources of the News collector.
+  string sources = 8;
+  // Id for the collector
+  string id = 9;
+}
+
+message OneDriveConfig {
+  // Client ID of the app
+  string client_id = 1;
+  // Client secret of the app
+  string client_secret = 2;
+  // Redirect URI
+  string redirect_uri = 3;
+  // Refresh token of the app
+  string refresh_token = 4;
+  /// Folder path of the app
+  string folder_path = 5;
+  /// Id for the collector
+  string id = 6;
+}

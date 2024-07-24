@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { Button, CloseButton, Heading, Input, Label } from 'flowbite-svelte';
-	import { CloseSolid } from 'flowbite-svelte-icons';
+	import { Button, Heading, Input, Label } from 'flowbite-svelte';
+	// import { CloseSolid } from 'flowbite-svelte-icons';
 
 	import { createEventDispatcher, onMount } from 'svelte';
 	const dispatch = createEventDispatcher();

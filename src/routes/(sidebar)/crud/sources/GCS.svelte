@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { createEventDispatcher, onMount } from 'svelte';
-	import { Button, CloseButton, Heading, Input, Label, Textarea } from 'flowbite-svelte';
+	import { Button, Heading, Input, Label, Textarea } from 'flowbite-svelte';
 
 	const dispatch = createEventDispatcher();
 
