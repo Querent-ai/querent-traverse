@@ -25,9 +25,7 @@
 	import NewsIcon from './NewsComponent.svelte';
 	import GCSIcon from './GCSComponent.svelte';
 	import MetaTag from '../../../../utils/MetaTag.svelte';
-	import { onMount, type SvelteComponent } from 'svelte';
-
-	export let configuration: Record<string, string>;
+	import { onMount } from 'svelte';
 
 	const CLIENT_ID = import.meta.env.VITE_DRIVE_CLIENT_ID;
 	const REDIRECT_URI = import.meta.env.VITE_DRIVE_REDIRECT_URL;
@@ -44,14 +42,6 @@
 			selectedSource = 'Google Drive';
 		}
 	});
-
-	const toggle = (component: typeof SvelteComponent | undefined, config: any) => {
-		if (!component) {
-			console.error('No component found for this Source type:');
-			return;
-		}
-		configuration = config;
-	};
 
 	function getIcon(sourceName: string) {
 		return iconMapping[sourceName as keyof typeof iconMapping];
