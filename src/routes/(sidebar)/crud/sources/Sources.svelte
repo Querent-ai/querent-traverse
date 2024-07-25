@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Button, CloseButton, Heading, Input, Label, Select, Textarea } from 'flowbite-svelte';
 	import { CloseSolid } from 'flowbite-svelte-icons';
-	export let hidden: boolean = true; // modal control
+	export let hidden: boolean = true;
 </script>
 
 <Heading tag="h5" class="mb-6 text-sm font-semibold uppercase">Add new product</Heading>

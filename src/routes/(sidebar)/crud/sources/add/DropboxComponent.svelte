@@ -1,5 +1,4 @@
 <script lang="ts">
-	// No specific script logic needed unless you want to add dynamic behavior
 </script>
 
 <svg class="icon" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">

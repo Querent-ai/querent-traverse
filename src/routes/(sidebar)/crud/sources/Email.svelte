@@ -1,10 +1,9 @@
 <script lang="ts">
-	import { Button, CloseButton, Heading, Input, Label } from 'flowbite-svelte';
-	import { CloseSolid } from 'flowbite-svelte-icons';
+	import { Button, Heading, Input, Label } from 'flowbite-svelte';
 	import { createEventDispatcher, onMount } from 'svelte';
 	const dispatch = createEventDispatcher();
 
-	export let sourceName: string = 'Email'; // this should be passed as a prop for reusability
+	export let sourceName: string = 'Email';
 
 	let imap_server: string = '';
 	let imap_port: string = '';
@@ -44,7 +43,6 @@
 	}
 
 	function saveConfiguration() {
-		// Dispatch event with collected data
 		dispatch('saveSource', {
 			name: sourceName,
 			technology: 'Email',

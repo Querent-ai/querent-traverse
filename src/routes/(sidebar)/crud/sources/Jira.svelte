@@ -1,11 +1,10 @@
 <script lang="ts">
-	import { Button, CloseButton, Heading, Input, Label, Textarea } from 'flowbite-svelte';
-	import { CloseSolid } from 'flowbite-svelte-icons';
+	import { Button, Heading, Input, Label, Textarea } from 'flowbite-svelte';
 
 	import { createEventDispatcher, onMount } from 'svelte';
 	const dispatch = createEventDispatcher();
 
-	export let sourceName: string = 'Jira'; // this should be passed as a prop for reusability
+	export let sourceName: string = 'Jira';
 
 	let jira_server: string = '';
 	let jira_username: string = '';
@@ -39,7 +38,6 @@
 	}
 
 	function saveConfiguration() {
-		// Dispatch event with collected data
 		dispatch('saveSource', {
 			name: sourceName,
 			technology: 'Jira',

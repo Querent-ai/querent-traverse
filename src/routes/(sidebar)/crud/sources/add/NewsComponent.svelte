@@ -1,6 +1,5 @@
 <!-- src/components/icons/GrayscaleIcon.svelte -->
 <script lang="ts">
-	// No specific script logic needed unless you want to add dynamic behavior
 </script>
 
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64px" height="64px" class="icon">

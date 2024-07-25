@@ -9,8 +9,8 @@
 	import type { ComponentType } from 'svelte';
 	import MetaTag from '../../../utils/MetaTag.svelte';
 
-	let hidden: boolean = true; // modal control
-	let drawerComponent: ComponentType = Source; // drawer component
+	let hidden: boolean = true;
+	let drawerComponent: ComponentType = Source;
 
 	const toggle = (component: ComponentType) => {
 		drawerComponent = component;

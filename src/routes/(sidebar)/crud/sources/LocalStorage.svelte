@@ -1,33 +1,37 @@
-<script>
-	import { writable } from 'svelte/store';
-	import { onMount } from 'svelte';
+<script lang="ts">
+	import { FileCollectorConfig } from '../../../codegen/protos/semantics';
 
-	export let configuration = { 'Storage Path': '' }; // Define the configuration prop type
+	let file_collector_config: FileCollectorConfig = {
+		rootPath: '',
+		id: ''
+	};
 
-	let selectedDirectory = writable('');
+	let root_path = '';
+	let id = '';
 
-	function handleSelectFolder() {
-		const input = document.createElement('input');
-		input.type = 'file';
-		input.webkitdirectory = true;
+	function updateDirectoryPath() {
+		if (id && root_path) {
+			file_collector_config.id = id;
+			file_collector_config.rootPath = root_path;
 
-		input.addEventListener('change', (e) => {
-			const files = e.target.files;
-			if (files.length > 0) {
-				const directory = files[0].webkitRelativePath.split('/')[0];
-				selectedDirectory.set(directory);
-				configuration['Storage Path'] = directory; // Update the configuration object
-			}
-		});
-
-		input.click();
+			console.log('Object is ', file_collector_config);
+		} else {
+			console.log('No directory path or id entered.');
+		}
 	}
 </script>
 
 <form on:submit|preventDefault>
-	<button type="button" on:click={handleSelectFolder}>Select the folder</button>
+	<label for="dirPath">Enter Directory Path:</label>
+	<input
+		id="dirPath"
+		type="text"
+		bind:value={root_path}
+		placeholder="Enter your directory path here"
+	/>
 
-	{#if $selectedDirectory}
-		<p>Selected directory: {$selectedDirectory}</p>
-	{/if}
+	<label for="id">Enter ID for source:</label>
+	<input id="id" type="text" bind:value={id} placeholder="Enter ID for the source" />
+
+	<button type="button" on:click={updateDirectoryPath}>Submit</button>
 </form>

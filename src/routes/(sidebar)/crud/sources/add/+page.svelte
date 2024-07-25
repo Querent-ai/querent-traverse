@@ -18,33 +18,38 @@
 	import AwsIcon from './AwsComponent.svelte';
 	import AzureIcon from './AzureComponent.svelte';
 	import GithubIcon from './GithubComponent.svelte';
-	import OnedriveIcon from './OnedriveComponent.svelte';
+	// import OnedriveIcon from './OnedriveComponent.svelte';
 	import JiraIcon from './JiraComponent.svelte';
 	import SlackIcon from './SlackComponent.svelte';
 	import EmailIcon from './EmailComponent.svelte';
 	import NewsIcon from './NewsComponent.svelte';
 	import GCSIcon from './GCSComponent.svelte';
 	import MetaTag from '../../../../utils/MetaTag.svelte';
-	import type { SvelteComponent } from 'svelte';
+	import { onMount } from 'svelte';
+	import Modal from './Modal.svelte';
 
-	export let configuration: Record<string, string>;
+	const CLIENT_ID = import.meta.env.VITE_DRIVE_CLIENT_ID;
+	const REDIRECT_URI = import.meta.env.VITE_DRIVE_REDIRECT_URL;
+	const AUTH_URL = `https://accounts.google.com/o/oauth2/auth?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=https://www.googleapis.com/auth/drive&access_type=offline`;
 
-	const toggle = (component: typeof SvelteComponent | undefined, config: any) => {
-		if (!component) {
-			console.error('No component found for this Source type:');
-			return; // Handle this case appropriately, maybe show an error message
+	function login() {
+		window.location.href = AUTH_URL;
+	}
+
+	onMount(() => {
+		const params = new URLSearchParams(window.location.search);
+		const code = params.get('code');
+		if (code) {
+			selectedSource = 'Google Drive';
 		}
-		configuration = config;
-	};
+	});
 
 	function getIcon(sourceName: string) {
 		return iconMapping[sourceName as keyof typeof iconMapping];
 	}
 
-	// Holds the current component to display the form
 	let selectedSource: string | null = null;
 
-	// Initialize configuration objects for each form
 	let configurations: Record<string, any> = {
 		'Local Storage': { 'Storage Path': '' },
 		'Google Drive': { 'Drive ID': '', Credentials: '' },
@@ -96,6 +101,32 @@
 		}
 	};
 
+	let premiumSources = [
+		'Azure',
+		'Dropbox',
+		'Email',
+		'Github',
+		'Jira',
+		'News',
+		'AWS S3',
+		'Slack',
+		'Google Cloud Storage'
+	];
+
+	let showModal = false;
+	let modalMessage = '';
+
+	function selectSource(sourceName: string) {
+		if (sourceName === 'Google Drive') {
+			login();
+		} else if (premiumSources.includes(sourceName)) {
+			modalMessage = 'This feature is only available in the premium version.';
+			showModal = true;
+		} else {
+			selectedSource = sourceName;
+		}
+	}
+
 	const iconMapping: Record<string, any> = {
 		'Google Drive': GoogleDriveIcon,
 		'Local Storage': FolderIcon,
@@ -133,7 +164,7 @@
 				<button
 					type="button"
 					class="flex cursor-pointer flex-col items-center space-y-2"
-					on:click={() => (selectedSource = sourceName)}
+					on:click={() => selectSource(sourceName)}
 					on:keydown={(event) => event.key === 'Enter' && (selectedSource = sourceName)}
 					aria-label={`Select ${sourceName}`}
 				>
@@ -163,14 +194,8 @@
 		{:else if selectedSource === 'Slack'}
 			<SlackForm configuration={configurations['Slack']} />
 		{:else if selectedSource === 'Local Storage'}
-			<LocalStorageForm configuration={configurations['Local Storage']} />
+			<LocalStorageForm bind:configuration={configurations['Local Storage']} />
 		{/if}
+		<Modal bind:show={showModal} message={modalMessage} />
 	</div>
 </main>
-
-<style>
-	.icon {
-		width: 64px;
-		height: 64px;
-	}
-</style>

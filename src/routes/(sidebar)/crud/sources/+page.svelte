@@ -1,83 +1,21 @@
 <script lang="ts">
-	import { Breadcrumb, BreadcrumbItem, Button, Checkbox, Drawer, Heading } from 'flowbite-svelte';
+	import { Breadcrumb, BreadcrumbItem, Button, Checkbox, Heading } from 'flowbite-svelte';
 	import { Input, Table, TableBody, TableBodyCell, TableBodyRow, TableHead } from 'flowbite-svelte';
 	import { TableHeadCell, Toolbar, ToolbarButton } from 'flowbite-svelte';
-	import { CogSolid, DotsVerticalSolid, EditOutline } from 'flowbite-svelte-icons';
+	import { CogSolid, DotsVerticalSolid } from 'flowbite-svelte-icons';
 	import { ExclamationCircleSolid, TrashBinSolid } from 'flowbite-svelte-icons';
-	import Source from './Sources.svelte';
-	import SourcesList from './SourcesList.svelte';
-	import GCSForm from './GCS.svelte';
-	import AzureForm from './Azure.svelte';
-	import DriveForm from './Drive.svelte';
-	import DropboxForm from './Dropbox.svelte';
-	import EmailForm from './Email.svelte';
-	import GithubForm from './Github.svelte';
-	import JiraForm from './Jira.svelte';
-	import NewsForm from './News.svelte';
-	import AWSForm from './S3.svelte';
-	import SlackForm from './Slack.svelte';
-	import LocalStorageForm from './LocalStorage.svelte';
-	import type { ComponentType, SvelteComponent } from 'svelte';
 	import MetaTag from '../../../utils/MetaTag.svelte';
 	import { goto } from '$app/navigation';
-
-	let hidden: boolean = true;
-	let drawerComponent: ComponentType = Source;
-
-	const toggle = (component: typeof SvelteComponent | undefined, config: any) => {
-		if (!component) {
-			console.error('No component found for this Source type:');
-			return;
-		}
-		drawerComponent = component;
-		configuration = config;
-	};
 
 	function navigateToAddNewSource() {
 		goto('/crud/sources/add');
 	}
-
-	let configuration = {};
-	type SourceComponents = {
-		[key: string]: any;
-	};
-	const nameToSource: SourceComponents = {
-		'Google Cloud Storage': GCSForm,
-		Azure: AzureForm,
-		'Google Drive': DriveForm,
-		Dropbox: DropboxForm,
-		Email: EmailForm,
-		Github: GithubForm,
-		Jira: JiraForm,
-		News: NewsForm,
-		'AWS S3': AWSForm,
-		Slack: SlackForm,
-		'Local Storage': LocalStorageForm
-	};
 
 	const path: string = '/crud/source';
 	const description: string = 'Sources example - Querent Admin Dashboard';
 	const title: string = 'Querent Admin Dashboard - Sources';
 	const subtitle: string = 'Sources';
 	let sources_list: any[] = [];
-	function handleSourceSaved(event: {
-		detail: { name: any; technology: any; description: any; configuration: any };
-	}) {
-		const { name, technology, description, configuration } = event.detail;
-		const index = sources_list.findIndex((source) => source.name === name);
-
-		if (index !== -1) {
-			sources_list[index] = { name, technology, description, configuration };
-			sources_list = [...sources_list];
-		} else {
-			sources_list.push({ name, technology, description, configuration });
-			sources_list = [...sources_list];
-		}
-	}
-	function getComponent(name: string): typeof SvelteComponent | undefined {
-		console.log(name);
-		return nameToSource[name as keyof typeof nameToSource] || undefined;
-	}
 </script>
 
 <MetaTag {path} {description} {title} {subtitle} />
@@ -149,16 +87,6 @@
 						class="max-w-md overflow-hidden truncate p-4 text-base font-normal text-gray-500 dark:text-gray-400 xl:max-w-lg"
 						>{source.description}</TableBodyCell
 					>
-
-					<TableBodyCell class="flex justify-end space-x-2 p-4">
-						<Button
-							size="sm"
-							class="gap-2 px-3"
-							on:click={() => toggle(getComponent(source.name), source.configuration)}
-						>
-							<EditOutline size="sm" /> Edit
-						</Button>
-					</TableBodyCell>
 				</TableBodyRow>
 			{/each}
 		</TableBody>

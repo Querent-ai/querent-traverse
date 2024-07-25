@@ -1,6 +1,5 @@
 <!-- src/components/icons/GoogleDriveIcon.svelte -->
 <script lang="ts">
-	// No specific script logic needed unless you want to add dynamic behavior
 </script>
 
 <svg fill="none" height="32" viewBox="0 0 32 32" width="32" xmlns="http://www.w3.org/2000/svg">
@@ -33,10 +32,3 @@
 		fill="#ea4335"
 	/>
 </svg>
-
-<style>
-	.icon {
-		width: 100%;
-		height: auto;
-	}
-</style>

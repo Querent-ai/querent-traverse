@@ -1,6 +1,5 @@
 <!-- src/components/icons/AwsIcon.svelte -->
 <script lang="ts">
-	// No specific script logic needed unless you want to add dynamic behavior
 </script>
 
 <svg height="32" viewBox="0 0 32 32" width="32" xmlns="http://www.w3.org/2000/svg">
@@ -11,7 +10,7 @@
 
 <style>
 	svg {
-		width: 32px; /* Responsive width, adjustable via parent container */
-		height: 32px; /* Maintain aspect ratio */
+		width: 32px;
+		height: 32px;
 	}
 </style>

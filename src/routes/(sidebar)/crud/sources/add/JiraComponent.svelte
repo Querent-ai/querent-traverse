@@ -1,6 +1,5 @@
 <!-- src/components/icons/MonochromeIcon.svelte -->
 <script lang="ts">
-	// No specific script logic needed unless you want to add dynamic behavior
 </script>
 
 <svg
@@ -54,8 +53,8 @@
 
 <style>
 	.icon {
-		width: 48px; /* Fixed width, adjust as needed */
-		height: 48px; /* Fixed height, adjust as needed */
-		display: block; /* Ensure SVG is not inline */
+		width: 32px;
+		height: 32px;
+		display: block;
 	}
 </style>
