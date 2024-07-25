@@ -1,12 +1,18 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { GoogleDriveCollectorConfig } from '../../../codegen/protos/semantics';
 
-	export let configuration: {
-		'Folder to crawl': string;
-		'Refresh token': string;
-		'Drive client id': string;
-		'Drive client secret': string;
+	let drive_config: GoogleDriveCollectorConfig = {
+		driveClientId: import.meta.env.VITE_DRIVE_CLIENT_ID,
+		driveClientSecret: import.meta.env.VITE_DRIVE_CLIENT_SECRET,
+		driveRefreshToken: '',
+		folderToCrawl: '',
+		id: ''
 	};
+
+	let folderPath = '';
+	let collectorId = '';
+	let id = '';
 
 	onMount(async () => {
 		const params = new URLSearchParams(window.location.search);
@@ -34,31 +40,44 @@
 				}
 
 				const data = await response.json();
-				console.log('Access Token:', data.access_token);
-				console.log('Refresh Token:', data.refresh_token);
+				drive_config.driveRefreshToken = data.refresh_token;
 			} catch (error) {
 				console.error('Error during token exchange:', error);
 			}
 		}
 	});
 
-	function updateFolderPath() {
-		if (configuration['Folder to crawl']) {
-			console.log('Directory Path: ', configuration['Folder to crawl']);
+	function handleSubmit() {
+		if (folderPath && collectorId && id) {
+			drive_config.folderToCrawl = folderPath;
+			drive_config.id = collectorId;
+			drive_config.id = id;
+			console.log('Drive Configuration:', drive_config);
 		} else {
-			console.log('No directory path entered.');
+			console.error('Please fill in all required fields.');
 		}
 	}
 </script>
 
-<form on:submit|preventDefault>
-	<label for="dirPath">Enter Folder:</label>
+<form on:submit|preventDefault={handleSubmit}>
+	<label for="collectorId">Collector ID:</label>
 	<input
-		id="dirPath"
+		id="collectorId"
 		type="text"
-		bind:value={configuration['Folder to crawl']}
+		bind:value={collectorId}
+		placeholder="Enter your collector ID"
+	/>
+
+	<label for="folderPath">Folder to Crawl:</label>
+	<input
+		id="folderPath"
+		type="text"
+		bind:value={folderPath}
 		placeholder="Enter your folder to crawl"
 	/>
 
-	<button type="button" on:click={updateFolderPath}>Submit</button>
+	<label for="id">ID</label>
+	<input id="id" type="text" bind:value={id} placeholder="Enter the ID for the source" />
+
+	<button type="submit">Submit Source</button>
 </form>

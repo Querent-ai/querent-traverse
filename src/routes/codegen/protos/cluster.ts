@@ -5,8 +5,8 @@
 // source: protos/cluster.proto
 
 /* eslint-disable */
-import * as _m0 from 'protobufjs/minimal';
-import Long = require('long');
+import Long from 'long';
+import _m0 from 'protobufjs/minimal';
 
 export const protobufPackage = 'querent.cluster';
 
