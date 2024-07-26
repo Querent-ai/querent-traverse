@@ -23,25 +23,27 @@
 </script>
 
 <form on:submit|preventDefault={updateDirectoryPath}>
-	<Label class="space-y-2 w-1/4 mb-5">
+	<Label class="mb-5 w-1/4 space-y-2">
 		<span>Enter Directory Path:</span>
-		<Input bind:value={root_path}
-		class="border font-normal outline-none"
-		placeholder="Enter the directory path"
-		required
+		<Input
+			bind:value={root_path}
+			class="border font-normal outline-none"
+			placeholder="Enter the directory path"
+			required
 		/>
 	</Label>
 
-	<Label class="space-y-2 w-1/4 mb-5">
+	<Label class="mb-5 w-1/4 space-y-2">
 		<span>Source ID:</span>
-		<Input bind:value={id}
-		class="border font-normal outline-none"
-		placeholder="Enter ID for the source"
-		required
+		<Input
+			bind:value={id}
+			class="border font-normal outline-none"
+			placeholder="Enter ID for the source"
+			required
 		/>
 	</Label>
 
-	<div class="flex w-1/4 left space-x-4 pb-5 ">
+	<div class="left flex w-1/4 space-x-4 pb-5">
 		<Button type="submit" class="w-full">Save Configuration</Button>
 	</div>
 </form>

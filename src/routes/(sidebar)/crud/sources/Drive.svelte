@@ -61,21 +61,23 @@
 </script>
 
 <form on:submit|preventDefault={handleSubmit}>
-	<Label class="space-y-2 w-1/4 mb-5">
+	<Label class="mb-5 w-1/4 space-y-2">
 		<span>Source ID</span>
-		<Input bind:value={collectorId}
-		class="border font-normal outline-none"
-		placeholder="Enter the ID for the source"
-		required
+		<Input
+			bind:value={collectorId}
+			class="border font-normal outline-none"
+			placeholder="Enter the ID for the source"
+			required
 		/>
 	</Label>
 
-	<Label class="space-y-2 w-1/4 mb-5">
+	<Label class="mb-5 w-1/4 space-y-2">
 		<span>Folder to crawl</span>
-		<Input bind:value={folderPath}
-		class="border font-normal outline-none"
-		placeholder="Enter path of your folder to crawl"
-		required
+		<Input
+			bind:value={folderPath}
+			class="border font-normal outline-none"
+			placeholder="Enter path of your folder to crawl"
+			required
 		/>
 	</Label>
 
