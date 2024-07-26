@@ -1,25 +1,46 @@
-export default function (dark) {
+export function getChartOptions(dark, type) {
 	let mainChartColors;
+	let title, subtitle, seriesData;
 
 	if (dark) {
 		mainChartColors = {
-			borderColor: '#374151',
+			borderColor: '#007bff',
 			labelColor: '#9CA3AF',
-			opacityFrom: 0,
-			opacityTo: 0.15
+			opacityFrom: 0.05,
+			opacityTo: 0.4
 		};
 	} else {
 		mainChartColors = {
-			borderColor: '#F3F4F6',
+			borderColor: '#007bff',
 			labelColor: '#6B7280',
 			opacityFrom: 0.45,
-			opacityTo: 0
+			opacityTo: 0.1
 		};
+	}
+
+	if (type === 'graph') {
+		title = 'Total Graph Events';
+		subtitle = 'Events over Time';
+		seriesData = [
+			{
+				name: 'Graph Events',
+				data: [100, 164, 254, 368, 513, 652, 742]
+			}
+		];
+	} else if (type === 'vector') {
+		title = 'Total Vector Events';
+		subtitle = 'Events over Time';
+		seriesData = [
+			{
+				name: 'Vector Events',
+				data: [100, 164, 254, 368, 513, 652, 742]
+			}
+		];
 	}
 
 	return {
 		chart: {
-			height: 420,
+			height: 300,
 			type: 'area',
 			fontFamily: 'Inter, sans-serif',
 			foreColor: mainChartColors.labelColor,
@@ -53,17 +74,9 @@ export default function (dark) {
 				bottom: 15
 			}
 		},
-		series: [],
-		markers: {
-			size: 5,
-			strokeColors: '#ffffff',
-			hover: {
-				size: undefined,
-				sizeOffset: 3
-			}
-		},
+		series: seriesData,
 		xaxis: {
-			categories: ['01 Feb', '02 Feb', '03 Feb', '04 Feb', '05 Feb', '06 Feb', '07 Feb'],
+			categories: ['20', '40', '60', '80', '100', '120', '140'],
 			labels: {
 				style: {
 					colors: [mainChartColors.labelColor],
@@ -95,7 +108,7 @@ export default function (dark) {
 					fontWeight: 500
 				},
 				formatter: function (value) {
-					return '$' + value;
+					return value;
 				}
 			}
 		},
