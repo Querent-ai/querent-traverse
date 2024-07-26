@@ -32,7 +32,7 @@
 		</Heading>
 
 		<Toolbar embedded class="w-full py-4 text-gray-500 dark:text-gray-400">
-			<Input placeholder="Search for sources" class="me-6 w-80 border xl:w-96" />
+			<!-- <Input placeholder="Search for sources" class="me-6 w-80 border xl:w-96" />
 			<ToolbarButton
 				color="dark"
 				class="m-0 rounded p-1 hover:bg-gray-100 focus:ring-0 dark:hover:bg-gray-700"
@@ -56,7 +56,7 @@
 				class="m-0 rounded p-1 hover:bg-gray-100 focus:ring-0 dark:hover:bg-gray-700"
 			>
 				<DotsVerticalSolid size="lg" />
-			</ToolbarButton>
+			</ToolbarButton> -->
 
 			<div slot="end" class="space-x-2">
 				<Button class="whitespace-nowrap" on:click={navigateToAddNewSource}>Add new source</Button>
@@ -66,10 +66,10 @@
 	<Table>
 		<TableHead class="border-y border-gray-200 bg-gray-100 dark:border-gray-700">
 			<TableHeadCell class="w-4 p-4"><Checkbox /></TableHeadCell>
-			{#each ['Source', 'Company', 'Description'] as title}
+			{#each ['ID', 'Icon', 'Source'] as title}
 				<TableHeadCell class="ps-4 font-normal">{title}</TableHeadCell>
 			{/each}
-			<TableHeadCell class="pe-100 ps-4 text-right font-normal">Actions</TableHeadCell>
+			<TableHeadCell class="pe-100 ps-4 text-right font-normal">Delete</TableHeadCell>
 		</TableHead>
 		<TableBody>
 			{#each sources_list as source}

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { Button, Input, Label } from 'flowbite-svelte';
 	import { FileCollectorConfig } from '../../../codegen/protos/semantics';
 
 	let file_collector_config: FileCollectorConfig = {
@@ -21,17 +22,26 @@
 	}
 </script>
 
-<form on:submit|preventDefault>
-	<label for="dirPath">Enter Directory Path:</label>
-	<input
-		id="dirPath"
-		type="text"
-		bind:value={root_path}
-		placeholder="Enter your directory path here"
-	/>
+<form on:submit|preventDefault={updateDirectoryPath}>
+	<Label class="space-y-2 w-1/4 mb-5">
+		<span>Enter Directory Path:</span>
+		<Input bind:value={root_path}
+		class="border font-normal outline-none"
+		placeholder="Enter the directory path"
+		required
+		/>
+	</Label>
 
-	<label for="id">Enter ID for source:</label>
-	<input id="id" type="text" bind:value={id} placeholder="Enter ID for the source" />
+	<Label class="space-y-2 w-1/4 mb-5">
+		<span>Source ID:</span>
+		<Input bind:value={id}
+		class="border font-normal outline-none"
+		placeholder="Enter ID for the source"
+		required
+		/>
+	</Label>
 
-	<button type="button" on:click={updateDirectoryPath}>Submit</button>
+	<div class="flex w-1/4 left space-x-4 pb-5 ">
+		<Button type="submit" class="w-full">Save Configuration</Button>
+	</div>
 </form>
