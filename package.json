@@ -25,6 +25,7 @@
 		"package:publish": "standard-version && git push --follow-tags origin main && npm publish"
 	},
 	"devDependencies": {
+		"@iconify/svelte": "^4.0.2",
 		"@playwright/test": "^1.42.1",
 		"@sveltejs/adapter-auto": "^3.1.1",
 		"@sveltejs/kit": "^2.5.18",
