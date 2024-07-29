@@ -60,28 +60,34 @@
 	}
 </script>
 
-<form on:submit|preventDefault={handleSubmit}>
-	<Label class="mb-5 w-1/4 space-y-2">
-		<span>Source ID</span>
-		<Input
-			bind:value={collectorId}
-			class="border font-normal outline-none"
-			placeholder="Enter the ID for the source"
-			required
-		/>
-	</Label>
+<div class="flex min-h-screen items-start justify-center pt-20">
+	<form on:submit|preventDefault={handleSubmit} class="w-full max-w-2xl px-4">
+		<Label class="mb-5 block w-full space-y-2">
+			<span>Source ID</span>
+			<Input
+				bind:value={collectorId}
+				class="border font-normal outline-none"
+				placeholder="Enter the ID for the source"
+				required
+				style="min-width: 300px;"
+			/>
+		</Label>
 
-	<Label class="mb-5 w-1/4 space-y-2">
-		<span>Folder to crawl</span>
-		<Input
-			bind:value={folderPath}
-			class="border font-normal outline-none"
-			placeholder="Enter path of your folder to crawl"
-			required
-		/>
-	</Label>
+		<Label class="mb-5 block w-full space-y-2">
+			<span>Folder to crawl</span>
+			<Input
+				bind:value={folderPath}
+				class="border font-normal outline-none"
+				placeholder="Enter path of your folder to crawl"
+				required
+				style="min-width: 300px;"
+			/>
+		</Label>
 
-	<div class="flex w-full justify-center space-x-4 pb-4">
-		<Button type="submit" class="w-full">Save Configuration</Button>
-	</div>
-</form>
+		<div class="flex w-full pb-5">
+			<Button type="submit" class="w-full rounded bg-blue-600 px-4 py-2 text-base text-white"
+				>Save Configuration</Button
+			>
+		</div>
+	</form>
+</div>
