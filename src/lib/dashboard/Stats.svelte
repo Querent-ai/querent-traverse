@@ -2,83 +2,63 @@
 	import { Card, Heading, TabItem, Tabs } from 'flowbite-svelte';
 	// import Change from '$lib/dashboard/Change.svelte';
 	// import Customers from '../../routes/data/users.json';
-	import { imagesPath } from '$lib/variables';
-	import LastRange from '$lib/widgets/LastRange.svelte';
-	import More from '$lib/widgets/More.svelte';
+	// import { imagesPath } from '$lib/variables';
+	// import LastRange from '$lib/widgets/LastRange.svelte';
+	// import More from '$lib/widgets/More.svelte';
 	// import { QuestionCircleSolid } from 'flowbite-svelte-icons';
 
 	const products = [
 		{
-			label: 'total_batches',
-			number: 0,
-			image: 'iphone',
-			src: 'iphone.png'
+			label: 'Total Documents',
+			number: 208
 		},
 		{
-			label: 'total_docs',
-			number: 0,
-			image: 'iphone',
-			src: 'iphone.png'
+			label: 'Total Events',
+			number: 1482
 		},
 		{
-			label: 'total_events',
-			number: 0,
-			image: 'iphone',
-			src: 'iphone.png'
+			label: 'Total Events Processed',
+			number: 1482
 		},
 		{
-			label: 'total_events_processed',
-			number: 0,
-			image: 'iphone',
-			src: 'iphone.png'
+			label: 'Total Events Received',
+			number: 784
 		},
 		{
-			label: 'total_events_received',
-			number: 0,
-			image: 'iphone',
-			src: 'iphone.png'
+			label: 'Total Events Sent',
+			number: 784
 		},
 		{
-			label: 'total_events_sent',
-			number: 0,
-			image: 'iphone',
-			src: 'iphone.png'
+			label: 'Total Batches',
+			number: 425
 		},
 		{
-			label: 'total_graph_events',
-			number: 0,
-			image: 'iphone',
-			src: 'iphone.png'
+			label: 'Total Sentences',
+			number: 742
 		},
 		{
-			label: 'total_objects',
-			number: 0,
-			image: 'iphone',
-			src: 'iphone.png'
+			label: 'Total Subjects',
+			number: 742
 		},
 		{
-			label: 'total_predicates',
-			number: 0,
-			image: 'iphone',
-			src: 'iphone.png'
+			label: 'Total Predicates',
+			number: 742
 		},
 		{
-			label: 'total_sentences',
-			number: 0,
-			image: 'iphone',
-			src: 'iphone.png'
+			label: 'Total Objects',
+			number: 742
 		},
 		{
-			label: 'total_subjects',
-			number: 0,
-			image: 'iphone',
-			src: 'iphone.png'
+			label: 'Total Graph Events',
+			number: 742
 		},
 		{
-			label: 'total_vector_events',
-			number: 0,
-			image: 'iphone',
-			src: 'iphone.png'
+			label: 'Total Vector Events',
+			number: 742
+		},
+		{
+			label: 'Total Data Processed Size',
+			number: 1026
 		}
 	];
 
@@ -88,19 +68,6 @@
 <Card size="xl">
 	<div class="mb-4 flex items-center gap-2">
 		<Heading tag="h3" class="w-fit text-lg font-semibold dark:text-white">Pipeline Stats</Heading>
-		<!-- <button>
-			<span class="sr-only">Show information</span>
-			<QuestionCircleSolid size="sm" class="text-gray-400 hover:text-gray-500" />
-		</button>
-		<Popover placement="bottom-start">
-			<div class="w-72 space-y-2 text-sm font-normal text-gray-500 dark:text-gray-400">
-				<h3 class="font-semibold text-gray-900 dark:text-white">Statistics</h3>
-				<p>
-					Stats about the given pipeline
-				</p>
-				<More title="Read more" href="#top" flat />
-			</div>
-		</Popover> -->
 	</div>
 	<Tabs
 		style="full"
@@ -108,17 +75,18 @@
 		contentClass="p-3 mt-4"
 	>
 		<TabItem class="w-full" open>
-			<span slot="title">Pipeline ID:1234656</span>
+			<select
+				slot="title"
+				id="pipelineSelect"
+				class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+			>
+				<option value="1234656" selected>1234656</option>
+			</select>
 			<ul class="-m-3 divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-800">
-				{#each products as { src, image, label, number }}
+				{#each products as { label, number }}
 					<li class="py-3 sm:py-4">
 						<div class="flex items-center justify-between">
 							<div class="flex min-w-0 items-center">
-								<img
-									class="h-10 w-10 flex-shrink-0"
-									src={imagesPath(src, 'products')}
-									alt={image}
-								/>
 								<div class="ml-3">
 									<p class="truncate font-medium text-gray-900 dark:text-white">
 										{label}
@@ -140,7 +108,7 @@
 	<div
 		class="mt-4 flex items-center justify-between border-t border-gray-200 pt-3 dark:border-gray-700 sm:pt-6"
 	>
-		<LastRange />
-		<More title="Full Report" href="#top" />
+		<!-- <LastRange />
+		<More title="Full Report" href="#top" /> -->
 	</div>
 </Card>

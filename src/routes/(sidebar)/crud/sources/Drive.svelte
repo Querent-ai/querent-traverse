@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { GoogleDriveCollectorConfig } from '../../../codegen/protos/semantics';
+	import { Button, Input, Label } from 'flowbite-svelte';
 
 	let drive_config: GoogleDriveCollectorConfig = {
 		driveClientId: import.meta.env.VITE_DRIVE_CLIENT_ID,
@@ -59,25 +60,34 @@
 	}
 </script>
 
-<form on:submit|preventDefault={handleSubmit}>
-	<label for="collectorId">Collector ID:</label>
-	<input
-		id="collectorId"
-		type="text"
-		bind:value={collectorId}
-		placeholder="Enter your collector ID"
-	/>
+<div class="flex min-h-screen items-start justify-center pt-20">
+	<form on:submit|preventDefault={handleSubmit} class="w-full max-w-2xl px-4">
+		<Label class="mb-5 block w-full space-y-2">
+			<span>Source ID</span>
+			<Input
+				bind:value={collectorId}
+				class="border font-normal outline-none"
+				placeholder="Enter the ID for the source"
+				required
+				style="min-width: 300px;"
+			/>
+		</Label>
 
-	<label for="folderPath">Folder to Crawl:</label>
-	<input
-		id="folderPath"
-		type="text"
-		bind:value={folderPath}
-		placeholder="Enter your folder to crawl"
-	/>
+		<Label class="mb-5 block w-full space-y-2">
+			<span>Folder to crawl</span>
+			<Input
+				bind:value={folderPath}
+				class="border font-normal outline-none"
+				placeholder="Enter path of your folder to crawl"
+				required
+				style="min-width: 300px;"
+			/>
+		</Label>
 
-	<label for="id">ID</label>
-	<input id="id" type="text" bind:value={id} placeholder="Enter the ID for the source" />
-
-	<button type="submit">Submit Source</button>
-</form>
+		<div class="flex w-full pb-5">
+			<Button type="submit" class="w-full rounded bg-blue-600 px-4 py-2 text-base text-white"
+				>Save Configuration</Button
+			>
+		</div>
+	</form>
+</div>
