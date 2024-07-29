@@ -1,21 +1,26 @@
 <script lang="ts">
 	import { Button, Input, Label } from 'flowbite-svelte';
-	import { FileCollectorConfig } from '../../../codegen/protos/semantics';
+	import { CollectorConfig, FileCollectorConfig } from '../../../codegen/protos/semantics';
 
 	let file_collector_config: FileCollectorConfig = {
 		rootPath: '',
 		id: ''
 	};
+	let collector_config: CollectorConfig = {
+		name: '',
+		files: file_collector_config
+	};
 
 	let root_path = '';
-	let id = '';
+	let name = '';
 
 	function updateDirectoryPath() {
-		if (id && root_path) {
-			file_collector_config.id = id;
+		if (name && root_path) {
+			file_collector_config.id = crypto.randomUUID();
 			file_collector_config.rootPath = root_path;
-
-			console.log('Object is ', file_collector_config);
+			collector_config.files = file_collector_config;
+			collector_config.name = name;
+			console.log('Object is ', collector_config);
 		} else {
 			console.log('No directory path or id entered.');
 		}
@@ -36,11 +41,11 @@
 		</Label>
 
 		<Label class="mb-5 block w-full space-y-2">
-			<span>Source ID:</span>
+			<span>Name</span>
 			<Input
-				bind:value={id}
+				bind:value={name}
 				class="border font-normal outline-none"
-				placeholder="Enter ID for the source"
+				placeholder="Enter name for the source"
 				required
 				style="min-width: 300px;"
 			/>
