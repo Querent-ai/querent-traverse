@@ -18,6 +18,7 @@
 	import TotalDocs from './TotalDocs.svelte';
 	import TotalSubjects from './TotalSubjects.svelte';
 	import TotalObjects from './TotalObjects.svelte';
+	import TotalEvents from './TotalEvents.svelte';
 
 	export let data: PageData;
 
@@ -63,9 +64,17 @@
 	</div>
 
 	<div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
-		<Card class="min-h-[400px] min-w-[500px] rounded-lg shadow-lg">
-			<TotalDocs />
-		</Card>
+		<div class="w-full">
+			<Card class="min-h-[400px] min-w-[500px] rounded-lg shadow-lg">
+				<TotalDocs />
+			</Card>
+		</div>
+
+		<div class="w-full">
+			<Card class="min-h-[400px] min-w-[500px] rounded-lg shadow-lg">
+				<TotalEvents />
+			</Card>
+		</div>
 	</div>
 
 	<!-- <div class="grid grid-cols-1 gap-4 xl:grid-cols-2 2xl:grid-cols-3">
