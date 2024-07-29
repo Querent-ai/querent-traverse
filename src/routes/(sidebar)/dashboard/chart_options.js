@@ -28,11 +28,11 @@ export function getChartOptions(dark, type) {
 			}
 		];
 	} else if (type === 'vector') {
-		title = 'Total Vector Events';
+		title = 'Total Events';
 		subtitle = 'Events over Time';
 		seriesData = [
 			{
-				name: 'Vector Events',
+				name: 'Events',
 				data: [100, 164, 254, 368, 513, 652, 742]
 			}
 		];

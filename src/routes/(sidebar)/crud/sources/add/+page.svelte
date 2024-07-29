@@ -178,7 +178,7 @@
 		{:else if selectedSource === 'Azure'}
 			<AzureForm configuration={configurations['Azure']} />
 		{:else if selectedSource === 'Google Drive'}
-			<DriveForm configuration={configurations['Google Drive']} />
+			<DriveForm />
 		{:else if selectedSource === 'Dropbox'}
 			<DropboxForm configuration={configurations['Dropbox']} />
 		{:else if selectedSource === 'Email'}
@@ -194,7 +194,7 @@
 		{:else if selectedSource === 'Slack'}
 			<SlackForm configuration={configurations['Slack']} />
 		{:else if selectedSource === 'Local Storage'}
-			<LocalStorageForm bind:configuration={configurations['Local Storage']} />
+			<LocalStorageForm />
 		{/if}
 		<Modal bind:show={showModal} message={modalMessage} />
 	</div>
