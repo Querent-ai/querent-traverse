@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { GoogleDriveCollectorConfig } from '../../../codegen/protos/semantics';
+	import { GoogleDriveCollectorConfig, CollectorConfig } from '../../../codegen/protos/semantics';
 	import { Button, Input, Label } from 'flowbite-svelte';
 
 	let drive_config: GoogleDriveCollectorConfig = {
@@ -10,10 +10,13 @@
 		folderToCrawl: '',
 		id: ''
 	};
+	let collector_config: CollectorConfig = {
+		name: '',
+		drive: drive_config
+	};
 
 	let folderPath = '';
-	let collectorId = '';
-	let id = '';
+	let name = '';
 
 	onMount(async () => {
 		const params = new URLSearchParams(window.location.search);
@@ -49,11 +52,12 @@
 	});
 
 	function handleSubmit() {
-		if (folderPath && collectorId && id) {
+		if (folderPath && name) {
 			drive_config.folderToCrawl = folderPath;
-			drive_config.id = collectorId;
-			drive_config.id = id;
-			console.log('Drive Configuration:', drive_config);
+			drive_config.id = crypto.randomUUID();
+			collector_config.drive = drive_config;
+			collector_config.name = name;
+			console.log('Drive Configuration:', collector_config);
 		} else {
 			console.error('Please fill in all required fields.');
 		}
@@ -63,11 +67,11 @@
 <div class="flex min-h-screen items-start justify-center pt-20">
 	<form on:submit|preventDefault={handleSubmit} class="w-full max-w-2xl px-4">
 		<Label class="mb-5 block w-full space-y-2">
-			<span>Source ID</span>
+			<span>Name</span>
 			<Input
-				bind:value={collectorId}
+				bind:value={name}
 				class="border font-normal outline-none"
-				placeholder="Enter the ID for the source"
+				placeholder="Enter the name for the source"
 				required
 				style="min-width: 300px;"
 			/>

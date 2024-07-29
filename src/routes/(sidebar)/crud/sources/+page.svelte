@@ -66,7 +66,7 @@
 	<Table>
 		<TableHead class="border-y border-gray-200 bg-gray-100 dark:border-gray-700">
 			<TableHeadCell class="w-4 p-4"><Checkbox /></TableHeadCell>
-			{#each ['ID', 'Icon', 'Source'] as title}
+			{#each ['ID', 'Icon', 'Name'] as title}
 				<TableHeadCell class="ps-4 font-normal">{title}</TableHeadCell>
 			{/each}
 			<TableHeadCell class="pe-100 ps-4 text-right font-normal">Delete</TableHeadCell>

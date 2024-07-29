@@ -15,17 +15,18 @@
 	// import Traffic from './Traffic.svelte';
 	// import Transactions from './Transactions.svelte';
 	import { getChartOptions } from '../../routes/(sidebar)/dashboard/chart_options';
-	import TotalDocs from './TotalDocs.svelte';
-	import TotalSubjects from './TotalSubjects.svelte';
-	import TotalObjects from './TotalObjects.svelte';
-	import TotalEvents from './TotalEvents.svelte';
+	// import TotalDocs from './TotalDocs.svelte';
+	// import TotalSubjects from './TotalSubjects.svelte';
+	// import TotalObjects from './TotalObjects.svelte';
+	import TotalSources from './TotalSources.svelte';
+	// import TotalEvents from './TotalEvents.svelte';
 
 	export let data: PageData;
 
 	// let chartOptions = chart_options_func(false);
 	// chartOptions.series = data.series;
 
-	let graphOptions = getChartOptions(false, 'graph');
+	// let graphOptions = getChartOptions(false, 'graph');
 	let vectorOptions = getChartOptions(false, 'vector');
 </script>
 
@@ -36,15 +37,18 @@
 				<div class="space-y-4">
 					<ChartWidget
 						chartOptions={vectorOptions}
-						title="Total Vector Events"
+						title="Total Events"
 						subtitle="Events over Time"
 					/>
-					<ChartWidget
+					<!-- <ChartWidget
 						chartOptions={graphOptions}
 						title="Total Graph Events"
 						subtitle="Events over Time"
-					/>
+					/> -->
 				</div>
+			</Card>
+			<Card class="min-h-[550px] min-w-[900px] rounded-lg shadow-lg">
+				<TotalSources />
 			</Card>
 		</div>
 		<div class="lg:col-span-1">
@@ -54,16 +58,17 @@
 		</div>
 	</div>
 
-	<div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+	<!-- <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+		
 		<Card class="min-h-[550px] min-w-[650px] rounded-lg shadow-lg">
 			<TotalSubjects />
 		</Card>
 		<Card class="min-h-[550px] min-w-[650px] rounded-lg shadow-lg">
 			<TotalObjects />
 		</Card>
-	</div>
+	</div> -->
 
-	<div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+	<!-- <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
 		<div class="w-full">
 			<Card class="min-h-[400px] min-w-[500px] rounded-lg shadow-lg">
 				<TotalDocs />
@@ -75,7 +80,7 @@
 				<TotalEvents />
 			</Card>
 		</div>
-	</div>
+	</div> -->
 
 	<!-- <div class="grid grid-cols-1 gap-4 xl:grid-cols-2 2xl:grid-cols-3">
 		<Card horizontal class="items-center justify-between" size="xl">
