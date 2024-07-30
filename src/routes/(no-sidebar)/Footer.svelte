@@ -1,7 +1,7 @@
 <footer class="px-4 py-6 md:flex md:items-center md:justify-between md:py-10 2xl:px-0">
 	<p class="mb-4 text-center text-sm text-gray-500 md:mb-0">
-		© 2019-2023 <a href="https://flowbite.com//" class="hover:underline" target="_blank">
-			Flowbite.com
+		© 2023-2024 <a href="https://querent.xyz//" class="hover:underline" target="_blank">
+			Querent AI
 		</a>. All rights reserved
 	</p>
 	<ul class="flex flex-wrap items-center justify-center gap-6">
