@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { GoogleDriveCollectorConfig, CollectorConfig } from '../../../codegen/protos/semantics';
 	import { Button, Input, Label } from 'flowbite-svelte';
+	import { addDataSource } from '../../../../stores/appState';
 
 	let drive_config: GoogleDriveCollectorConfig = {
 		driveClientId: import.meta.env.VITE_DRIVE_CLIENT_ID,
@@ -57,6 +58,8 @@
 			drive_config.id = crypto.randomUUID();
 			collector_config.drive = drive_config;
 			collector_config.name = name;
+
+			addDataSource(collector_config);
 			console.log('Drive Configuration:', collector_config);
 
 			// TODO: make the API call

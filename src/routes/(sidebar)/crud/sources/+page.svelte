@@ -1,11 +1,10 @@
 <script lang="ts">
 	import { Breadcrumb, BreadcrumbItem, Button, Checkbox, Heading } from 'flowbite-svelte';
-	import { Input, Table, TableBody, TableBodyCell, TableBodyRow, TableHead } from 'flowbite-svelte';
-	import { TableHeadCell, Toolbar, ToolbarButton } from 'flowbite-svelte';
-	import { CogSolid, DotsVerticalSolid } from 'flowbite-svelte-icons';
-	import { ExclamationCircleSolid, TrashBinSolid } from 'flowbite-svelte-icons';
+	import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead } from 'flowbite-svelte';
+	import { TableHeadCell, Toolbar } from 'flowbite-svelte';
 	import MetaTag from '../../../utils/MetaTag.svelte';
 	import { goto } from '$app/navigation';
+	import { dataSources, getCurrentDataSources } from '../../../../stores/appState';
 
 	function navigateToAddNewSource() {
 		goto('/crud/sources/add');
@@ -15,7 +14,12 @@
 	const description: string = 'Sources example - Querent Admin Dashboard';
 	const title: string = 'Querent Admin Dashboard - Sources';
 	const subtitle: string = 'Sources';
-	let sources_list: any[] = [];
+
+	$: sources_list = $dataSources;
+
+	$: {
+		console.log('abcd', $dataSources);
+	}
 </script>
 
 <MetaTag {path} {description} {title} {subtitle} />
@@ -32,31 +36,6 @@
 		</Heading>
 
 		<Toolbar embedded class="w-full py-4 text-gray-500 dark:text-gray-400">
-			<!-- <Input placeholder="Search for sources" class="me-6 w-80 border xl:w-96" />
-			<ToolbarButton
-				color="dark"
-				class="m-0 rounded p-1 hover:bg-gray-100 focus:ring-0 dark:hover:bg-gray-700"
-			>
-				<CogSolid size="lg" />
-			</ToolbarButton>
-			<ToolbarButton
-				color="dark"
-				class="m-0 rounded p-1 hover:bg-gray-100 focus:ring-0 dark:hover:bg-gray-700"
-			>
-				<TrashBinSolid size="lg" />
-			</ToolbarButton>
-			<ToolbarButton
-				color="dark"
-				class="m-0 rounded p-1 hover:bg-gray-100 focus:ring-0 dark:hover:bg-gray-700"
-			>
-				<ExclamationCircleSolid size="lg" />
-			</ToolbarButton>
-			<ToolbarButton
-				color="dark"
-				class="m-0 rounded p-1 hover:bg-gray-100 focus:ring-0 dark:hover:bg-gray-700"
-			>
-				<DotsVerticalSolid size="lg" />
-			</ToolbarButton> -->
 
 			<div slot="end" class="space-x-2">
 				<Button class="whitespace-nowrap" on:click={navigateToAddNewSource}>Add new source</Button>
@@ -82,10 +61,10 @@
 							</div>
 						</div>
 					</TableBodyCell>
-					<TableBodyCell class="p-4">{source.technology}</TableBodyCell>
+					<TableBodyCell class="p-4">{'source.technology'}</TableBodyCell>
 					<TableBodyCell
 						class="max-w-md overflow-hidden truncate p-4 text-base font-normal text-gray-500 dark:text-gray-400 xl:max-w-lg"
-						>{source.description}</TableBodyCell
+						>{'source.description'}</TableBodyCell
 					>
 				</TableBodyRow>
 			{/each}

@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { Button, Input, Label } from 'flowbite-svelte';
 	import { CollectorConfig, FileCollectorConfig } from '../../../codegen/protos/semantics';
+	import { addDataSource } from '../../../../stores/appState';
+
 
 	let file_collector_config: FileCollectorConfig = {
 		rootPath: '',
@@ -20,6 +22,8 @@
 			file_collector_config.rootPath = root_path;
 			collector_config.files = file_collector_config;
 			collector_config.name = name;
+
+			addDataSource(collector_config);
 			console.log('Object is ', collector_config);
 
 			// TODO: make the API call
