@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { afterNavigate } from '$app/navigation';
 	import { page } from '$app/stores';
+	import Icon from '@iconify/svelte';
 
 	import {
 		Sidebar,
@@ -9,16 +10,7 @@
 		SidebarItem,
 		SidebarWrapper
 	} from 'flowbite-svelte';
-	import {
-		AngleDownSolid,
-		AngleUpOutline,
-		ClipboardListSolid,
-		LifeSaverSolid,
-		LockSolid,
-		MagicWandSolid,
-		PieChartSolid,
-		DatabaseOutline
-	} from 'flowbite-svelte-icons';
+	import { AngleDownSolid, AngleUpOutline } from 'flowbite-svelte-icons';
 
 	export let drawerHidden: boolean = false;
 
@@ -44,28 +36,28 @@
 	});
 
 	let posts = [
-		{ name: 'Dashboard', icon: PieChartSolid, href: '/dashboard' },
+		{ name: 'Dashboard', icon: 'mdi:chart-pie', href: '/dashboard' },
 		{
 			name: 'Data Sources',
-			icon: DatabaseOutline,
+			icon: 'grommet-icons:resources',
 			children: {
 				Historical: '/crud/sources/',
 				Realtime: '/crud/users'
 			}
 		},
 		{
-			name: 'Semantic Web',
-			icon: MagicWandSolid,
+			name: 'Data Fabric',
+			icon: 'token:neuroni',
 			href: '/crud/semantic-web'
 		},
 		{
 			name: 'Discovery',
-			icon: LockSolid,
+			icon: 'carbon:ibm-watson-discovery',
 			href: '/crud/discovery'
 		},
 		{
 			name: 'Insights',
-			icon: LifeSaverSolid,
+			icon: 'carbon:ibm-elo-engineering-insights',
 			href: '/crud/insights'
 		}
 	];
@@ -74,12 +66,12 @@
 		{
 			label: 'Querent Docs',
 			href: 'https://docs.querent.xyz/',
-			icon: ClipboardListSolid
+			icon: 'mdi:clipboard-list'
 		},
 		{
 			label: 'Support',
 			href: 'https://github.com/querent-ai/support/issues',
-			icon: LifeSaverSolid
+			icon: 'mdi:lifebuoy'
 		}
 	];
 	let dropdowns = Object.fromEntries(Object.keys(posts).map((x) => [x, false]));
@@ -102,7 +94,7 @@
 						<SidebarDropdownWrapper bind:isOpen={dropdowns[name]} label={name} class="pr-3">
 							<AngleDownSolid slot="arrowdown" strokeWidth="3.3" size="sm" />
 							<AngleUpOutline slot="arrowup" strokeWidth="3.3" size="sm" />
-							<svelte:component this={icon} slot="icon" class={iconClass} />
+							<Icon {icon} slot="icon" class={iconClass} />
 
 							{#each Object.entries(children) as [title, href]}
 								<SidebarItem
@@ -122,7 +114,7 @@
 							class={itemClass}
 							active={activeMainSidebar === href}
 						>
-							<svelte:component this={icon} slot="icon" class={iconClass} />
+							<Icon {icon} slot="icon" class={iconClass} />
 						</SidebarItem>
 					{/if}
 				{/each}
@@ -137,7 +129,7 @@
 						active={activeMainSidebar === href}
 						target="_blank"
 					>
-						<svelte:component this={icon} slot="icon" class={iconClass} />
+						<Icon {icon} slot="icon" class={iconClass} />
 					</SidebarItem>
 				{/each}
 			</SidebarGroup>
