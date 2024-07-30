@@ -42,7 +42,7 @@
 			icon: 'grommet-icons:resources',
 			children: {
 				Historical: '/crud/sources/',
-				Realtime: '/crud/users'
+				Realtime: '/crud/realtime/'
 			}
 		},
 		{
