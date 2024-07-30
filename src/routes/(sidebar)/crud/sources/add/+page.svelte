@@ -99,9 +99,7 @@
 			Limit: '',
 			'Access Token': ''
 		},
-		Onedrive: {
-
-		}
+		Onedrive: {}
 	};
 
 	let premiumSources = [
@@ -142,7 +140,7 @@
 		News: NewsIcon,
 		'AWS S3': AwsIcon,
 		Slack: SlackIcon,
-		Onedrive: OnedriveIcon,
+		Onedrive: OnedriveIcon
 	};
 
 	const path: string = '/crud/sources/add';

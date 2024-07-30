@@ -36,7 +36,6 @@
 		</Heading>
 
 		<Toolbar embedded class="w-full py-4 text-gray-500 dark:text-gray-400">
-
 			<div slot="end" class="space-x-2">
 				<Button class="whitespace-nowrap" on:click={navigateToAddNewSource}>Add new source</Button>
 			</div>

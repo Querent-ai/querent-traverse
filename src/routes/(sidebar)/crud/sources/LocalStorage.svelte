@@ -3,7 +3,6 @@
 	import { CollectorConfig, FileCollectorConfig } from '../../../codegen/protos/semantics';
 	import { addDataSource } from '../../../../stores/appState';
 
-
 	let file_collector_config: FileCollectorConfig = {
 		rootPath: '',
 		id: ''
@@ -27,7 +26,7 @@
 			console.log('Object is ', collector_config);
 
 			// TODO: make the API call
-			window.location.href = "/crud/sources";
+			window.location.href = '/crud/sources';
 		} else {
 			console.log('No directory path or id entered.');
 		}
