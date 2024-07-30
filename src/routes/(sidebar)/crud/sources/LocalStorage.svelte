@@ -21,6 +21,9 @@
 			collector_config.files = file_collector_config;
 			collector_config.name = name;
 			console.log('Object is ', collector_config);
+
+			// TODO: make the API call
+			window.location.href = "/crud/sources";
 		} else {
 			console.log('No directory path or id entered.');
 		}

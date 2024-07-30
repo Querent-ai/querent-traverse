@@ -58,6 +58,9 @@
 			collector_config.drive = drive_config;
 			collector_config.name = name;
 			console.log('Drive Configuration:', collector_config);
+
+			// TODO: make the API call
+			window.location.href = "/crud/sources";
 		} else {
 			console.error('Please fill in all required fields.');
 		}

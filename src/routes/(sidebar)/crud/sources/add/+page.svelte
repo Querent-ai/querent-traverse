@@ -18,7 +18,7 @@
 	import AwsIcon from './AwsComponent.svelte';
 	import AzureIcon from './AzureComponent.svelte';
 	import GithubIcon from './GithubComponent.svelte';
-	// import OnedriveIcon from './OnedriveComponent.svelte';
+	import OnedriveIcon from './OnedriveComponent.svelte';
 	import JiraIcon from './JiraComponent.svelte';
 	import SlackIcon from './SlackComponent.svelte';
 	import EmailIcon from './EmailComponent.svelte';
@@ -98,6 +98,9 @@
 			'Latest (timestamp)': '',
 			Limit: '',
 			'Access Token': ''
+		},
+		Onedrive: {
+
 		}
 	};
 
@@ -138,7 +141,8 @@
 		Jira: JiraIcon,
 		News: NewsIcon,
 		'AWS S3': AwsIcon,
-		Slack: SlackIcon
+		Slack: SlackIcon,
+		Onedrive: OnedriveIcon,
 	};
 
 	const path: string = '/crud/sources/add';
