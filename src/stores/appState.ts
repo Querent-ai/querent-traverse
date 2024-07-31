@@ -71,3 +71,11 @@ export function getCurrentDataSources(): CollectorMetadata[] {
 export function getCurrentPipelineState(): PipelineState {
 	return get(pipelineState);
 }
+
+export function deleteSourcefromList(id: string): void {
+	dataSources.update((currentSources) => {
+		const updatedSources = currentSources.filter((source) => source.id !== id);
+		saveToLocalStorage('dataSources', updatedSources);
+		return updatedSources;
+	});
+}

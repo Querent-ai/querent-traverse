@@ -4,8 +4,7 @@
 	import { TableHeadCell, Toolbar } from 'flowbite-svelte';
 	import MetaTag from '../../../utils/MetaTag.svelte';
 	import { goto } from '$app/navigation';
-	import { dataSources } from '../../../../stores/appState';
-	import type { CollectorConfig } from '../../../codegen/protos/semantics';
+	import { dataSources, deleteSourcefromList } from '../../../../stores/appState';
 	import GoogleDriveIcon from './add/DriveComponent.svelte';
 	import LocalStorageIcon from './add/FolderComponent.svelte';
 	import DropboxIcon from './add/DropboxComponent.svelte';
@@ -18,6 +17,7 @@
 	import EmailIcon from './add/EmailComponent.svelte';
 	import NewsIcon from './add/NewsComponent.svelte';
 	import GCSIcon from './add/GCSComponent.svelte';
+	import { Trash } from 'svelte-bootstrap-icons';
 
 	// import { clearDataSources } from '../../../../stores/appState';
 	// clearDataSources();
@@ -47,6 +47,10 @@
 		if (type == 's3') return AwsIcon;
 		if (type == 'slack') return SlackIcon;
 		return null;
+	}
+
+	function deleteSource(id: string) {
+		deleteSourcefromList(id);
 	}
 </script>
 
@@ -89,6 +93,13 @@
 						>
 						<TableBodyCell class="flex items-center space-x-2 whitespace-nowrap p-4">
 							{source.id}
+						</TableBodyCell>
+
+						<TableBodyCell class="p-4 text-right">
+							<Button color="red" size="xs" on:click={() => deleteSource(source.id)}>
+								<Trash class="mr-2 h-4 w-4" />
+								Delete
+							</Button>
 						</TableBodyCell>
 					</TableBodyRow>
 				{/each}
