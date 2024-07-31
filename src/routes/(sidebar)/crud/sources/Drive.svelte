@@ -3,6 +3,7 @@
 	import { GoogleDriveCollectorConfig, CollectorConfig } from '../../../codegen/protos/semantics';
 	import { Button, Input, Label } from 'flowbite-svelte';
 	import { addDataSource } from '../../../../stores/appState';
+	import { goto } from '$app/navigation';
 
 	let drive_config: GoogleDriveCollectorConfig = {
 		driveClientId: import.meta.env.VITE_DRIVE_CLIENT_ID,
@@ -11,6 +12,11 @@
 		folderToCrawl: '',
 		id: ''
 	};
+
+	let isVisible = true;
+	function handleClose() {
+		isVisible = false;
+	}
 	let collector_config: CollectorConfig = {
 		name: '',
 		drive: drive_config
@@ -63,7 +69,7 @@
 			console.log('Drive Configuration:', collector_config);
 
 			// TODO: make the API call
-			window.location.href = '/crud/sources';
+			goto('/crud/sources');
 		} else {
 			console.error('Please fill in all required fields.');
 		}
@@ -71,7 +77,13 @@
 </script>
 
 <div class="flex min-h-screen items-start justify-center pt-20">
-	<form on:submit|preventDefault={handleSubmit} class="w-full max-w-2xl px-4">
+	<form on:submit|preventDefault={handleSubmit} class="relative rounded-lg bg-white p-4 shadow-lg">
+		<button
+			type="button"
+			class="absolute right-0 top-0 m-4 text-lg font-bold text-gray-800 hover:text-gray-600"
+			on:click={handleClose}
+			aria-label="Close form">&times;</button
+		>
 		<Label class="mb-5 block w-full space-y-2">
 			<span>Name</span>
 			<Input

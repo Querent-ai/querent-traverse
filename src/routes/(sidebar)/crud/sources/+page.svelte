@@ -4,7 +4,8 @@
 	import { TableHeadCell, Toolbar } from 'flowbite-svelte';
 	import MetaTag from '../../../utils/MetaTag.svelte';
 	import { goto } from '$app/navigation';
-	import { dataSources, getCurrentDataSources } from '../../../../stores/appState';
+	import { dataSources } from '../../../../stores/appState';
+	import type { CollectorConfig } from '../../../codegen/protos/semantics';
 
 	function navigateToAddNewSource() {
 		goto('/crud/sources/add');
@@ -19,6 +20,22 @@
 
 	$: {
 		console.log('abcd', $dataSources);
+	}
+
+	function getId(source: CollectorConfig): string {
+		if (source.files) return source.files.id;
+		if (source.drive) return source.drive.id;
+		if (source.azure) return source.azure.id;
+		if (source.dropbox) return source.dropbox.id;
+		if (source.email) return source.email.id;
+		if (source.gcs) return source.gcs.id;
+		if (source.github) return source.github.id;
+		if (source.jira) return source.jira.id;
+		if (source.news) return source.news.id;
+		if (source.onedrive) return source.onedrive.id;
+		if (source.s3) return source.s3.id;
+		if (source.slack) return source.slack.id;
+		return 'None';
 	}
 </script>
 
@@ -56,14 +73,14 @@
 					<TableBodyCell class="flex items-center space-x-6 whitespace-nowrap p-4">
 						<div class="text-sm font-normal text-gray-500 dark:text-gray-400">
 							<div class="text-base font-semibold text-gray-900 dark:text-white">
-								{source.name}
+								{getId(source)}
 							</div>
 						</div>
 					</TableBodyCell>
 					<TableBodyCell class="p-4">{'source.technology'}</TableBodyCell>
 					<TableBodyCell
 						class="max-w-md overflow-hidden truncate p-4 text-base font-normal text-gray-500 dark:text-gray-400 xl:max-w-lg"
-						>{'source.description'}</TableBodyCell
+						>{source.name}</TableBodyCell
 					>
 				</TableBodyRow>
 			{/each}
