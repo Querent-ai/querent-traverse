@@ -6,6 +6,22 @@
 	import { goto } from '$app/navigation';
 	import { dataSources } from '../../../../stores/appState';
 	import type { CollectorConfig } from '../../../codegen/protos/semantics';
+	import GoogleDriveIcon from './add/DriveComponent.svelte';
+	import LocalStorageIcon from './add/FolderComponent.svelte';
+	import DropboxIcon from './add/DropboxComponent.svelte';
+	import AwsIcon from './add/AwsComponent.svelte';
+	import AzureIcon from './add/AzureComponent.svelte';
+	import GithubIcon from './add/GithubComponent.svelte';
+	import OnedriveIcon from './add/OnedriveComponent.svelte';
+	import JiraIcon from './add/JiraComponent.svelte';
+	import SlackIcon from './add/SlackComponent.svelte';
+	import EmailIcon from './add/EmailComponent.svelte';
+	import NewsIcon from './add/NewsComponent.svelte';
+	import GCSIcon from './add/GCSComponent.svelte';
+
+	// import { clearDataSources } from '../../../../stores/appState';
+	// clearDataSources();
+
 
 	function navigateToAddNewSource() {
 		goto('/crud/sources/add');
@@ -18,8 +34,20 @@
 
 	$: sources_list = $dataSources;
 
-	$: {
-		console.log('abcd', $dataSources);
+	function getImage(source: CollectorConfig): any {
+		if (source.files) return LocalStorageIcon;
+		if (source.drive) return GoogleDriveIcon;
+		if (source.azure) return AzureIcon;
+		if (source.dropbox) return DropboxIcon;
+		if (source.email) return EmailIcon;
+		if (source.gcs) return GCSIcon;
+		if (source.github) return GithubIcon;
+		if (source.jira) return JiraIcon;
+		if (source.news) return NewsIcon;
+		if (source.onedrive) return OnedriveIcon;
+		if (source.s3) return AwsIcon;
+		if (source.slack) return SlackIcon;
+		return null;
 	}
 
 	function getId(source: CollectorConfig): string {
@@ -60,8 +88,7 @@
 	</div>
 	<Table>
 		<TableHead class="border-y border-gray-200 bg-gray-100 dark:border-gray-700">
-			<TableHeadCell class="w-4 p-4"><Checkbox /></TableHeadCell>
-			{#each ['ID', 'Type', 'Name'] as title}
+			{#each ['Type', 'Name', 'ID'] as title}
 				<TableHeadCell class="ps-4 font-normal">{title}</TableHeadCell>
 			{/each}
 			<TableHeadCell class="pe-100 ps-4 text-right font-normal">Delete</TableHeadCell>
@@ -69,19 +96,16 @@
 		<TableBody>
 			{#each sources_list as source}
 				<TableBodyRow class="text-base">
-					<TableBodyCell class="w-4 p-4"><Checkbox /></TableBodyCell>
-					<TableBodyCell class="flex items-center space-x-6 whitespace-nowrap p-4">
-						<div class="text-sm font-normal text-gray-500 dark:text-gray-400">
-							<div class="text-base font-semibold text-gray-900 dark:text-white">
-								{getId(source)}
-							</div>
-						</div>
+					<TableBodyCell class="p-4">
+						<svelte:component this={getImage(source)} />
 					</TableBodyCell>
-					<TableBodyCell class="p-4">{'source.technology'}</TableBodyCell>
 					<TableBodyCell
-						class="max-w-md overflow-hidden truncate p-4 text-base font-normal text-gray-500 dark:text-gray-400 xl:max-w-lg"
+						class="overflow-hidden truncate p-4 text-base font-normal text-gray-500 dark:text-gray-400"
 						>{source.name}</TableBodyCell
 					>
+					<TableBodyCell class="flex items-center space-x-2 whitespace-nowrap p-4">
+						{getId(source)}
+					</TableBodyCell>
 				</TableBodyRow>
 			{/each}
 		</TableBody>

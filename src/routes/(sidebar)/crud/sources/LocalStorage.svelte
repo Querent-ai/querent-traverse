@@ -3,14 +3,15 @@
 	import { CollectorConfig, FileCollectorConfig } from '../../../codegen/protos/semantics';
 	import { dataSources, addDataSource } from '../../../../stores/appState';
 	import { goto } from '$app/navigation';
+	import { isVisible } from '../../../../stores/appState';
 
 	let file_collector_config: FileCollectorConfig = {
 		rootPath: '',
 		id: ''
 	};
-	let isVisible = true;
+
 	function handleClose() {
-		isVisible = false;
+		$isVisible = false;
 	}
 	let collector_config: CollectorConfig = {
 		name: '',
@@ -38,7 +39,7 @@
 	}
 </script>
 
-{#if isVisible}
+{#if $isVisible}
 	<div class="flex min-h-screen items-start justify-center pt-20">
 		<form
 			on:submit|preventDefault={updateDirectoryPath}

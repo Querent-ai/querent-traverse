@@ -27,6 +27,7 @@
 	import MetaTag from '../../../../utils/MetaTag.svelte';
 	import { onMount } from 'svelte';
 	import Modal from './Modal.svelte';
+	import { isVisible } from '../../../../../stores/appState';
 
 	const CLIENT_ID = import.meta.env.VITE_DRIVE_CLIENT_ID;
 	const REDIRECT_URI = import.meta.env.VITE_DRIVE_REDIRECT_URL;
@@ -119,13 +120,20 @@
 
 	function selectSource(sourceName: string) {
 		if (sourceName === 'Google Drive') {
+			$isVisible = true;
 			login();
 		} else if (premiumSources.includes(sourceName)) {
 			modalMessage = 'This feature is only available in the premium version.';
 			showModal = true;
 		} else {
+			$isVisible = true;
 			selectedSource = sourceName;
 		}
+	}
+
+	function setIsVisible(): string {
+		$isVisible = true;
+		return '';
 	}
 
 	const iconMapping: Record<string, any> = {
@@ -180,6 +188,7 @@
 		{:else if selectedSource === 'Azure'}
 			<AzureForm configuration={configurations['Azure']} />
 		{:else if selectedSource === 'Google Drive'}
+		{setIsVisible()}
 			<DriveForm />
 		{:else if selectedSource === 'Dropbox'}
 			<DropboxForm configuration={configurations['Dropbox']} />
