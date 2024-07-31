@@ -1,13 +1,19 @@
 <script lang="ts">
 	import { Button, Input, Label } from 'flowbite-svelte';
 	import { CollectorConfig, FileCollectorConfig } from '../../../codegen/protos/semantics';
-	import { dataSources, addDataSource } from '../../../../stores/appState';
+	import { dataSources, addDataSource, type CollectorMetadata } from '../../../../stores/appState';
 	import { goto } from '$app/navigation';
 	import { isVisible } from '../../../../stores/appState';
 
 	let file_collector_config: FileCollectorConfig = {
 		rootPath: '',
 		id: ''
+	};
+
+	let metadata: CollectorMetadata = {
+		id: '',
+		name: '',
+		type: ''
 	};
 
 	function handleClose() {
@@ -28,7 +34,10 @@
 			collector_config.files = file_collector_config;
 			collector_config.name = name;
 
-			addDataSource(collector_config);
+			metadata.id = file_collector_config.id;
+			metadata.name = name;
+			metadata.type = 'files';
+			addDataSource(metadata);
 			console.log('Object is ', $dataSources);
 
 			// TODO: make the API call

@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import { GoogleDriveCollectorConfig, CollectorConfig } from '../../../codegen/protos/semantics';
 	import { Button, Input, Label } from 'flowbite-svelte';
-	import { addDataSource } from '../../../../stores/appState';
+	import { addDataSource, type CollectorMetadata } from '../../../../stores/appState';
 	import { goto } from '$app/navigation';
 	import { isVisible } from '../../../../stores/appState';
 
@@ -12,6 +12,12 @@
 		driveRefreshToken: '',
 		folderToCrawl: '',
 		id: ''
+	};
+
+	let metadata: CollectorMetadata = {
+		id: '',
+		name: '',
+		type: ''
 	};
 
 	function handleClose() {
@@ -70,7 +76,10 @@
 			collector_config.drive = drive_config;
 			collector_config.name = name;
 
-			addDataSource(collector_config);
+			metadata.id = drive_config.id;
+			metadata.name = name;
+			metadata.type = 'drive';
+			addDataSource(metadata);
 			console.log('Drive Configuration:', collector_config);
 
 			// TODO: make the API call

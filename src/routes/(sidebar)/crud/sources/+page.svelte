@@ -33,36 +33,20 @@
 
 	$: sources_list = $dataSources;
 
-	function getImage(source: CollectorConfig): any {
-		if (source.files) return LocalStorageIcon;
-		if (source.drive) return GoogleDriveIcon;
-		if (source.azure) return AzureIcon;
-		if (source.dropbox) return DropboxIcon;
-		if (source.email) return EmailIcon;
-		if (source.gcs) return GCSIcon;
-		if (source.github) return GithubIcon;
-		if (source.jira) return JiraIcon;
-		if (source.news) return NewsIcon;
-		if (source.onedrive) return OnedriveIcon;
-		if (source.s3) return AwsIcon;
-		if (source.slack) return SlackIcon;
+	function getImage(type: string): any {
+		if (type == 'files') return LocalStorageIcon;
+		if (type == 'drive') return GoogleDriveIcon;
+		if (type == 'azure') return AzureIcon;
+		if (type == 'dropbox') return DropboxIcon;
+		if (type == 'email') return EmailIcon;
+		if (type == 'gcs') return GCSIcon;
+		if (type == 'github') return GithubIcon;
+		if (type == 'jira') return JiraIcon;
+		if (type == 'news') return NewsIcon;
+		if (type == 'onedrive') return OnedriveIcon;
+		if (type == 's3') return AwsIcon;
+		if (type == 'slack') return SlackIcon;
 		return null;
-	}
-
-	function getId(source: CollectorConfig): string {
-		if (source.files) return source.files.id;
-		if (source.drive) return source.drive.id;
-		if (source.azure) return source.azure.id;
-		if (source.dropbox) return source.dropbox.id;
-		if (source.email) return source.email.id;
-		if (source.gcs) return source.gcs.id;
-		if (source.github) return source.github.id;
-		if (source.jira) return source.jira.id;
-		if (source.news) return source.news.id;
-		if (source.onedrive) return source.onedrive.id;
-		if (source.s3) return source.s3.id;
-		if (source.slack) return source.slack.id;
-		return 'None';
 	}
 </script>
 
@@ -96,14 +80,14 @@
 			{#each sources_list as source}
 				<TableBodyRow class="text-base">
 					<TableBodyCell class="p-4">
-						<svelte:component this={getImage(source)} />
+						<svelte:component this={getImage(source.type)} />
 					</TableBodyCell>
 					<TableBodyCell
 						class="overflow-hidden truncate p-4 text-base font-normal text-gray-500 dark:text-gray-400"
 						>{source.name}</TableBodyCell
 					>
 					<TableBodyCell class="flex items-center space-x-2 whitespace-nowrap p-4">
-						{getId(source)}
+						{source.id}
 					</TableBodyCell>
 				</TableBodyRow>
 			{/each}

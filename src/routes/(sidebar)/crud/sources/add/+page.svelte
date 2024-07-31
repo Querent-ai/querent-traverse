@@ -1,4 +1,3 @@
-<!-- src/routes/crud/sources/add/+page.svelte -->
 <script lang="ts">
 	import { Breadcrumb, BreadcrumbItem, Heading } from 'flowbite-svelte';
 	import GCSForm from '../GCS.svelte';

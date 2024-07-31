@@ -1,9 +1,5 @@
 import { writable, get } from 'svelte/store';
-import { CollectorConfig } from '../routes/codegen/protos/semantics';
-
 export const isVisible = writable(false);
-
-//collector metadata - id, name, type
 
 function saveToLocalStorage(key: string, value: any) {
 	if (typeof window !== 'undefined') {
@@ -26,12 +22,18 @@ export function clearDataSources(): void {
 	saveToLocalStorage('dataSources', []);
 }
 
-const initialStateDataSources: CollectorConfig[] = getFromLocalStorage('dataSources', []);
+const initialStateDataSources: CollectorMetadata[] = getFromLocalStorage('dataSources', []);
 const initialStatePipeline: PipelineState = getFromLocalStorage('pipelineState', {
 	mode: 'idle',
 	results: null,
 	error: null
 });
+
+export interface CollectorMetadata {
+	id: string;
+	name: string;
+	type: string;
+}
 
 interface PipelineState {
 	mode: 'idle' | 'running' | 'completed' | 'exited';
@@ -39,7 +41,7 @@ interface PipelineState {
 	error: string | null;
 }
 
-export const dataSources = writable<CollectorConfig[]>(initialStateDataSources);
+export const dataSources = writable<CollectorMetadata[]>(initialStateDataSources);
 export const pipelineState = writable<PipelineState>(initialStatePipeline);
 
 dataSources.subscribe(($dataSources) => {
@@ -50,8 +52,7 @@ pipelineState.subscribe(($pipelineState) => {
 	saveToLocalStorage('pipelineState', $pipelineState);
 });
 
-// Function to add a data source
-export function addDataSource(source: CollectorConfig): void {
+export function addDataSource(source: CollectorMetadata): void {
 	dataSources.update((currentSources) => [...currentSources, source]);
 }
 
@@ -63,7 +64,7 @@ export function updatePipeline(
 	pipelineState.set({ mode, results, error });
 }
 
-export function getCurrentDataSources(): CollectorConfig[] {
+export function getCurrentDataSources(): CollectorMetadata[] {
 	return get(dataSources);
 }
 
