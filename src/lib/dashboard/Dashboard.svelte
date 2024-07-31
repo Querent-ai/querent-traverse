@@ -1,32 +1,15 @@
 <script lang="ts">
-	// import thickbars from '$lib/graphs/thickbars';
-	// import thinfillbars from '$lib/graphs/thinfillbars';
 	import ChartWidget from '$lib/widgets/ChartWidget.svelte';
 	import { Card } from 'flowbite-svelte';
-	import type { PageData } from '../../routes/(sidebar)/$types';
+	// import type { PageData } from '../../routes/(sidebar)/$types';
 	import Stats from './Stats.svelte';
 
-	// import { onMount } from 'svelte';
-	// import ActivityList from './ActivityList.svelte';
-	// import Change from './Change.svelte';
-	// import Chat from './Chat.svelte';
-	// import DesktopPc from './DesktopPc.svelte';
-	// import Insights from './Insights.svelte';
-	// import Traffic from './Traffic.svelte';
-	// import Transactions from './Transactions.svelte';
 	import { getChartOptions } from '../../routes/(sidebar)/dashboard/chart_options';
-	// import TotalDocs from './TotalDocs.svelte';
-	// import TotalSubjects from './TotalSubjects.svelte';
-	// import TotalObjects from './TotalObjects.svelte';
 	import TotalSources from './TotalSources.svelte';
 	// import TotalEvents from './TotalEvents.svelte';
 
-	export let data: PageData;
+	// export let data: PageData;
 
-	// let chartOptions = chart_options_func(false);
-	// chartOptions.series = data.series;
-
-	// let graphOptions = getChartOptions(false, 'graph');
 	let vectorOptions = getChartOptions(false, 'vector');
 </script>
 

@@ -77,20 +77,22 @@
 			<TableHeadCell class="pe-100 ps-4 text-right font-normal">Delete</TableHeadCell>
 		</TableHead>
 		<TableBody>
-			{#each sources_list as source}
-				<TableBodyRow class="text-base">
-					<TableBodyCell class="p-4">
-						<svelte:component this={getImage(source.type)} />
-					</TableBodyCell>
-					<TableBodyCell
-						class="overflow-hidden truncate p-4 text-base font-normal text-gray-500 dark:text-gray-400"
-						>{source.name}</TableBodyCell
-					>
-					<TableBodyCell class="flex items-center space-x-2 whitespace-nowrap p-4">
-						{source.id}
-					</TableBodyCell>
-				</TableBodyRow>
-			{/each}
+			{#if Array.isArray(sources_list)}
+				{#each sources_list as source}
+					<TableBodyRow class="text-base">
+						<TableBodyCell class="p-4">
+							<svelte:component this={getImage(source.type)} />
+						</TableBodyCell>
+						<TableBodyCell
+							class="overflow-hidden truncate p-4 text-base font-normal text-gray-500 dark:text-gray-400"
+							>{source.name}</TableBodyCell
+						>
+						<TableBodyCell class="flex items-center space-x-2 whitespace-nowrap p-4">
+							{source.id}
+						</TableBodyCell>
+					</TableBodyRow>
+				{/each}
+			{/if}
 		</TableBody>
 	</Table>
 </main>
