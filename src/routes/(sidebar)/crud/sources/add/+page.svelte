@@ -1,4 +1,3 @@
-<!-- src/routes/crud/sources/add/+page.svelte -->
 <script lang="ts">
 	import { Breadcrumb, BreadcrumbItem, Heading } from 'flowbite-svelte';
 	import GCSForm from '../GCS.svelte';
@@ -18,7 +17,7 @@
 	import AwsIcon from './AwsComponent.svelte';
 	import AzureIcon from './AzureComponent.svelte';
 	import GithubIcon from './GithubComponent.svelte';
-	// import OnedriveIcon from './OnedriveComponent.svelte';
+	import OnedriveIcon from './OnedriveComponent.svelte';
 	import JiraIcon from './JiraComponent.svelte';
 	import SlackIcon from './SlackComponent.svelte';
 	import EmailIcon from './EmailComponent.svelte';
@@ -27,6 +26,7 @@
 	import MetaTag from '../../../../utils/MetaTag.svelte';
 	import { onMount } from 'svelte';
 	import Modal from './Modal.svelte';
+	import { isVisible } from '../../../../../stores/appState';
 
 	const CLIENT_ID = import.meta.env.VITE_DRIVE_CLIENT_ID;
 	const REDIRECT_URI = import.meta.env.VITE_DRIVE_REDIRECT_URL;
@@ -98,7 +98,8 @@
 			'Latest (timestamp)': '',
 			Limit: '',
 			'Access Token': ''
-		}
+		},
+		Onedrive: {}
 	};
 
 	let premiumSources = [
@@ -118,13 +119,20 @@
 
 	function selectSource(sourceName: string) {
 		if (sourceName === 'Google Drive') {
+			$isVisible = true;
 			login();
 		} else if (premiumSources.includes(sourceName)) {
 			modalMessage = 'This feature is only available in the premium version.';
 			showModal = true;
 		} else {
+			$isVisible = true;
 			selectedSource = sourceName;
 		}
+	}
+
+	function setIsVisible(): string {
+		$isVisible = true;
+		return '';
 	}
 
 	const iconMapping: Record<string, any> = {
@@ -138,7 +146,8 @@
 		Jira: JiraIcon,
 		News: NewsIcon,
 		'AWS S3': AwsIcon,
-		Slack: SlackIcon
+		Slack: SlackIcon,
+		Onedrive: OnedriveIcon
 	};
 
 	const path: string = '/crud/sources/add';
@@ -178,6 +187,7 @@
 		{:else if selectedSource === 'Azure'}
 			<AzureForm configuration={configurations['Azure']} />
 		{:else if selectedSource === 'Google Drive'}
+			{setIsVisible()}
 			<DriveForm />
 		{:else if selectedSource === 'Dropbox'}
 			<DropboxForm configuration={configurations['Dropbox']} />

@@ -1,11 +1,26 @@
 <script lang="ts">
 	import { Breadcrumb, BreadcrumbItem, Button, Checkbox, Heading } from 'flowbite-svelte';
-	import { Input, Table, TableBody, TableBodyCell, TableBodyRow, TableHead } from 'flowbite-svelte';
-	import { TableHeadCell, Toolbar, ToolbarButton } from 'flowbite-svelte';
-	import { CogSolid, DotsVerticalSolid } from 'flowbite-svelte-icons';
-	import { ExclamationCircleSolid, TrashBinSolid } from 'flowbite-svelte-icons';
+	import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead } from 'flowbite-svelte';
+	import { TableHeadCell, Toolbar } from 'flowbite-svelte';
 	import MetaTag from '../../../utils/MetaTag.svelte';
 	import { goto } from '$app/navigation';
+	import { dataSources, deleteSourcefromList } from '../../../../stores/appState';
+	import GoogleDriveIcon from './add/DriveComponent.svelte';
+	import LocalStorageIcon from './add/FolderComponent.svelte';
+	import DropboxIcon from './add/DropboxComponent.svelte';
+	import AwsIcon from './add/AwsComponent.svelte';
+	import AzureIcon from './add/AzureComponent.svelte';
+	import GithubIcon from './add/GithubComponent.svelte';
+	import OnedriveIcon from './add/OnedriveComponent.svelte';
+	import JiraIcon from './add/JiraComponent.svelte';
+	import SlackIcon from './add/SlackComponent.svelte';
+	import EmailIcon from './add/EmailComponent.svelte';
+	import NewsIcon from './add/NewsComponent.svelte';
+	import GCSIcon from './add/GCSComponent.svelte';
+	import { Trash } from 'svelte-bootstrap-icons';
+
+	// import { clearDataSources } from '../../../../stores/appState';
+	// clearDataSources();
 
 	function navigateToAddNewSource() {
 		goto('/crud/sources/add');
@@ -15,7 +30,28 @@
 	const description: string = 'Sources example - Querent Admin Dashboard';
 	const title: string = 'Querent Admin Dashboard - Sources';
 	const subtitle: string = 'Sources';
-	let sources_list: any[] = [];
+
+	$: sources_list = $dataSources;
+
+	function getImage(type: string): any {
+		if (type == 'files') return LocalStorageIcon;
+		if (type == 'drive') return GoogleDriveIcon;
+		if (type == 'azure') return AzureIcon;
+		if (type == 'dropbox') return DropboxIcon;
+		if (type == 'email') return EmailIcon;
+		if (type == 'gcs') return GCSIcon;
+		if (type == 'github') return GithubIcon;
+		if (type == 'jira') return JiraIcon;
+		if (type == 'news') return NewsIcon;
+		if (type == 'onedrive') return OnedriveIcon;
+		if (type == 's3') return AwsIcon;
+		if (type == 'slack') return SlackIcon;
+		return null;
+	}
+
+	function deleteSource(id: string) {
+		deleteSourcefromList(id);
+	}
 </script>
 
 <MetaTag {path} {description} {title} {subtitle} />
@@ -32,32 +68,6 @@
 		</Heading>
 
 		<Toolbar embedded class="w-full py-4 text-gray-500 dark:text-gray-400">
-			<!-- <Input placeholder="Search for sources" class="me-6 w-80 border xl:w-96" />
-			<ToolbarButton
-				color="dark"
-				class="m-0 rounded p-1 hover:bg-gray-100 focus:ring-0 dark:hover:bg-gray-700"
-			>
-				<CogSolid size="lg" />
-			</ToolbarButton>
-			<ToolbarButton
-				color="dark"
-				class="m-0 rounded p-1 hover:bg-gray-100 focus:ring-0 dark:hover:bg-gray-700"
-			>
-				<TrashBinSolid size="lg" />
-			</ToolbarButton>
-			<ToolbarButton
-				color="dark"
-				class="m-0 rounded p-1 hover:bg-gray-100 focus:ring-0 dark:hover:bg-gray-700"
-			>
-				<ExclamationCircleSolid size="lg" />
-			</ToolbarButton>
-			<ToolbarButton
-				color="dark"
-				class="m-0 rounded p-1 hover:bg-gray-100 focus:ring-0 dark:hover:bg-gray-700"
-			>
-				<DotsVerticalSolid size="lg" />
-			</ToolbarButton> -->
-
 			<div slot="end" class="space-x-2">
 				<Button class="whitespace-nowrap" on:click={navigateToAddNewSource}>Add new source</Button>
 			</div>
@@ -65,30 +75,35 @@
 	</div>
 	<Table>
 		<TableHead class="border-y border-gray-200 bg-gray-100 dark:border-gray-700">
-			<TableHeadCell class="w-4 p-4"><Checkbox /></TableHeadCell>
-			{#each ['ID', 'Type', 'Name'] as title}
+			{#each ['Type', 'Name', 'ID'] as title}
 				<TableHeadCell class="ps-4 font-normal">{title}</TableHeadCell>
 			{/each}
 			<TableHeadCell class="pe-100 ps-4 text-right font-normal">Delete</TableHeadCell>
 		</TableHead>
 		<TableBody>
-			{#each sources_list as source}
-				<TableBodyRow class="text-base">
-					<TableBodyCell class="w-4 p-4"><Checkbox /></TableBodyCell>
-					<TableBodyCell class="flex items-center space-x-6 whitespace-nowrap p-4">
-						<div class="text-sm font-normal text-gray-500 dark:text-gray-400">
-							<div class="text-base font-semibold text-gray-900 dark:text-white">
-								{source.name}
-							</div>
-						</div>
-					</TableBodyCell>
-					<TableBodyCell class="p-4">{source.technology}</TableBodyCell>
-					<TableBodyCell
-						class="max-w-md overflow-hidden truncate p-4 text-base font-normal text-gray-500 dark:text-gray-400 xl:max-w-lg"
-						>{source.description}</TableBodyCell
-					>
-				</TableBodyRow>
-			{/each}
+			{#if Array.isArray(sources_list)}
+				{#each sources_list as source}
+					<TableBodyRow class="text-base">
+						<TableBodyCell class="p-4">
+							<svelte:component this={getImage(source.type)} />
+						</TableBodyCell>
+						<TableBodyCell
+							class="overflow-hidden truncate p-4 text-base font-normal text-gray-500 dark:text-gray-400"
+							>{source.name}</TableBodyCell
+						>
+						<TableBodyCell class="flex items-center space-x-2 whitespace-nowrap p-4">
+							{source.id}
+						</TableBodyCell>
+
+						<TableBodyCell class="p-4 text-right">
+							<Button color="red" size="xs" on:click={() => deleteSource(source.id)}>
+								<Trash class="mr-2 h-4 w-4" />
+								Delete
+							</Button>
+						</TableBodyCell>
+					</TableBodyRow>
+				{/each}
+			{/if}
 		</TableBody>
 	</Table>
 </main>
