@@ -188,7 +188,7 @@
 		{:else if selectedSource === 'Azure'}
 			<AzureForm configuration={configurations['Azure']} />
 		{:else if selectedSource === 'Google Drive'}
-		{setIsVisible()}
+			{setIsVisible()}
 			<DriveForm />
 		{:else if selectedSource === 'Dropbox'}
 			<DropboxForm configuration={configurations['Dropbox']} />

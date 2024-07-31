@@ -55,7 +55,7 @@
 				drive_config.driveRefreshToken = data.refresh_token;
 
 				url.searchParams.delete('code');
-        		url.searchParams.delete('scope');
+				url.searchParams.delete('scope');
 				window.history.replaceState({}, '', url.toString());
 			} catch (error) {
 				console.error('Error during token exchange:', error);
@@ -83,7 +83,10 @@
 
 {#if $isVisible}
 	<div class="flex min-h-screen items-start justify-center pt-20">
-		<form on:submit|preventDefault={handleSubmit} class="relative rounded-lg bg-white p-4 shadow-lg">
+		<form
+			on:submit|preventDefault={handleSubmit}
+			class="relative rounded-lg bg-white p-4 shadow-lg"
+		>
 			<button
 				type="button"
 				class="absolute right-0 top-0 m-4 text-lg font-bold text-gray-800 hover:text-gray-600"

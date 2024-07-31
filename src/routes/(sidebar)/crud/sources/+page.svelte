@@ -22,7 +22,6 @@
 	// import { clearDataSources } from '../../../../stores/appState';
 	// clearDataSources();
 
-
 	function navigateToAddNewSource() {
 		goto('/crud/sources/add');
 	}
