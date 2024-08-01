@@ -42,15 +42,15 @@
 		</div>
 	</div>
 </div>
+
 <!-- </main> -->
 
-
 <style>
-    .bg-image {
-        background-image: url("/images/querent-background.png");
-        background-size: cover;
-        background-position: calc(50% - 20px) center;
-        background-repeat: no-repeat;
-        background-color: #3B82F6;
-    }
+	.bg-image {
+		background-image: url('/images/querent-background.png');
+		background-size: cover;
+		background-position: calc(50% - 20px) center;
+		background-repeat: no-repeat;
+		background-color: #3b82f6;
+	}
 </style>

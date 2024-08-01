@@ -39,7 +39,6 @@ interface PipelineState {
 	mode: 'idle' | 'running' | 'completed' | 'exited';
 	results: any | null;
 	error: string | null;
-	
 }
 
 export const dataSources = writable<CollectorMetadata[]>(initialStateDataSources);
@@ -82,6 +81,6 @@ export function deleteSourcefromList(id: string): void {
 }
 
 export function countSourcesByType(type: string): number {
-    const sources = get(dataSources);
-    return sources.filter(source => source.type === type).length;
+	const sources = get(dataSources);
+	return sources.filter((source) => source.type === type).length;
 }
