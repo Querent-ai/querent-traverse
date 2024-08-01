@@ -5,6 +5,8 @@
 		SampleEntities
 	} from '../../../codegen/protos/semantics';
 
+	import { dataSources } from '../../../../stores/appState';
+
 	let fixed_entities: FixedEntities = {
 		entities: []
 	};
@@ -20,11 +22,23 @@
 		attentionThreshold: 0
 	};
 
+	let sourceIds: string[] = [];
+
+	$: {
+		sourceIds = [];
+		if ($dataSources) {
+			$dataSources.forEach((metadata) => {
+				sourceIds.push(metadata.id);
+			});
+		}
+	}
+
 	const handleSubmit = () => {
 		if (request.fixedEntities && request.sampleEntities) {
 			if (request.fixedEntities.entities.length !== request.sampleEntities.entities.length) {
 				console.log('The number of fixed entities must match the number of sample entities.');
 			} else {
+				request.collectors = sourceIds;
 				console.log('form, ', request);
 			}
 		}
