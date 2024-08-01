@@ -10,7 +10,7 @@
 
 	let selectedPipeline: string;
 
-	$: selectedPipeline = $pipelineState.id || '123456';
+	$: selectedPipeline = $pipelineState?.id || '123456';
 
 	const products = [
 		{

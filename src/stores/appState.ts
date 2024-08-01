@@ -25,8 +25,7 @@ export function clearDataSources(): void {
 const initialStateDataSources: CollectorMetadata[] = getFromLocalStorage('dataSources', []);
 const initialStatePipeline: PipelineState = getFromLocalStorage('pipelineState', {
 	mode: 'idle',
-	results: null,
-	error: null
+	id: null
 });
 
 export interface CollectorMetadata {
