@@ -5,7 +5,7 @@
 		SampleEntities
 	} from '../../../codegen/protos/semantics';
 
-	import { dataSources } from '../../../../stores/appState';
+	import { dataSources, updatePipeline, pipelineState } from '../../../../stores/appState';
 
 	let fixed_entities: FixedEntities = {
 		entities: []
@@ -38,13 +38,15 @@
 			if (request.fixedEntities.entities.length !== request.sampleEntities.entities.length) {
 				console.log('The number of fixed entities must match the number of sample entities.');
 			} else {
+				let id = crypto.randomUUID();
+				updatePipeline('running', crypto.randomUUID());
 				request.collectors = sourceIds;
 				console.log('form, ', request);
+				console.log('ID  ', $pipelineState.id);
 			}
 		}
 	};
 
-	// Utility to handle input changes for entities
 	const handleEntityChange = (event: Event, type: 'fixed' | 'sample') => {
 		const target = event.target as HTMLInputElement;
 		const value = target.value;
@@ -65,9 +67,7 @@
 		}
 	};
 
-	// Function to close form (simply hide or remove the form from the display)
 	const handleClose = () => {
-		// Add logic to close the form, e.g., remove or hide it
 		console.log('Form closed');
 	};
 </script>

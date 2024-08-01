@@ -43,8 +43,6 @@
 	</div>
 </div>
 
-<!-- </main> -->
-
 <style>
 	.bg-image {
 		background-image: url('/images/querent-background.png');

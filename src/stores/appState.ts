@@ -36,9 +36,8 @@ export interface CollectorMetadata {
 }
 
 interface PipelineState {
+	id: string;
 	mode: 'idle' | 'running' | 'completed' | 'exited';
-	results: any | null;
-	error: string | null;
 }
 
 export const dataSources = writable<CollectorMetadata[]>(initialStateDataSources);
@@ -56,12 +55,8 @@ export function addDataSource(source: CollectorMetadata): void {
 	dataSources.update((currentSources) => [...currentSources, source]);
 }
 
-export function updatePipeline(
-	mode: PipelineState['mode'],
-	results: any = null,
-	error: string = ''
-): void {
-	pipelineState.set({ mode, results, error });
+export function updatePipeline(mode: PipelineState['mode'], id: PipelineState['id']): void {
+	pipelineState.set({ id, mode });
 }
 
 export function getCurrentDataSources(): CollectorMetadata[] {
@@ -82,5 +77,8 @@ export function deleteSourcefromList(id: string): void {
 
 export function countSourcesByType(type: string): number {
 	const sources = get(dataSources);
-	return sources.filter((source) => source.type === type).length;
+	if (sources && Array.isArray(sources)) {
+		return sources.filter((source) => source.type === type).length;
+	}
+	return 0;
 }
