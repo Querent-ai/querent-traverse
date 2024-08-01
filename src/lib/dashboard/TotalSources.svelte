@@ -1,17 +1,18 @@
 <script>
 	import { onMount } from 'svelte';
 	import * as d3 from 'd3';
+	import { dataSources } from '../../stores/appState';
+	import { countSourcesByType } from '../../stores/appState';
 
-	// Data for the graph
 	const data = [
-		{ source: 'Google Drive', value: 4 },
-		{ source: 'Local Storage', value: 3 }
+		{ source: 'Google Drive', value: countSourcesByType('drive') },
+		{ source: 'Local Storage', value: countSourcesByType('files') }
 	];
 
 	let svg;
 
 	onMount(() => {
-		const margin = { top: 40, right: 40, bottom: 80, left: 60 }; // Increased bottom margin
+		const margin = { top: 40, right: 40, bottom: 80, left: 60 };
 		const width = 500 - margin.left - margin.right;
 		const height = 400 - margin.top - margin.bottom;
 
