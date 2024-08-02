@@ -28,6 +28,8 @@ const initialStatePipeline: PipelineState = getFromLocalStorage('pipelineState',
 	id: null
 });
 
+const initialStatePipelinesList: PipelinesData[] = getFromLocalStorage('PipelinesData', []);
+
 export interface CollectorMetadata {
 	id: string;
 	name: string;
@@ -39,16 +41,32 @@ interface PipelineState {
 	mode: 'idle' | 'running' | 'completed' | 'exited';
 }
 
+interface PipelinesData {
+	id: string;
+	sources: string[];
+	fixed_entities: string[];
+	sample_entities: string[];
+}
+
 export const dataSources = writable<CollectorMetadata[]>(initialStateDataSources);
 export const pipelineState = writable<PipelineState>(initialStatePipeline);
+export const pipelines = writable<PipelinesData[]>(initialStatePipelinesList);
+
+pipelines.subscribe(($pipelines) => {
+	saveToLocalStorage('pipelinesList', $pipelines);
+});
 
 dataSources.subscribe(($dataSources) => {
 	saveToLocalStorage('dataSources', $dataSources);
 });
 
 pipelineState.subscribe(($pipelineState) => {
-	saveToLocalStorage('pipelineState', $pipelineState);
+	saveToLocalStorage('PipelinesData', $pipelineState);
 });
+
+export function addPipelinesToList(pipeline: PipelinesData): void {
+	pipelines.update((currentPipelines) => [...currentPipelines, pipeline]);
+}
 
 export function addDataSource(source: CollectorMetadata): void {
 	dataSources.update((currentSources) => [...currentSources, source]);
