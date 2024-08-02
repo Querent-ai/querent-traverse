@@ -1,6 +1,4 @@
 <script lang="ts">
-	let selectedCategory = 'mostFrequent';
-
 	const categories = {
 		mostFrequent: [
 			{
@@ -16,34 +14,93 @@
 			{ description: "'eagle ford' (reservoir) and 'Carbonate' (rock_type): 120 times" }
 		],
 		mostUnique: [
-			{ description: 'Pair 1: Unique interaction' },
-			{ description: 'Pair 2: Rare condition' },
-			{ description: 'Pair 3: Unusual combination' },
-			{ description: 'Pair 4: Sparse relationship' },
-			{ description: 'Pair 5: Infrequent connection' }
+			{
+				description:
+					"'Temperature' (reservoir_characteristic) and 'Production rate' (production_metric): 1 times"
+			},
+			{
+				description:
+					"'oil well' (hydrocarbon_source) and 'Depth' (reservoir_characteristic): 1 times"
+			},
+			{
+				description: "'oil field' (hydrocarbon_source) and 'oil well' (hydrocarbon_source): 1 times"
+			},
+			{
+				description:
+					"'Gas injection' (recovery_technique) and 'Water injection' (recovery_technique): 1 times"
+			},
+			{
+				description:
+					"'Production rate' (production_metric) and 'oil field' (hydrocarbon_source): 1 times"
+			}
 		],
-		recentlyAdded: [
-			{ description: 'Pair 1: Newly observed' },
-			{ description: 'Pair 2: Recent addition' },
-			{ description: 'Pair 3: Latest discovery' },
-			{ description: 'Pair 4: New insight' },
-			{ description: 'Pair 5: Fresh data' }
+		richestMixDocuments: [
+			{
+				description:
+					"Modeling interwell fracture interference and Huff-N-Puff pressure containment in eagle ford using EDFM.pdf': 16 unique subjects and objects"
+			},
+			{
+				description:
+					"Decline curve analysis of shale oil production_ The case of Eagle Ford.pdf': 14 unique subjects and objects"
+			},
+			{
+				description:
+					"Rock Typing in Organic Shales_ Eagle Ford_ Woodford_ Barnett and Wolfcamp Formations.pdf': 14 unique subjects and objects"
+			},
+			{
+				description:
+					"Coupled geomechanics and fluid flow model for production optimization in naturally fractured shale reservoirs.pdf': 13 unique subjects and objects"
+			},
+			{
+				description:
+					"Asphaltene Precipitation and Deposition during Nitrogen Gas Cyclic Miscible and Immiscible Injection in Eagle Ford Shale and Its Impact on Oil Recovery.pdf': 12 unique subjects and objects"
+			}
 		],
-		highCorrelation: [
-			{ description: 'Pair 1: Strong correlation' },
-			{ description: 'Pair 2: High linkage' },
-			{ description: 'Pair 3: Tight connection' },
-			{ description: 'Pair 4: Firm relationship' },
-			{ description: 'Pair 5: Solid association' }
+		highImpactDocuments: [
+			{
+				description:
+					"Modeling interwell fracture interference and Huff-N-Puff pressure containment in eagle ford using EDFM.pdf': 42 unique context"
+			},
+			{
+				description:
+					"__Sub-Salt Carbonate Rocks in the Rozhkovsky Structure_ Northern Precaspian Basin_ Kazakhstan_ Implications for the Formation of Carbonate Reservoir in a Relatively__.pdf': 35 unique context"
+			},
+			{
+				description:
+					"Organic petrology_ maturation_ thermal and burial history analysis_ and hydrocarbon generation and migration of the Saudi Arabian Paleozoic Petroleum__.pdf': 33 unique context"
+			},
+			{
+				description:
+					"__petrology_ maturation_ thermal and burial history analysis_ and hydrocarbon generation and migration modeling of the Saudi Arabian paleozoic petroleum__.pdf': 33 unique context"
+			},
+			{
+				description:
+					"Asphaltene Precipitation and Deposition during Nitrogen Gas Cyclic Miscible and Immiscible Injection in Eagle Ford Shale and Its Impact on Oil Recovery.pdf': 23 unique context"
+			}
 		],
-		trending: [
-			{ description: 'Pair 1: Trending topic' },
-			{ description: 'Pair 2: Hot topic' },
-			{ description: 'Pair 3: Current favorite' },
-			{ description: 'Pair 4: Popular now' },
-			{ description: 'Pair 5: In demand' }
+		highContext: [
+			{
+				description:
+					"'The black-oil correlation requires input data of reservoir temperature, initial producing GOR (to calculate bubble point or dew point), oil API gravity, and gas gravity (air =1)': 132 times"
+			},
+			{
+				description:
+					"'Geologically, the Eagle Ford shale consists of Cretaceous sediments that are the source rock for the Austin Chalk formation (Fig': 99 times"
+			},
+			{
+				description:
+					"'The average temperature equals the surface temperature 60 ºF plus 0': 66 times"
+			},
+			{
+				description:
+					"'The spectacular vertical and lateral exposures of the Eagle Ford strata in west Texas are very useful to examine the properties, characteristics, and sequence-stratigraphic settings (Donovan and Staerker 2010)': 66 times"
+			},
+			{ description: 'Some other information' }
 		]
 	};
+
+	type CategoryKey = keyof typeof categories;
+	let selectedCategory: CategoryKey = 'mostFrequent';
 </script>
 
 <main>
@@ -52,9 +109,9 @@
 		<select bind:value={selectedCategory} class="dropdown">
 			<option value="mostFrequent">Most frequently occurring entity pairs</option>
 			<option value="mostUnique">Most unique entity pairs</option>
-			<option value="recentlyAdded">Recently added entity pairs</option>
-			<option value="highCorrelation">Entity pairs with high correlation</option>
-			<option value="trending">Trending entity pairs</option>
+			<option value="richestMixDocuments">Documents with the richest mix of entity pairs</option>
+			<option value="highImpactDocuments">High impact documents</option>
+			<option value="highContext">High-impact context</option>
 		</select>
 		<div class="suggestion-cards">
 			{#each categories[selectedCategory] as item}
