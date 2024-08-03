@@ -44,6 +44,9 @@ importers:
       svelte-bootstrap-icons:
         specifier: ^3.1.1
         version: 3.1.1
+      svelte-select:
+        specifier: ^5.8.3
+        version: 5.8.3
       tailwind-merge:
         specifier: ^2.2.1
         version: 2.2.1
@@ -1937,6 +1940,9 @@ packages:
       svelte:
         optional: true
 
+  svelte-floating-ui@1.5.8:
+    resolution: {integrity: sha512-dVvJhZ2bT+kQDHlE4Lep8t+sgEc0XD96fXLzAi2DDI2bsaegBbClxXVNMma0C2WsG+n9GJSYx292dTvA8CYRtw==}
+
   svelte-hmr@0.15.3:
     resolution: {integrity: sha512-41snaPswvSf8TJUhlkoJBekRrABDXDMdpNpT2tfHIv4JuhgvHqLMhEPGtaQn0BmbNSTkuz2Ed20DF2eHw0SmBQ==}
     engines: {node: ^12.20 || ^14.13.1 || >= 16}
@@ -1988,6 +1994,9 @@ packages:
         optional: true
       typescript:
         optional: true
+
+  svelte-select@5.8.3:
+    resolution: {integrity: sha512-nQsvflWmTCOZjssdrNptzfD1Ok45hHVMTL5IHay5DINk7dfu5Er+8KsVJnZMJdSircqtR0YlT4YkCFlxOUhVPA==}
 
   svelte@4.2.12:
     resolution: {integrity: sha512-d8+wsh5TfPwqVzbm4/HCXC783/KPHV60NvwitJnyTA5lWn1elhXMNWhXGCJ7PwPa8qFUnyJNIyuIRt2mT0WMug==}
@@ -3958,6 +3967,11 @@ snapshots:
     optionalDependencies:
       svelte: 4.2.12
 
+  svelte-floating-ui@1.5.8:
+    dependencies:
+      '@floating-ui/core': 1.6.0
+      '@floating-ui/dom': 1.6.3
+
   svelte-hmr@0.15.3(svelte@4.2.12):
     dependencies:
       svelte: 4.2.12
@@ -3983,6 +3997,10 @@ snapshots:
       postcss: 8.4.35
       postcss-load-config: 5.0.3(jiti@1.21.0)(postcss@8.4.35)
       typescript: 5.4.2
+
+  svelte-select@5.8.3:
+    dependencies:
+      svelte-floating-ui: 1.5.8
 
   svelte@4.2.12:
     dependencies:

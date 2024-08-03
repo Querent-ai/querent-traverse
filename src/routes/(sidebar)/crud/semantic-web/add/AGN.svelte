@@ -7,6 +7,7 @@
 	} from '../../../../codegen/protos/semantics';
 
 	let sourceIds: string[] = [];
+	let selectedSourceIds: string[] = [];
 
 	$: {
 		sourceIds = [];
@@ -40,7 +41,7 @@
 			} else {
 				let id = crypto.randomUUID();
 				updatePipeline('running', crypto.randomUUID());
-				request.collectors = sourceIds;
+				request.collectors = selectedSourceIds;
 				console.log('form, ', request);
 				console.log('ID  ', $pipelineState.id);
 			}
@@ -67,6 +68,20 @@
 		}
 	};
 
+	const handleRemoveSource = (id: string) => {
+		selectedSourceIds = selectedSourceIds.filter((source) => source !== id);
+	};
+
+	const handleAddSource = (event: Event) => {
+		const select: HTMLSelectElement = event.target as HTMLSelectElement;
+		const selectedValue = select.value;
+		console.log('ID ', selectedValue);
+		if (selectedValue && !selectedSourceIds.includes(selectedValue)) {
+			selectedSourceIds = [...selectedSourceIds, selectedValue];
+		}
+		select.value = ''; // Reset the dropdown
+	};
+
 	const handleClose = () => {
 		console.log('Form closed');
 	};
@@ -75,17 +90,6 @@
 <div class="form-container">
 	<button class="close-button" on:click={handleClose}>&times;</button>
 	<form on:submit|preventDefault={handleSubmit}>
-		<label for="attentionThreshold">
-			Attention Threshold: <span class="tooltip"
-				>?
-				<span class="tooltiptext"
-					>R!AN uses attention matrices from transformer models to construct the semantic data
-					fabric. This threshold filters out data fabrics that fall below the specified score.</span
-				>
-			</span>
-		</label>
-		<input type="number" id="attentionThreshold" bind:value={request.attentionThreshold} min="0" />
-
 		<label for="model"
 			>Model: <span class="tooltip"
 				>?
@@ -128,23 +132,40 @@
 			placeholder="Enter sample entities separated by commas"
 		/>
 
+		<div class="select-with-tags">
+			<label for="sourceSelector">Select Source:</label>
+			<select id="sourceSelector" on:change={handleAddSource}>
+				<option value="">-- Choose Source --</option>
+				{#each sourceIds as id}
+					<option value={id}>{id}</option>
+				{/each}
+			</select>
+			<div class="tags">
+				{#each selectedSourceIds as id}
+					<span class="tag">
+						{id}
+						<button on:click={() => handleRemoveSource(id)}>&times;</button>
+					</span>
+				{/each}
+			</div>
+		</div>
+
 		<button type="submit">Start Pipeline</button>
 	</form>
 </div>
 
 <style>
 	.form-container {
-		border: 2px solid #ccc;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		padding: 20px;
 		border-radius: 8px;
-		padding-top: 60px;
-		padding-bottom: 40px;
-		padding-left: 40px;
-		padding-right: 40px;
-		position: relative;
-		width: 50%;
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+		background: #fff;
+		width: 80%;
 		max-width: 500px;
-		margin: auto;
-		margin-top: 20px;
+		margin: 20px auto;
 	}
 
 	.form-container label {
@@ -154,11 +175,60 @@
 
 	.form-container input[type='text'],
 	.form-container input[type='number'] {
-		width: calc(100% - 22px);
+		width: 100%;
+		max-width: 100%;
 		padding: 10px;
 		margin-bottom: 20px;
 		border: 1px solid #ddd;
 		border-radius: 4px;
+	}
+
+	.select-with-tags {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		max-width: 100%;
+		box-sizing: border-box;
+		margin-bottom: 20px;
+	}
+
+	select {
+		width: 100%;
+		padding: 10px;
+		border-radius: 4px;
+		margin-bottom: 10px;
+		box-sizing: border-box;
+	}
+
+	.tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 5px;
+		margin-bottom: 20px;
+		max-height: 100px;
+		overflow-y: auto;
+		padding: 5px;
+		width: 100%;
+		align-items: center;
+		border: 1px solid #ddd;
+	}
+
+	.tag {
+		padding: 5px 10px;
+		background-color: #007bff;
+		color: white;
+		border-radius: 20px;
+		display: inline-flex;
+		align-items: center;
+		margin: 2px;
+	}
+
+	.tag button {
+		background: none;
+		border: none;
+		color: white;
+		cursor: pointer;
+		margin-left: 5px;
 	}
 
 	.close-button {
@@ -187,7 +257,7 @@
 		border-radius: 4px;
 		cursor: pointer;
 		display: block;
-		margin: 0 auto;
+		margin: 20px auto;
 	}
 
 	button[type='submit']:hover {

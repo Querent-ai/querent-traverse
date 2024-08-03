@@ -41,7 +41,7 @@ interface PipelineState {
 	mode: 'idle' | 'running' | 'completed' | 'exited';
 }
 
-interface PipelinesData {
+export interface PipelinesData {
 	id: string;
 	sources: string[];
 	fixed_entities: string[];
