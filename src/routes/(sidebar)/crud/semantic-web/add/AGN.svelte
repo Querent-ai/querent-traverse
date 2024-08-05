@@ -119,6 +119,8 @@
 <div class="form-container">
 	<button class="close-button" on:click={handleClose}>&times;</button>
 	<form on:submit|preventDefault={handleSubmit}>
+
+		<div class="section">
 		<label for="model"
 			>Model: <span class="tooltip"
 				>?
@@ -133,9 +135,12 @@
 			<option value={'english'}>{'English based NER Model'}</option>
 			<option value={'geobert'}>{'Geology based NER Model'}</option>
 		</select>
+		</div>
+		<div class="divider"></div>
 
+		<div class="section">
 		<label for="fixedEntities"
-			>Fixed Entities (comma-separated): <span class="tooltip"
+			>Entities<span class="tooltip"
 				>?
 				<span class="tooltiptext"
 					>A list of entities around which the semantic data fabric will be constructed.</span
@@ -146,11 +151,11 @@
 			type="text"
 			id="fixedEntities"
 			on:input={(e) => handleEntityChange(e, 'fixed')}
-			placeholder="Enter fixed entities separated by commas"
+			placeholder="Please enter entities such as Apple Inc., Amazon River, oil rig, Higgs boson, etc"
 		/>
 
 		<label for="sampleEntities"
-			>Sample Entities (comma-separated): <span class="tooltip"
+			>Entities type<span class="tooltip"
 				>?
 				<span class="tooltiptext">
 					The types of the entities specified in fixed_entities. The number of fixed entities and
@@ -162,9 +167,12 @@
 			type="text"
 			id="sampleEntities"
 			on:input={(e) => handleEntityChange(e, 'sample')}
-			placeholder="Enter sample entities separated by commas"
+			placeholder="Please enter corresponding entity types such as Org, Location, Facility, Particle, etc."
 		/>
+		</div>
+		<div class="divider"></div>
 
+		<div class="section">
 		<div class="select-with-tags">
 			<label for="sourceSelector"
 				>Select Source: <span class="tooltip"
@@ -183,10 +191,11 @@
 				{#each selectedSourceIds as id}
 					<span class="tag">
 						{id}
-						<button on:click={() => handleRemoveSource(id)}>&times;</button>
+						<button type="button" on:click={() => handleRemoveSource(id)}>&times;</button>
 					</span>
 				{/each}
 			</div>
+		</div>
 		</div>
 
 		<button type="submit">Start Pipeline</button>
@@ -332,5 +341,14 @@
 	.tooltip:hover .tooltiptext {
 		visibility: visible;
 		opacity: 1;
+	}
+	.divider {
+		height: 2px;
+		background: #ccc;
+		margin: 20px 0;
+	}
+
+	.section {
+		margin-bottom: 20px;
 	}
 </style>
