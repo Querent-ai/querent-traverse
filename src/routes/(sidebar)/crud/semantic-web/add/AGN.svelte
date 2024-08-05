@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Modal from '../../sources/add/Modal.svelte';
 	import { dataSources, pipelineState, updatePipeline } from '../../../../../stores/appState';
 	import type {
 		FixedEntities,
@@ -8,6 +9,7 @@
 
 	let sourceIds: string[] = [];
 	let selectedSourceIds: string[] = [];
+	let selectedModel: number;
 
 	$: {
 		sourceIds = [];
@@ -30,20 +32,32 @@
 		collectors: [],
 		fixedEntities: fixed_entities,
 		sampleEntities: sample_entities,
-		model: 0,
-		attentionThreshold: 0
+		model: 0
+	};
+
+	let showModal = false;
+	let modalMessage = '';
+
+	let modelsList: Record<string, number> = {
+		english: 0,
+		geobert: 1
 	};
 
 	const handleSubmit = () => {
 		if (request.fixedEntities && request.sampleEntities) {
 			if (request.fixedEntities.entities.length !== request.sampleEntities.entities.length) {
 				console.log('The number of fixed entities must match the number of sample entities.');
+			} else if (selectedModel == null || selectedModel == -1) {
+				modalMessage = 'Please choose the model';
+				showModal = true;
 			} else {
 				let id = crypto.randomUUID();
 				updatePipeline('running', crypto.randomUUID());
 				request.collectors = selectedSourceIds;
+				request.model = selectedModel;
 				console.log('form, ', request);
 				console.log('ID  ', $pipelineState.id);
+				selectedModel = -1;
 			}
 		}
 	};
@@ -75,11 +89,26 @@
 	const handleAddSource = (event: Event) => {
 		const select: HTMLSelectElement = event.target as HTMLSelectElement;
 		const selectedValue = select.value;
-		console.log('ID ', selectedValue);
 		if (selectedValue && !selectedSourceIds.includes(selectedValue)) {
 			selectedSourceIds = [...selectedSourceIds, selectedValue];
 		}
-		select.value = ''; // Reset the dropdown
+		select.value = '';
+	};
+
+	const handleAddModel = (event: Event) => {
+		const select: HTMLSelectElement = event.target as HTMLSelectElement;
+		const selectedValue = select.value;
+		if (selectedValue) {
+			if (selectedValue == 'geobert') {
+				modalMessage = 'This feature is only available in the premium version.';
+				showModal = true;
+				select.value = '';
+			} else if (selectedValue == 'english') {
+				selectedModel = modelsList[selectedValue];
+			} else {
+				console.log('selected value: ' + selectedValue);
+			}
+		}
 	};
 
 	const handleClose = () => {
@@ -99,7 +128,11 @@
 				>
 			</span>
 		</label>
-		<input type="number" id="model" bind:value={request.model} min="0" max="1" />
+		<select id="sourceSelector" on:change={handleAddModel}>
+			<option value="">Choose model</option>
+			<option value={'english'}>{'English based NER Model'}</option>
+			<option value={'geobert'}>{'Geology based NER Model'}</option>
+		</select>
 
 		<label for="fixedEntities"
 			>Fixed Entities (comma-separated): <span class="tooltip"
@@ -133,7 +166,13 @@
 		/>
 
 		<div class="select-with-tags">
-			<label for="sourceSelector">Select Source:</label>
+			<label for="sourceSelector"
+				>Select Source: <span class="tooltip"
+					>?<span class="tooltiptext"
+						>Choose all the sources from the list of sources that you have defined</span
+					>
+				</span></label
+			>
 			<select id="sourceSelector" on:change={handleAddSource}>
 				<option value="">-- Choose Source --</option>
 				{#each sourceIds as id}
@@ -152,6 +191,8 @@
 
 		<button type="submit">Start Pipeline</button>
 	</form>
+
+	<Modal bind:show={showModal} message={modalMessage} />
 </div>
 
 <style>
@@ -173,8 +214,7 @@
 		margin-bottom: 10px;
 	}
 
-	.form-container input[type='text'],
-	.form-container input[type='number'] {
+	.form-container input[type='text'] {
 		width: 100%;
 		max-width: 100%;
 		padding: 10px;
@@ -210,7 +250,7 @@
 		padding: 5px;
 		width: 100%;
 		align-items: center;
-		border: 1px solid #ddd;
+		border: 1px solid transparent;
 	}
 
 	.tag {

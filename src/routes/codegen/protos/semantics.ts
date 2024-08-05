@@ -99,7 +99,6 @@ export interface SemanticPipelineRequest {
 	fixedEntities?: FixedEntities | undefined;
 	sampleEntities?: SampleEntities | undefined;
 	model?: Model | undefined;
-	attentionThreshold?: number | undefined;
 }
 
 export interface FixedEntities {
@@ -1123,13 +1122,7 @@ export const ListCollectorConfig = {
 };
 
 function createBaseSemanticPipelineRequest(): SemanticPipelineRequest {
-	return {
-		collectors: [],
-		fixedEntities: undefined,
-		sampleEntities: undefined,
-		model: undefined,
-		attentionThreshold: undefined
-	};
+	return { collectors: [], fixedEntities: undefined, sampleEntities: undefined, model: undefined };
 }
 
 export const SemanticPipelineRequest = {
@@ -1145,9 +1138,6 @@ export const SemanticPipelineRequest = {
 		}
 		if (message.model !== undefined) {
 			writer.uint32(32).int32(message.model);
-		}
-		if (message.attentionThreshold !== undefined) {
-			writer.uint32(45).float(message.attentionThreshold);
 		}
 		return writer;
 	},
@@ -1187,13 +1177,6 @@ export const SemanticPipelineRequest = {
 
 					message.model = reader.int32() as any;
 					continue;
-				case 5:
-					if (tag !== 45) {
-						break;
-					}
-
-					message.attentionThreshold = reader.float();
-					continue;
 			}
 			if ((tag & 7) === 4 || tag === 0) {
 				break;
@@ -1214,10 +1197,7 @@ export const SemanticPipelineRequest = {
 			sampleEntities: isSet(object.sampleEntities)
 				? SampleEntities.fromJSON(object.sampleEntities)
 				: undefined,
-			model: isSet(object.model) ? modelFromJSON(object.model) : undefined,
-			attentionThreshold: isSet(object.attentionThreshold)
-				? globalThis.Number(object.attentionThreshold)
-				: undefined
+			model: isSet(object.model) ? modelFromJSON(object.model) : undefined
 		};
 	},
 
@@ -1234,9 +1214,6 @@ export const SemanticPipelineRequest = {
 		}
 		if (message.model !== undefined) {
 			obj.model = modelToJSON(message.model);
-		}
-		if (message.attentionThreshold !== undefined) {
-			obj.attentionThreshold = message.attentionThreshold;
 		}
 		return obj;
 	},
@@ -1260,7 +1237,6 @@ export const SemanticPipelineRequest = {
 				? SampleEntities.fromPartial(object.sampleEntities)
 				: undefined;
 		message.model = object.model ?? undefined;
-		message.attentionThreshold = object.attentionThreshold ?? undefined;
 		return message;
 	}
 };
