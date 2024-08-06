@@ -6,6 +6,9 @@
 		SampleEntities,
 		SemanticPipelineRequest
 	} from '../../../../codegen/protos/semantics';
+	import CsvComponent from './CSVComponent.svelte';
+	import CsvModal from './CSVModal.svelte';
+	import EntityModal from './EntityModal.svelte';
 
 	let sourceIds: string[] = [];
 	let selectedSourceIds: string[] = [];
@@ -37,6 +40,9 @@
 
 	let showModal = false;
 	let modalMessage = '';
+	let entitiesPairs: any[] = [];
+	let showEntityModal = false;
+	let entityTable: { entity: string; entityType: string }[] = [];
 
 	let modelsList: Record<string, number> = {
 		english: 0,
@@ -44,42 +50,35 @@
 	};
 
 	const handleSubmit = () => {
-		if (request.fixedEntities && request.sampleEntities) {
-			if (request.fixedEntities.entities.length !== request.sampleEntities.entities.length) {
-				console.log('The number of fixed entities must match the number of sample entities.');
-			} else if (selectedModel == null || selectedModel == -1) {
-				modalMessage = 'Please choose the model';
-				showModal = true;
-			} else {
-				let id = crypto.randomUUID();
-				updatePipeline('running', crypto.randomUUID());
-				request.collectors = selectedSourceIds;
-				request.model = selectedModel;
-				console.log('form, ', request);
-				console.log('ID  ', $pipelineState.id);
-				selectedModel = -1;
-			}
-		}
-	};
+		const nonEmptyRows = entityTable.filter((row) => row.entity !== '' && row.entityType !== '');
 
-	const handleEntityChange = (event: Event, type: 'fixed' | 'sample') => {
-		const target = event.target as HTMLInputElement;
-		const value = target.value;
-		const entities = value
-			.split(',')
-			.map((item) => item.trim())
-			.filter((item) => item !== '');
-		if (type === 'fixed') {
-			if (!request.fixedEntities) {
-				request.fixedEntities = { entities: [] };
-			}
-			request.fixedEntities.entities = entities;
-		} else if (type === 'sample') {
-			if (!request.sampleEntities) {
-				request.sampleEntities = { entities: [] };
-			}
-			request.sampleEntities.entities = entities;
+		if (nonEmptyRows.length === 0) {
+			modalMessage = 'Please add at least one entity pair.';
+			showModal = true;
+			return;
 		}
+
+		if (selectedModel == null || selectedModel == -1) {
+			modalMessage = 'Please choose the model';
+			showModal = true;
+			return;
+		}
+
+		let id = crypto.randomUUID();
+		updatePipeline('running', crypto.randomUUID());
+		request.collectors = selectedSourceIds;
+		request.model = selectedModel;
+
+		request.fixedEntities = {
+			entities: nonEmptyRows.map((row) => row.entityType)
+		};
+		request.sampleEntities = {
+			entities: nonEmptyRows.map((row) => row.entity)
+		};
+
+		console.log('form, ', request);
+		console.log('ID  ', $pipelineState.id);
+		selectedModel = -1;
 	};
 
 	const handleRemoveSource = (id: string) => {
@@ -114,88 +113,163 @@
 	const handleClose = () => {
 		console.log('Form closed');
 	};
+
+	// let entity = '';
+	// let entityType = '';
+
+	// function addEntityPair() {
+	// 	if (!entity || !entityType) {
+	// 		modalMessage = 'Please fill both fields: entity and entity type.';
+	// 		showModal = true;
+	// 		return;
+	// 	}
+	// 	console.log('Entity type ', entityType);
+	// 	entitiesPairs.push({ entity, entityType });
+	// 	entity = '';
+	// 	entityType = '';
+	// }
+
+	// function handleViewPairs() {
+	// 	showEntityModal = true;
+	// }
+
+	let showCsvModal = false;
+
+	function openModal() {
+		showCsvModal = true;
+	}
+	function closeModal() {
+		showCsvModal = false;
+	}
+
+	function addRow() {
+		entityTable = [...entityTable, { entity: '', entityType: '' }];
+	}
+
+	function updateRow(index: number) {
+		entityTable = entityTable.filter(
+			(row, i) => i !== index || row.entity !== '' || row.entityType !== ''
+		);
+	}
 </script>
 
 <div class="form-container">
 	<button class="close-button" on:click={handleClose}>&times;</button>
 	<form on:submit|preventDefault={handleSubmit}>
-
 		<div class="section">
-		<label for="model"
-			>Model: <span class="tooltip"
-				>?
-				<span class="tooltiptext"
-					>Choose the model to use for Named Entity Recognition (NER). Pass 0 to use the
-					English-based NER model. Pass 1 to use the Geology-based NER model.</span
-				>
-			</span>
-		</label>
-		<select id="sourceSelector" on:change={handleAddModel}>
-			<option value="">Choose model</option>
-			<option value={'english'}>{'English based NER Model'}</option>
-			<option value={'geobert'}>{'Geology based NER Model'}</option>
-		</select>
-		</div>
-		<div class="divider"></div>
-
-		<div class="section">
-		<label for="fixedEntities"
-			>Entities<span class="tooltip"
-				>?
-				<span class="tooltiptext"
-					>A list of entities around which the semantic data fabric will be constructed.</span
-				>
-			</span>
-		</label>
-		<input
-			type="text"
-			id="fixedEntities"
-			on:input={(e) => handleEntityChange(e, 'fixed')}
-			placeholder="Please enter entities such as Apple Inc., Amazon River, oil rig, Higgs boson, etc"
-		/>
-
-		<label for="sampleEntities"
-			>Entities type<span class="tooltip"
-				>?
-				<span class="tooltiptext">
-					The types of the entities specified in fixed_entities. The number of fixed entities and
-					sample entities should be same</span
-				>
-			</span>
-		</label>
-		<input
-			type="text"
-			id="sampleEntities"
-			on:input={(e) => handleEntityChange(e, 'sample')}
-			placeholder="Please enter corresponding entity types such as Org, Location, Facility, Particle, etc."
-		/>
-		</div>
-		<div class="divider"></div>
-
-		<div class="section">
-		<div class="select-with-tags">
-			<label for="sourceSelector"
-				>Select Source: <span class="tooltip"
-					>?<span class="tooltiptext"
-						>Choose all the sources from the list of sources that you have defined</span
+			<label for="model"
+				>Model <span class="tooltip"
+					><span class="icon-info">i</span>
+					<span class="tooltiptext"
+						>Choose the model to use for Named Entity Recognition (NER). Pass 0 to use the
+						English-based NER model. Pass 1 to use the Geology-based NER model.</span
 					>
-				</span></label
-			>
-			<select id="sourceSelector" on:change={handleAddSource}>
-				<option value="">-- Choose Source --</option>
-				{#each sourceIds as id}
-					<option value={id}>{id}</option>
-				{/each}
+				</span>
+			</label>
+			<select id="sourceSelector" on:change={handleAddModel}>
+				<option value="">Choose model</option>
+				<option value={'english'}>{'English based NER Model'}</option>
+				<option value={'geobert'}>{'Geology based NER Model'}</option>
 			</select>
-			<div class="tags">
-				{#each selectedSourceIds as id}
-					<span class="tag">
-						{id}
-						<button type="button" on:click={() => handleRemoveSource(id)}>&times;</button>
-					</span>
-				{/each}
-			</div>
 		</div>
+		<div class="divider"></div>
+
+		<!-- <div class="section">
+			<button type="button" class="open-csv-btn" on:click={openModal}>Upload your CSV</button>
+
+			<label for="entities"
+				>or Enter the Entity Pair Below <span class="tooltip">
+					<span class="icon-info">i</span>
+					<span class="tooltiptext">Enter the entities and their types alongside</span>
+				</span>
+			</label>
+
+			<input type="text" bind:value={entity} placeholder="Entity" />
+			<input type="text" bind:value={entityType} placeholder="Entity Type" />
+			<div class="inline-buttons">
+				<button type="button" class="add-entity-btn" on:click={addEntityPair}
+					>Add Entity Pair</button
+				>
+				<button type="button" class="view-pairs-btn" on:click={handleViewPairs}
+					>View Entity Pairs</button
+				>
+			</div>
+
+			<CsvModal {showCsvModal} {closeModal}>
+				<CsvComponent />
+			</CsvModal>
+
+			<EntityModal bind:show={showEntityModal} {entitiesPairs} />
+		</div>
+		<div class="divider"></div> -->
+
+		<div class="section">
+			<div class="table-container">
+				<table>
+					<thead>
+						<tr>
+							<th>Entity</th>
+							<th>Entity Type</th>
+						</tr>
+					</thead>
+					<tbody>
+						{#each entityTable as row, index}
+							<tr>
+								<td
+									><input
+										type="text"
+										bind:value={row.entity}
+										placeholder="Entity"
+										on:input={() => updateRow(index)}
+									/></td
+								>
+								<td
+									><input
+										type="text"
+										bind:value={row.entityType}
+										placeholder="Entity Type"
+										on:input={() => updateRow(index)}
+									/></td
+								>
+							</tr>
+						{/each}
+					</tbody>
+				</table>
+			</div>
+			<button type="button" on:click={addRow}>Add Row</button>
+
+			<button type="button" class="open-csv-btn" on:click={openModal}>Upload your CSV</button>
+
+			<CsvModal {showCsvModal} {closeModal}>
+				<CsvComponent />
+			</CsvModal>
+		</div>
+		<div class="divider"></div>
+
+		<div class="section">
+			<div class="select-with-tags">
+				<label for="sourceSelector"
+					>Select Source <span class="tooltip"
+						><span class="icon-info">i</span><span class="tooltiptext"
+							>Choose all the sources from the list of sources that you have defined</span
+						>
+					</span></label
+				>
+				<select id="sourceSelector" on:change={handleAddSource}>
+					<option value="">-- Choose Source --</option>
+					{#each sourceIds as id}
+						<option value={id}>{id}</option>
+					{/each}
+				</select>
+				<div class="tags">
+					{#each selectedSourceIds as id}
+						<span class="tag">
+							{id}
+							<button type="button" on:click={() => handleRemoveSource(id)}>&times;</button>
+						</span>
+					{/each}
+				</div>
+			</div>
 		</div>
 
 		<button type="submit">Start Pipeline</button>
@@ -316,7 +390,21 @@
 	.tooltip {
 		position: relative;
 		display: inline-block;
-		border-bottom: 1px dotted black;
+	}
+
+	.icon-info {
+		display: inline-block;
+		width: 18px;
+		height: 18px;
+		border-radius: 50%;
+		background-color: #000000;
+		color: white;
+		text-align: center;
+		line-height: 18px;
+		font-size: 12px;
+		font-weight: bold;
+		font-style: italic;
+		cursor: pointer;
 	}
 
 	.tooltip .tooltiptext {
@@ -331,7 +419,7 @@
 		z-index: 1;
 		bottom: 125%;
 		left: 50%;
-		margin-left: -75px;
+		margin-left: -150px;
 		opacity: 0;
 		transition: opacity 0.3s;
 		font-size: 12px;
@@ -350,5 +438,92 @@
 
 	.section {
 		margin-bottom: 20px;
+		text-align: center;
+	}
+	.section input[type='text'] {
+		margin-bottom: 10px;
+	}
+
+	.open-csv-btn {
+		display: block;
+		margin: 0 auto;
+		background-color: #007bff;
+		color: white;
+		border: none;
+		padding: 10px 20px;
+		border-radius: 5px;
+		cursor: pointer;
+		font-size: 1.1em;
+		margin-bottom: 20px;
+	}
+
+	/* .add-entity-btn,
+	.view-pairs-btn {
+		background-color: #007bff;
+		color: white;
+		border: none;
+		padding: 8px 16px;
+		border-radius: 5px;
+		cursor: pointer;
+		margin-right: 10px;
+	}
+
+	.add-entity-btn:last-child,
+	.view-pairs-btn:last-child {
+		margin-right: 0;
+	} */
+
+	/* .inline-buttons {
+		display: flex;
+		justify-content: center;
+		gap: 10px;
+	} */
+
+	.table-container {
+		height: 220px;
+		overflow-y: auto;
+		margin-bottom: 10px;
+		border: 1px solid #ddd;
+	}
+
+	table {
+		width: 100%;
+		border-collapse: collapse;
+	}
+
+	thead {
+		position: sticky;
+		top: 0;
+		background-color: #f2f2f2;
+		z-index: 1;
+	}
+
+	th,
+	td {
+		padding: 8px;
+		text-align: left;
+		border: none;
+	}
+
+	th {
+		background-color: #f2f2f2;
+		border-bottom: 1px solid #ddd;
+	}
+
+	td input {
+		width: 100%;
+		box-sizing: border-box;
+		margin: 0;
+		padding: 4px;
+		border: none;
+		background: transparent;
+	}
+
+	tr {
+		border-bottom: 1px solid #eee;
+	}
+
+	tr:last-child {
+		border-bottom: none;
 	}
 </style>

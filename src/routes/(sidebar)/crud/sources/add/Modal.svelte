@@ -1,4 +1,3 @@
-<!-- src/components/Modal.svelte -->
 <script>
 	export let show = false;
 	export let message = '';
