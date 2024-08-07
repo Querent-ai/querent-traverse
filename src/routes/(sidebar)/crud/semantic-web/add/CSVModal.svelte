@@ -23,6 +23,8 @@
 	}
 
 	function handleInteraction(event) {
+		// event.preventDefault();
+		// event.stopPropagation();
 		if (event.type === 'click' && event.target === dialogElement) {
 			closeModal();
 		} else if (event.type === 'keydown' && event.key === 'Escape') {
@@ -34,13 +36,12 @@
 <div on:click={handleInteraction} on:keydown={handleInteraction} role="presentation">
 	<dialog bind:this={dialogElement} class="modal">
 		<div class="modal-content">
-			<button class="close-button" on:click={closeModal} aria-label="Close modal">
-				&times;
-			</button>
+			<button class="close-button" on:click={closeModal} aria-label="Close modal"> &times; </button>
 			<slot />
 		</div>
 	</dialog>
 </div>
+
 <style>
 	.modal {
 		border: none;

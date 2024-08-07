@@ -20,7 +20,7 @@
 
 {#if show}
 	<div role="dialog" aria-modal="true" class="modal-overlay">
-		<section
+		<!-- <section
 			role="document"
 			class="modal-content"
 			on:click|stopPropagation
@@ -41,13 +41,13 @@
 				{/each}
 			</div>
 			<button class="close-btn" on:click={close}>Close</button>
-		</section>
+		</section> -->
 	</div>
 {/if}
 
 <svelte:window on:keydown={handleKeydown} />
 
-<style>
+<!-- <style>
 	.modal-overlay {
 		position: fixed;
 		top: 0;
@@ -101,4 +101,4 @@
 	.close-btn:hover {
 		background-color: #0056b3;
 	}
-</style>
+</style> -->

@@ -8,7 +8,7 @@
 	} from '../../../../codegen/protos/semantics';
 	import CsvComponent from './CSVComponent.svelte';
 	import CsvModal from './CSVModal.svelte';
-	import EntityModal from './EntityModal.svelte';
+	// import EntityModal from './EntityModal.svelte';
 
 	let sourceIds: string[] = [];
 	let selectedSourceIds: string[] = [];
@@ -18,7 +18,7 @@
 		sourceIds = [];
 		if ($dataSources) {
 			$dataSources.forEach((metadata) => {
-				sourceIds.push(metadata.id);
+				sourceIds.push(metadata.name);
 			});
 		}
 	}
@@ -40,16 +40,21 @@
 
 	let showModal = false;
 	let modalMessage = '';
-	let entitiesPairs: any[] = [];
-	let showEntityModal = false;
-	let entityTable: { entity: string; entityType: string }[] = [];
+	// let entitiesPairs: any[] = [];
+	// let showEntityModal = false;
+	let entityTable: {
+		editing: boolean;
+		entity: string;
+		entityType: string;
+	}[] = [];
 
 	let modelsList: Record<string, number> = {
 		english: 0,
 		geobert: 1
 	};
 
-	const handleSubmit = () => {
+	const handleSubmit = (event: Event) => {
+		event.preventDefault();
 		const nonEmptyRows = entityTable.filter((row) => row.entity !== '' && row.entityType !== '');
 
 		if (nonEmptyRows.length === 0) {
@@ -143,13 +148,30 @@
 	}
 
 	function addRow() {
-		entityTable = [...entityTable, { entity: '', entityType: '' }];
+		entityTable = [...entityTable, { entity: '', entityType: '', editing: true }];
+	}
+
+	function editRow(index: number) {
+		entityTable[index].editing = true;
+	}
+
+	function deleteRow(index: number) {
+		entityTable.splice(index, 1);
+		entityTable = entityTable.slice();
 	}
 
 	function updateRow(index: number) {
 		entityTable = entityTable.filter(
 			(row, i) => i !== index || row.entity !== '' || row.entityType !== ''
 		);
+	}
+
+	function saveRow(index: number) {
+		entityTable[index].editing = false;
+	}
+
+	function updateEntityTable(event: CustomEvent) {
+		entityTable = event.detail;
 	}
 </script>
 
@@ -168,10 +190,11 @@
 			</label>
 			<select id="sourceSelector" on:change={handleAddModel}>
 				<option value="">Choose model</option>
-				<option value={'english'}>{'English based NER Model'}</option>
-				<option value={'geobert'}>{'Geology based NER Model'}</option>
+				<option value={'english'}>{'Davlan/xlm-roberta-base-wikiann-ner'}</option>
+				<option value={'geobert'}>{'botryan96/GeoBERT'}</option>
 			</select>
 		</div>
+
 		<div class="divider"></div>
 
 		<!-- <div class="section">
@@ -204,44 +227,51 @@
 		<div class="divider"></div> -->
 
 		<div class="section">
+			<button type="button" class="open-csv-btn" on:click={addRow}>Add Row</button>
 			<div class="table-container">
 				<table>
 					<thead>
 						<tr>
 							<th>Entity</th>
 							<th>Entity Type</th>
+							<th>Actions</th>
 						</tr>
 					</thead>
 					<tbody>
-						{#each entityTable as row, index}
+						{#each entityTable as row, index (row.entity + row.entityType)}
 							<tr>
-								<td
-									><input
-										type="text"
-										bind:value={row.entity}
-										placeholder="Entity"
-										on:input={() => updateRow(index)}
-									/></td
-								>
-								<td
-									><input
-										type="text"
-										bind:value={row.entityType}
-										placeholder="Entity Type"
-										on:input={() => updateRow(index)}
-									/></td
-								>
+								<td>
+									{#if row.editing}
+										<input class="input-field" type="text" bind:value={row.entity} />
+									{:else}
+										{row.entity}
+									{/if}
+								</td>
+								<td>
+									{#if row.editing}
+										<input class="input-field" type="text" bind:value={row.entityType} />
+									{:else}
+										{row.entityType}
+									{/if}
+								</td>
+								<td>
+									{#if row.editing}
+										<button class="save-button" on:click={() => saveRow(index)}>Save</button>
+									{:else}
+										<button class="edit-button" on:click={() => editRow(index)}>Edit</button>
+										<button class="delete-button" on:click={() => deleteRow(index)}>Delete</button>
+									{/if}
+								</td>
 							</tr>
 						{/each}
 					</tbody>
 				</table>
 			</div>
-			<button type="button" on:click={addRow}>Add Row</button>
 
 			<button type="button" class="open-csv-btn" on:click={openModal}>Upload your CSV</button>
 
 			<CsvModal {showCsvModal} {closeModal}>
-				<CsvComponent />
+				<CsvComponent {entityTable} on:entityTableUpdated={updateEntityTable} />
 			</CsvModal>
 		</div>
 		<div class="divider"></div>
@@ -440,6 +470,7 @@
 		margin-bottom: 20px;
 		text-align: center;
 	}
+
 	.section input[type='text'] {
 		margin-bottom: 10px;
 	}
@@ -456,28 +487,6 @@
 		font-size: 1.1em;
 		margin-bottom: 20px;
 	}
-
-	/* .add-entity-btn,
-	.view-pairs-btn {
-		background-color: #007bff;
-		color: white;
-		border: none;
-		padding: 8px 16px;
-		border-radius: 5px;
-		cursor: pointer;
-		margin-right: 10px;
-	}
-
-	.add-entity-btn:last-child,
-	.view-pairs-btn:last-child {
-		margin-right: 0;
-	} */
-
-	/* .inline-buttons {
-		display: flex;
-		justify-content: center;
-		gap: 10px;
-	} */
 
 	.table-container {
 		height: 220px;
@@ -500,13 +509,16 @@
 
 	th,
 	td {
-		padding: 8px;
+		padding: 12px 15px;
 		text-align: left;
 		border: none;
 	}
 
 	th {
-		background-color: #f2f2f2;
+		color: #666;
+		font-weight: bold;
+		text-transform: uppercase;
+		font-size: 0.9em;
 		border-bottom: 1px solid #ddd;
 	}
 
@@ -514,16 +526,26 @@
 		width: 100%;
 		box-sizing: border-box;
 		margin: 0;
-		padding: 4px;
+		padding: 0;
 		border: none;
 		background: transparent;
+		font-size: 1em;
 	}
 
 	tr {
-		border-bottom: 1px solid #eee;
+		border-bottom: 1px solid #3a4453;
 	}
 
 	tr:last-child {
 		border-bottom: none;
+	}
+
+	.edit-button,
+	.delete-button {
+		cursor: pointer;
+		margin-left: 5px;
+	}
+	.input-field {
+		width: 100%;
 	}
 </style>

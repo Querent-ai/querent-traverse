@@ -1,5 +1,8 @@
-<script>
-	import { onMount } from 'svelte';
+<script lang="ts">
+	import { createEventDispatcher } from 'svelte';
+
+	export let entityTable: { entity: string; entityType: string }[];
+	const dispatch = createEventDispatcher();
 
 	let dummyCSV = [
 		['Entitiy', 'Entity type'],
@@ -7,23 +10,38 @@
 		['Ramesh', 'Person']
 	];
 
-	let uploadedHeaders = [];
-	let uploadedData = [];
+	let uploadedHeaders: string | any[] = [];
+	let uploadedData: any[] = [];
 
-	function handleFileUpload(event) {
-		const file = event.target.files[0];
-		if (file) {
+	function handleFileUpload(event: Event) {
+		console.log('Event     ', event);
+		event.preventDefault();
+		const input = event.target as HTMLInputElement;
+		if (input.files && input.files.length > 0) {
+			const file = input.files[0];
 			const reader = new FileReader();
 			reader.onload = function (e) {
-				const contents = e.target.result;
-				const lines = contents.split('\n');
-				uploadedHeaders = lines[0].split(',');
-				uploadedData = lines.slice(1).map((line) => line.split(','));
+				const contents = e.target?.result;
+				if (typeof contents === 'string') {
+					const lines = contents?.split('\n');
+					uploadedHeaders = lines[0].split(',');
+					uploadedData = lines.slice(1).map((line: string) => line.split(','));
+					uploadedData.forEach((data) => {
+						if (data.length === 2 && data[0].trim() !== '' && data[1].trim() !== '') {
+							entityTable.push({ entity: data[0].trim(), entityType: data[1].trim() });
+						} else {
+							console.log('Skipping invalid data:', data);
+						}
+					});
+					console.log('Uploaded type:  ', entityTable);
+					dispatch('entityTableUpdated', entityTable);
+				} else {
+					console.error('Failed to read file as string');
+				}
 			};
 			reader.readAsText(file);
 		}
 	}
-
 </script>
 
 <main>
@@ -50,7 +68,7 @@
 	<h2>Upload CSV</h2>
 	<input type="file" accept=".csv" on:change={handleFileUpload} />
 
-	{#if uploadedHeaders.length > 0}
+	<!-- {#if uploadedHeaders.length > 0}
 		<h3>Uploaded CSV Contents</h3>
 		<table>
 			<thead>
@@ -70,13 +88,14 @@
 				{/each}
 			</tbody>
 		</table>
-	{/if}
+	{/if} -->
 </main>
 
 <style>
 	table {
 		border-collapse: collapse;
 		margin-bottom: 20px;
+		width: 100%;
 	}
 	th,
 	td {
