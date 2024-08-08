@@ -8,6 +8,7 @@
 	} from '../../../../codegen/protos/semantics';
 	import CsvComponent from './CSVComponent.svelte';
 	import CsvModal from './CSVModal.svelte';
+	import { Search } from 'flowbite-svelte';
 	// import EntityModal from './EntityModal.svelte';
 
 	let sourceIds: string[] = [];
@@ -47,6 +48,10 @@
 		entity: string;
 		entityType: string;
 	}[] = [];
+
+	let uploadedHeaders: string | any[] = [];
+	let uploadedData: any[] = [];
+	let fileInput: HTMLInputElement | null = null;
 
 	let modelsList: Record<string, number> = {
 		english: 0,
@@ -109,8 +114,6 @@
 				select.value = '';
 			} else if (selectedValue == 'english') {
 				selectedModel = modelsList[selectedValue];
-			} else {
-				console.log('selected value: ' + selectedValue);
 			}
 		}
 	};
@@ -118,34 +121,6 @@
 	const handleClose = () => {
 		console.log('Form closed');
 	};
-
-	// let entity = '';
-	// let entityType = '';
-
-	// function addEntityPair() {
-	// 	if (!entity || !entityType) {
-	// 		modalMessage = 'Please fill both fields: entity and entity type.';
-	// 		showModal = true;
-	// 		return;
-	// 	}
-	// 	console.log('Entity type ', entityType);
-	// 	entitiesPairs.push({ entity, entityType });
-	// 	entity = '';
-	// 	entityType = '';
-	// }
-
-	// function handleViewPairs() {
-	// 	showEntityModal = true;
-	// }
-
-	let showCsvModal = false;
-
-	function openModal() {
-		showCsvModal = true;
-	}
-	function closeModal() {
-		showCsvModal = false;
-	}
 
 	function addRow() {
 		entityTable = [...entityTable, { entity: '', entityType: '', editing: true }];
@@ -160,18 +135,67 @@
 		entityTable = entityTable.slice();
 	}
 
-	function updateRow(index: number) {
-		entityTable = entityTable.filter(
-			(row, i) => i !== index || row.entity !== '' || row.entityType !== ''
-		);
-	}
-
 	function saveRow(index: number) {
 		entityTable[index].editing = false;
 	}
 
-	function updateEntityTable(event: CustomEvent) {
-		entityTable = event.detail;
+	function downloadCSV() {
+		let exampleCSV = [['Entity', 'Entity type']];
+
+		let csvContent = 'data:text/csv;charset=utf-8,' + exampleCSV.map((e) => e.join(',')).join('\n');
+
+		let encodedUri = encodeURI(csvContent);
+
+		let link = document.createElement('a');
+		link.setAttribute('href', encodedUri);
+		link.setAttribute('download', 'example.csv');
+		document.body.appendChild(link); // Required for Firefox
+
+		link.click();
+		document.body.removeChild(link);
+	}
+
+	function handleFileUpload(event: Event) {
+		event.preventDefault();
+		const input = event.target as HTMLInputElement;
+		if (input.files && input.files.length > 0) {
+			const file = input.files[0];
+			const reader = new FileReader();
+			reader.onload = function (e) {
+				const contents = e.target?.result;
+				if (typeof contents === 'string') {
+					const lines = contents?.split('\n');
+					uploadedHeaders = lines[0].split(',');
+					uploadedData = lines.slice(1).map((line: string) => line.split(','));
+					let newEntities: { editing: boolean; entity: any; entityType: any }[] = [];
+
+					uploadedData.forEach((data) => {
+						if (data.length === 2 && data[0].trim() !== '' && data[1].trim() !== '') {
+							newEntities.push({
+								editing: false,
+								entity: data[0].trim(),
+								entityType: data[1].trim()
+							});
+						} else {
+							console.log('Skipping invalid data:', data);
+						}
+					});
+
+					if (newEntities.length > 0) {
+						entityTable = [...entityTable, ...newEntities];
+					}
+				} else {
+					console.error('Failed to read file as string');
+				}
+			};
+			reader.readAsText(file);
+		}
+	}
+
+	function openFileInput() {
+		if (fileInput) {
+			fileInput.click();
+		}
 	}
 </script>
 
@@ -182,14 +206,11 @@
 			<label for="model"
 				>Model <span class="tooltip"
 					><span class="icon-info">i</span>
-					<span class="tooltiptext"
-						>Choose the model to use for Named Entity Recognition (NER). Pass 0 to use the
-						English-based NER model. Pass 1 to use the Geology-based NER model.</span
-					>
+					<span class="tooltiptext">Choose the model to use for Named Entity Recognition.</span>
 				</span>
 			</label>
 			<select id="sourceSelector" on:change={handleAddModel}>
-				<option value="">Choose model</option>
+				<option value="">-- Choose Model --</option>
 				<option value={'english'}>{'Davlan/xlm-roberta-base-wikiann-ner'}</option>
 				<option value={'geobert'}>{'botryan96/GeoBERT'}</option>
 			</select>
@@ -197,37 +218,19 @@
 
 		<div class="divider"></div>
 
-		<!-- <div class="section">
-			<button type="button" class="open-csv-btn" on:click={openModal}>Upload your CSV</button>
-
-			<label for="entities"
-				>or Enter the Entity Pair Below <span class="tooltip">
-					<span class="icon-info">i</span>
-					<span class="tooltiptext">Enter the entities and their types alongside</span>
+		<div class="section">
+			<label for="entity-pairs">
+				Entity Pairs <span class="tooltip"
+					><span class="icon-info">i</span>
+					<span class="tooltiptext"
+						>Enter the entity and its types in the below table or upload your CSV</span
+					>
 				</span>
 			</label>
-
-			<input type="text" bind:value={entity} placeholder="Entity" />
-			<input type="text" bind:value={entityType} placeholder="Entity Type" />
-			<div class="inline-buttons">
-				<button type="button" class="add-entity-btn" on:click={addEntityPair}
-					>Add Entity Pair</button
-				>
-				<button type="button" class="view-pairs-btn" on:click={handleViewPairs}
-					>View Entity Pairs</button
-				>
+			<div class="search-container">
+				<Search size="md" style="width: 300px" class="search-btn" />
+				<button type="button" class="add-row-btn" on:click={addRow}>+ Add New Entity Pair</button>
 			</div>
-
-			<CsvModal {showCsvModal} {closeModal}>
-				<CsvComponent />
-			</CsvModal>
-
-			<EntityModal bind:show={showEntityModal} {entitiesPairs} />
-		</div>
-		<div class="divider"></div> -->
-
-		<div class="section">
-			<button type="button" class="open-csv-btn" on:click={addRow}>Add Row</button>
 			<div class="table-container">
 				<table>
 					<thead>
@@ -254,7 +257,7 @@
 										{row.entityType}
 									{/if}
 								</td>
-								<td>
+								<td class="button-cell">
 									{#if row.editing}
 										<button class="save-button" on:click={() => saveRow(index)}>Save</button>
 									{:else}
@@ -268,11 +271,39 @@
 				</table>
 			</div>
 
-			<button type="button" class="open-csv-btn" on:click={openModal}>Upload your CSV</button>
+			<div class="button-container">
+				<button type="button" class="download-csv-btn" on:click={downloadCSV}>
+					<span class="tooltip"
+						><svg
+							class="h-6 w-6 text-gray-800 dark:text-white"
+							aria-hidden="true"
+							xmlns="http://www.w3.org/2000/svg"
+							width="24"
+							height="24"
+							fill="none"
+							viewBox="0 0 24 24"
+						>
+							<path
+								stroke="currentColor"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M12 13V4M7 14H5a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1h-2m-1-5-4 5-4-5m9 8h.01"
+							/>
+						</svg>
 
-			<CsvModal {showCsvModal} {closeModal}>
-				<CsvComponent {entityTable} on:entityTableUpdated={updateEntityTable} />
-			</CsvModal>
+						<span class="tooltiptext">Download example CSV</span>
+					</span>
+				</button>
+				<input
+					type="file"
+					accept=".csv"
+					bind:this={fileInput}
+					style="display: none;"
+					on:change={handleFileUpload}
+				/>
+				<button type="button" class="open-csv-btn" on:click={openFileInput}>Upload your CSV</button>
+			</div>
 		</div>
 		<div class="divider"></div>
 
@@ -317,23 +348,28 @@
 		border-radius: 8px;
 		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 		background: #fff;
-		width: 80%;
-		max-width: 500px;
+		width: 90%;
+		max-width: 1000px;
 		margin: 20px auto;
 	}
 
 	.form-container label {
 		display: block;
 		margin-bottom: 10px;
+		font-size: 1.1em;
+		font-weight: bold;
 	}
 
-	.form-container input[type='text'] {
+	.form-container input[type='text'],
+	.select-with-tags select,
+	.tags {
 		width: 100%;
 		max-width: 100%;
 		padding: 10px;
 		margin-bottom: 20px;
 		border: 1px solid #ddd;
 		border-radius: 4px;
+		box-sizing: border-box;
 	}
 
 	.select-with-tags {
@@ -410,11 +446,14 @@
 		border-radius: 4px;
 		cursor: pointer;
 		display: block;
-		margin: 20px auto;
+		margin: 0 auto;
+		border-radius: 20px;
+		font-size: 1em;
+		margin-bottom: 20px;
 	}
 
 	button[type='submit']:hover {
-		background: #0056b3;
+		background: #007bff;
 	}
 
 	.tooltip {
@@ -424,23 +463,25 @@
 
 	.icon-info {
 		display: inline-block;
-		width: 18px;
-		height: 18px;
+		width: 14px;
+		height: 14px;
+		vertical-align: 5px;
 		border-radius: 50%;
-		background-color: #000000;
-		color: white;
+		background-color: #898e92;
+		color: black;
 		text-align: center;
-		line-height: 18px;
+		line-height: 14px;
 		font-size: 12px;
 		font-weight: bold;
 		font-style: italic;
+		font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 		cursor: pointer;
 	}
 
 	.tooltip .tooltiptext {
 		visibility: hidden;
 		width: 300px;
-		background-color: black;
+		background-color: #007bff;
 		color: #fff;
 		text-align: center;
 		border-radius: 6px;
@@ -476,76 +517,165 @@
 	}
 
 	.open-csv-btn {
+		display: inline-block;
+		margin: 0;
+		background-color: #007bff;
+		color: white;
+		border: none;
+		padding: 10px 20px;
+		border-radius: 20px;
+		cursor: pointer;
+		font-size: 1em;
+		margin-bottom: 20px;
+		border-radius: 20px;
+		white-space: nowrap;
+	}
+
+	.download-csv-btn {
+		display: inline-block;
+		margin: 0;
+		background-color: #007bff;
+		color: white;
+		border: none;
+		padding: 10px 20px;
+		border-radius: 20px;
+		cursor: pointer;
+		font-size: 1em;
+		margin-bottom: 20px;
+		border-radius: 20px;
+		white-space: nowrap;
+	}
+
+	.add-row-btn {
 		display: block;
 		margin: 0 auto;
 		background-color: #007bff;
 		color: white;
 		border: none;
 		padding: 10px 20px;
-		border-radius: 5px;
+		border-radius: 20px;
 		cursor: pointer;
-		font-size: 1.1em;
-		margin-bottom: 20px;
+		font-size: 1em;
+		white-space: nowrap;
 	}
 
 	.table-container {
-		height: 220px;
+		display: flex;
+		flex-direction: column;
+		height: auto;
 		overflow-y: auto;
 		margin-bottom: 10px;
 		border: 1px solid #ddd;
+		width: 100%;
 	}
 
 	table {
 		width: 100%;
 		border-collapse: collapse;
+		display: grid;
+		min-width: 900px;
 	}
 
 	thead {
 		position: sticky;
 		top: 0;
-		background-color: #f2f2f2;
+		background-color: #c0bdbd;
+		color: white;
 		z-index: 1;
+		display: contents;
+	}
+	tbody {
+		width: 100%;
+		min-width: 600px;
 	}
 
-	th,
 	td {
-		padding: 12px 15px;
+		padding: 8px 10px;
 		text-align: left;
 		border: none;
+		width: 50%;
+	}
+
+	.button-cell {
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
 	}
 
 	th {
-		color: #666;
-		font-weight: bold;
+		color: black;
 		text-transform: uppercase;
-		font-size: 0.9em;
-		border-bottom: 1px solid #ddd;
+		font-size: 1em;
+		border-bottom: 2px solid #0c0c0c;
+		width: 50%;
+		font-weight: normal;
+		padding: 8px 10px;
+		text-align: left;
 	}
 
 	td input {
-		width: 100%;
+		width: 90%;
+		min-width: 200px;
 		box-sizing: border-box;
 		margin: 0;
-		padding: 0;
-		border: none;
+		padding: 10px;
+		border: 1px solid #ddd;
 		background: transparent;
 		font-size: 1em;
 	}
 
 	tr {
 		border-bottom: 1px solid #3a4453;
+		width: 100%;
+		min-width: 600px;
 	}
 
 	tr:last-child {
 		border-bottom: none;
+		width: 100%;
+		min-width: 600px;
+	}
+
+	.save-button {
+		cursor: pointer;
+		margin-left: 5px;
+		background-color: #007bff;
+		color: white;
+		padding: 5px 10px;
+		font-size: 0.9em;
+		border: none;
+		border-radius: 10px;
 	}
 
 	.edit-button,
 	.delete-button {
 		cursor: pointer;
 		margin-left: 5px;
+		background-color: #007bff;
+		color: white;
+		padding: 5px 5px;
+		font-size: 0.9em;
+		border: none;
+		border-radius: 10px;
+		display: inline-block;
 	}
 	.input-field {
 		width: 100%;
+	}
+
+	.search-container {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background-color: #eeecec;
+		height: 60px;
+		padding: 10px;
+	}
+
+	.button-container {
+		display: flex;
+		justify-content: flex-end;
+		gap: 5px;
+		margin-bottom: 20px;
 	}
 </style>

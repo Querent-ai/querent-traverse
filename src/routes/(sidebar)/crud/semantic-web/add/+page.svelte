@@ -39,16 +39,19 @@
 			List of Engines
 		</Heading>
 
-		<div class="mt-6 flex flex-wrap justify-center gap-8">
+		<div class="mt-6 flex flex-wrap justify-start gap-8">
 			{#each Object.keys(forms) as icon (icon)}
 				<button
 					type="button"
-					class="flex cursor-pointer flex-col items-center space-y-3 rounded-lg p-4 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
+					class="flex cursor-pointer items-start space-x-4 rounded-lg p-4 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
 					on:click={() => setActiveForm(icon)}
 					aria-label={`Select ${icon}`}
 				>
-					<svelte:component this={getIcon(icon)} class="h-32 w-32" />
-					<span class="text-center text-lg text-gray-700 dark:text-gray-200">{icon}</span>
+					<img class="h-16 w-16" src="/images/icon.png" alt="" />
+					<div class="text-left">
+						<span class="text-left text-lg text-gray-700 dark:text-gray-200">{icon}</span>
+						<div class="text-sm text-gray-500 dark:text-gray-400">Attention Graph Network</div>
+					</div>
 				</button>
 			{/each}
 		</div>
