@@ -6,8 +6,6 @@
 		SampleEntities,
 		SemanticPipelineRequest
 	} from '../../../../codegen/protos/semantics';
-	import CsvComponent from './CSVComponent.svelte';
-	import CsvModal from './CSVModal.svelte';
 	import { Search } from 'flowbite-svelte';
 	// import EntityModal from './EntityModal.svelte';
 
