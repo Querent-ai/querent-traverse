@@ -7,7 +7,7 @@
 		SemanticPipelineRequest
 	} from '../../../../codegen/protos/semantics';
 	import { Search } from 'flowbite-svelte';
-	// import EntityModal from './EntityModal.svelte';
+	import { onMount } from 'svelte';
 
 	let sourceIds: string[] = [];
 	let selectedSourceIds: string[] = [];
@@ -58,6 +58,7 @@
 
 	const handleSubmit = (event: Event) => {
 		event.preventDefault();
+		console.log('table   ', entityTable);
 		const nonEmptyRows = entityTable.filter((row) => row.entity !== '' && row.entityType !== '');
 
 		if (nonEmptyRows.length === 0) {
@@ -130,7 +131,6 @@
 
 	function deleteRow(index: number) {
 		entityTable.splice(index, 1);
-		entityTable = entityTable.slice();
 	}
 
 	function saveRow(index: number) {
@@ -201,17 +201,29 @@
 	<button class="close-button" on:click={handleClose}>&times;</button>
 	<form on:submit|preventDefault={handleSubmit}>
 		<div class="section">
-			<label for="model"
-				>Model <span class="tooltip"
-					><span class="icon-info">i</span>
-					<span class="tooltiptext">Choose the model to use for Named Entity Recognition.</span>
-				</span>
-			</label>
-			<select id="sourceSelector" on:change={handleAddModel}>
-				<option value="">-- Choose Model --</option>
-				<option value={'english'}>{'Davlan/xlm-roberta-base-wikiann-ner'}</option>
-				<option value={'geobert'}>{'botryan96/GeoBERT'}</option>
-			</select>
+			<div class="select-with-tags">
+				<label for="sourceSelector"
+					>Select Source <span class="tooltip"
+						><span class="icon-info">i</span><span class="tooltiptext"
+							>Choose all the sources from the list of sources that you have defined</span
+						>
+					</span></label
+				>
+				<select id="sourceSelector" on:change={handleAddSource}>
+					<option value="">-- Choose Source --</option>
+					{#each sourceIds as id}
+						<option value={id}>{id}</option>
+					{/each}
+				</select>
+				<div class="tags">
+					{#each selectedSourceIds as id}
+						<span class="tag">
+							{id}
+							<button type="button" on:click={() => handleRemoveSource(id)}>&times;</button>
+						</span>
+					{/each}
+				</div>
+			</div>
 		</div>
 
 		<div class="divider"></div>
@@ -270,6 +282,7 @@
 			</div>
 
 			<div class="button-container">
+				<button type="button" class="open-csv-btn" on:click={openFileInput}>Upload your CSV</button>
 				<button type="button" class="download-csv-btn" on:click={downloadCSV}>
 					<span class="tooltip"
 						><svg
@@ -300,35 +313,23 @@
 					style="display: none;"
 					on:change={handleFileUpload}
 				/>
-				<button type="button" class="open-csv-btn" on:click={openFileInput}>Upload your CSV</button>
 			</div>
 		</div>
+
 		<div class="divider"></div>
 
 		<div class="section">
-			<div class="select-with-tags">
-				<label for="sourceSelector"
-					>Select Source <span class="tooltip"
-						><span class="icon-info">i</span><span class="tooltiptext"
-							>Choose all the sources from the list of sources that you have defined</span
-						>
-					</span></label
-				>
-				<select id="sourceSelector" on:change={handleAddSource}>
-					<option value="">-- Choose Source --</option>
-					{#each sourceIds as id}
-						<option value={id}>{id}</option>
-					{/each}
-				</select>
-				<div class="tags">
-					{#each selectedSourceIds as id}
-						<span class="tag">
-							{id}
-							<button type="button" on:click={() => handleRemoveSource(id)}>&times;</button>
-						</span>
-					{/each}
-				</div>
-			</div>
+			<label for="model"
+				>Model <span class="tooltip"
+					><span class="icon-info">i</span>
+					<span class="tooltiptext">Choose the model to use for Named Entity Recognition.</span>
+				</span>
+			</label>
+			<select id="sourceSelector" on:change={handleAddModel}>
+				<option value="">-- Choose Model --</option>
+				<option value={'english'}>{'Davlan/xlm-roberta-base-wikiann-ner'}</option>
+				<option value={'geobert'}>{'botryan96/GeoBERT'}</option>
+			</select>
 		</div>
 
 		<button type="submit">Start Pipeline</button>
@@ -520,11 +521,11 @@
 		background-color: #007bff;
 		color: white;
 		border: none;
-		padding: 10px 20px;
+		padding: 5px 20px;
 		border-radius: 20px;
 		cursor: pointer;
 		font-size: 1em;
-		margin-bottom: 20px;
+		margin-bottom: 26px;
 		border-radius: 20px;
 		white-space: nowrap;
 	}
@@ -532,7 +533,7 @@
 	.download-csv-btn {
 		display: inline-block;
 		margin: 0;
-		background-color: #007bff;
+		background-color: white;
 		color: white;
 		border: none;
 		padding: 10px 20px;
