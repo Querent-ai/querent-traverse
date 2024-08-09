@@ -69,13 +69,13 @@
 			id: 0,
 			value: 'english',
 			name: 'Davlan/xlm-roberta-base-wikiann-ner',
-			info: 'https://huggingface.co/Davlan/xlm-roberta-base-wikiann-ner'
+			info: 'First Named Entity Recognition model for 20 languages based on a fine-tuned XLM-RoBERTa large model'
 		},
 		{
 			id: 1,
 			value: 'geobert',
 			name: 'botryan96/GeoBERT',
-			info: 'BERT-based model for geographic entity recognition'
+			info: 'An NER model that was fine-tuned from SciBERT on the Geoscientific Corpus dataset. The model was trained on the Labeled Geoscientific Corpus dataset'
 		}
 	];
 
