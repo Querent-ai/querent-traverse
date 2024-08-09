@@ -7,11 +7,12 @@
 		SemanticPipelineRequest
 	} from '../../../../codegen/protos/semantics';
 	import { Search } from 'flowbite-svelte';
-	import { onMount } from 'svelte';
+	import Huggingface from './Huggingface.svelte';
 
 	let sourceIds: string[] = [];
 	let selectedSourceIds: string[] = [];
-	let selectedModel: number;
+	let selectedModel: number | null = null;
+	let isDropdownOpen = false;
 
 	$: {
 		sourceIds = [];
@@ -51,10 +52,37 @@
 	let uploadedData: any[] = [];
 	let fileInput: HTMLInputElement | null = null;
 
-	let modelsList: Record<string, number> = {
+	let modelsList: { [key: string]: number } = {
 		english: 0,
 		geobert: 1
 	};
+
+	interface Model {
+		id: number;
+		value: string;
+		name: string;
+		info: string;
+	}
+
+	let models = [
+		{
+			id: 0,
+			value: 'english',
+			name: 'Davlan/xlm-roberta-base-wikiann-ner',
+			info: 'https://huggingface.co/Davlan/xlm-roberta-base-wikiann-ner'
+		},
+		{
+			id: 1,
+			value: 'geobert',
+			name: 'botryan96/GeoBERT',
+			info: 'BERT-based model for geographic entity recognition'
+		}
+	];
+
+	$: selectedModelName =
+		selectedModel !== null
+			? models.find((m) => m.id === selectedModel)?.name
+			: '-- Choose Model --';
 
 	const handleSubmit = (event: Event) => {
 		event.preventDefault();
@@ -103,18 +131,21 @@
 		select.value = '';
 	};
 
-	const handleAddModel = (event: Event) => {
-		const select: HTMLSelectElement = event.target as HTMLSelectElement;
-		const selectedValue = select.value;
-		if (selectedValue) {
-			if (selectedValue == 'geobert') {
-				modalMessage = 'This feature is only available in the premium version.';
-				showModal = true;
-				select.value = '';
-			} else if (selectedValue == 'english') {
-				selectedModel = modelsList[selectedValue];
-			}
+	const handleAddModel = (model: Model) => {
+		if (model.value === 'geobert') {
+			modalMessage = 'This feature is only available in the premium version.';
+			showModal = true;
+			selectedModel = null;
+		} else if (model.value === 'english') {
+			console.log('English is selected');
+			selectedModel = modelsList[model.value];
 		}
+		isDropdownOpen = false;
+	};
+	const toggleDropdown = (event: MouseEvent) => {
+		event.preventDefault();
+		event.stopPropagation();
+		isDropdownOpen = !isDropdownOpen;
 	};
 
 	const handleClose = () => {
@@ -319,17 +350,33 @@
 		<div class="divider"></div>
 
 		<div class="section">
-			<label for="model"
-				>Model <span class="tooltip"
-					><span class="icon-info">i</span>
+			<label for="model">
+				Model
+				<span class="tooltip">
+					<span class="icon-info">i</span>
 					<span class="tooltiptext">Choose the model to use for Named Entity Recognition.</span>
 				</span>
 			</label>
-			<select id="sourceSelector" on:change={handleAddModel}>
-				<option value="">-- Choose Model --</option>
-				<option value={'english'}>{'Davlan/xlm-roberta-base-wikiann-ner'}</option>
-				<option value={'geobert'}>{'botryan96/GeoBERT'}</option>
-			</select>
+
+			<div class="custom-dropdown">
+				<button on:click={toggleDropdown} class="dropdown-toggle">
+					{selectedModelName}
+				</button>
+
+				{#if isDropdownOpen}
+					<div class="dropdown-menu">
+						{#each models as model}
+							<button type="button" class="model-item" on:click={() => handleAddModel(model)}>
+								<Huggingface height="30px" width="30px" />
+								<div class="model-details">
+									<div class="model-name">{model.name}</div>
+									<div class="model-description">{model.info}</div>
+								</div>
+							</button>
+						{/each}
+					</div>
+				{/if}
+			</div>
 		</div>
 
 		<button type="submit">Start Pipeline</button>
@@ -388,6 +435,62 @@
 		box-sizing: border-box;
 	}
 
+	.custom-dropdown {
+		position: relative;
+		width: 100%;
+		max-width: 100%;
+	}
+
+	.dropdown-toggle {
+		width: 100%;
+		padding: 10px;
+		border-radius: 4px;
+		margin-bottom: 10px;
+		box-sizing: border-box;
+		text-align: left;
+		background-color: white;
+		border: 1px solid #ddd;
+		cursor: pointer;
+	}
+
+	.dropdown-menu {
+		position: absolute;
+		top: 100%;
+		left: 0;
+		width: 100%;
+		background-color: white;
+		border: 1px solid #ddd;
+		border-radius: 4px;
+		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+		z-index: 10;
+		max-height: 300px;
+		overflow-y: auto;
+	}
+
+	.model-item {
+		display: flex;
+		align-items: center;
+		padding: 10px;
+		border-bottom: 1px solid #eee;
+		cursor: pointer;
+		width: 100%;
+	}
+
+	.model-details {
+		flex: 1;
+		text-align: center;
+		padding-left: 100px;
+	}
+
+	.model-name {
+		font-weight: bold;
+		margin-bottom: 5px;
+	}
+
+	.model-description {
+		font-size: 0.9em;
+		color: #666;
+	}
 	.tags {
 		display: flex;
 		flex-wrap: wrap;
