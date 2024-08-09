@@ -1,11 +1,16 @@
 <script lang="ts">
 	import { Card, Heading, TabItem, Tabs } from 'flowbite-svelte';
+	import { pipelineState } from '../../stores/appState';
 	// import Change from '$lib/dashboard/Change.svelte';
 	// import Customers from '../../routes/data/users.json';
 	// import { imagesPath } from '$lib/variables';
 	// import LastRange from '$lib/widgets/LastRange.svelte';
 	// import More from '$lib/widgets/More.svelte';
 	// import { QuestionCircleSolid } from 'flowbite-svelte-icons';
+
+	let selectedPipeline: string;
+
+	$: selectedPipeline = $pipelineState?.id || '123456';
 
 	const products = [
 		{
@@ -80,7 +85,7 @@
 				id="pipelineSelect"
 				class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
 			>
-				<option value="1234656" selected>1234656</option>
+				<option value={selectedPipeline} selected>{selectedPipeline}</option>
 			</select>
 			<ul class="-m-3 divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-800">
 				{#each products as { label, number }}

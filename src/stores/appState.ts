@@ -25,9 +25,10 @@ export function clearDataSources(): void {
 const initialStateDataSources: CollectorMetadata[] = getFromLocalStorage('dataSources', []);
 const initialStatePipeline: PipelineState = getFromLocalStorage('pipelineState', {
 	mode: 'idle',
-	results: null,
-	error: null
+	id: null
 });
+
+const initialStatePipelinesList: PipelinesData[] = getFromLocalStorage('PipelinesData', []);
 
 export interface CollectorMetadata {
 	id: string;
@@ -36,32 +37,43 @@ export interface CollectorMetadata {
 }
 
 interface PipelineState {
+	id: string;
 	mode: 'idle' | 'running' | 'completed' | 'exited';
-	results: any | null;
-	error: string | null;
+}
+
+export interface PipelinesData {
+	id: string;
+	sources: string[];
+	fixed_entities: string[];
+	sample_entities: string[];
 }
 
 export const dataSources = writable<CollectorMetadata[]>(initialStateDataSources);
 export const pipelineState = writable<PipelineState>(initialStatePipeline);
+export const pipelines = writable<PipelinesData[]>(initialStatePipelinesList);
+
+pipelines.subscribe(($pipelines) => {
+	saveToLocalStorage('pipelinesList', $pipelines);
+});
 
 dataSources.subscribe(($dataSources) => {
 	saveToLocalStorage('dataSources', $dataSources);
 });
 
 pipelineState.subscribe(($pipelineState) => {
-	saveToLocalStorage('pipelineState', $pipelineState);
+	saveToLocalStorage('PipelinesData', $pipelineState);
 });
+
+export function addPipelinesToList(pipeline: PipelinesData): void {
+	pipelines.update((currentPipelines) => [...currentPipelines, pipeline]);
+}
 
 export function addDataSource(source: CollectorMetadata): void {
 	dataSources.update((currentSources) => [...currentSources, source]);
 }
 
-export function updatePipeline(
-	mode: PipelineState['mode'],
-	results: any = null,
-	error: string = ''
-): void {
-	pipelineState.set({ mode, results, error });
+export function updatePipeline(mode: PipelineState['mode'], id: PipelineState['id']): void {
+	pipelineState.set({ id, mode });
 }
 
 export function getCurrentDataSources(): CollectorMetadata[] {
@@ -78,4 +90,12 @@ export function deleteSourcefromList(id: string): void {
 		saveToLocalStorage('dataSources', updatedSources);
 		return updatedSources;
 	});
+}
+
+export function countSourcesByType(type: string): number {
+	const sources = get(dataSources);
+	if (sources && Array.isArray(sources)) {
+		return sources.filter((source) => source.type === type).length;
+	}
+	return 0;
 }
