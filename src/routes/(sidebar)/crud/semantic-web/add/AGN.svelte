@@ -8,6 +8,8 @@
 	} from '../../../../codegen/protos/semantics';
 	import { Search } from 'flowbite-svelte';
 	import Huggingface from './Huggingface.svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
+	export let formOpen: boolean;
 
 	let sourceIds: string[] = [];
 	let selectedSourceIds: string[] = [];
@@ -148,8 +150,11 @@
 		isDropdownOpen = !isDropdownOpen;
 	};
 
+	const dispatch = createEventDispatcher();
+
 	const handleClose = () => {
-		console.log('Form closed');
+		formOpen = false;
+		dispatch('close');
 	};
 
 	function addRow() {
@@ -228,165 +233,171 @@
 	}
 </script>
 
-<div class="form-container">
-	<button class="close-button" on:click={handleClose}>&times;</button>
-	<form on:submit|preventDefault={handleSubmit}>
-		<div class="section">
-			<div class="select-with-tags">
-				<label for="sourceSelector"
-					>Select Source <span class="tooltip"
-						><span class="icon-info">i</span><span class="tooltiptext"
-							>Choose all the sources from the list of sources that you have defined</span
-						>
-					</span></label
-				>
-				<select id="sourceSelector" on:change={handleAddSource}>
-					<option value="">-- Choose Source --</option>
-					{#each sourceIds as id}
-						<option value={id}>{id}</option>
-					{/each}
-				</select>
-				<div class="tags">
-					{#each selectedSourceIds as id}
-						<span class="tag">
-							{id}
-							<button type="button" on:click={() => handleRemoveSource(id)}>&times;</button>
-						</span>
-					{/each}
-				</div>
-			</div>
-		</div>
-
-		<div class="divider"></div>
-
-		<div class="section">
-			<label for="entity-pairs">
-				Entity Pairs <span class="tooltip"
-					><span class="icon-info">i</span>
-					<span class="tooltiptext"
-						>Enter the entity and its types in the below table or upload your CSV</span
+{#if formOpen}
+	<div class="form-container">
+		<button class="close-button" on:click={handleClose}>&times;</button>
+		<form on:submit|preventDefault={handleSubmit}>
+			<div class="section">
+				<div class="select-with-tags">
+					<label for="sourceSelector"
+						>Select Source <span class="tooltip"
+							><span class="icon-info">i</span><span class="tooltiptext"
+								>Choose all the sources from the list of sources that you have defined</span
+							>
+						</span></label
 					>
-				</span>
-			</label>
-			<div class="search-container">
-				<Search size="md" style="width: 300px" class="search-btn" />
-				<button type="button" class="add-row-btn" on:click={addRow}>+ Add New Entity Pair</button>
-			</div>
-			<div class="table-container">
-				<table>
-					<thead>
-						<tr>
-							<th>Entity</th>
-							<th>Entity Type</th>
-							<th>Actions</th>
-						</tr>
-					</thead>
-					<tbody>
-						{#each entityTable as row, index (row.entity + row.entityType)}
-							<tr>
-								<td>
-									{#if row.editing}
-										<input class="input-field" type="text" bind:value={row.entity} />
-									{:else}
-										{row.entity}
-									{/if}
-								</td>
-								<td>
-									{#if row.editing}
-										<input class="input-field" type="text" bind:value={row.entityType} />
-									{:else}
-										{row.entityType}
-									{/if}
-								</td>
-								<td class="button-cell">
-									{#if row.editing}
-										<button class="save-button" on:click={() => saveRow(index)}>Save</button>
-									{:else}
-										<button class="edit-button" on:click={() => editRow(index)}>Edit</button>
-										<button class="delete-button" on:click={() => deleteRow(index)}>Delete</button>
-									{/if}
-								</td>
-							</tr>
+					<select id="sourceSelector" on:change={handleAddSource}>
+						<option value="">-- Choose Source --</option>
+						{#each sourceIds as id}
+							<option value={id}>{id}</option>
 						{/each}
-					</tbody>
-				</table>
-			</div>
-
-			<div class="button-container">
-				<button type="button" class="open-csv-btn" on:click={openFileInput}>Upload your CSV</button>
-				<button type="button" class="download-csv-btn" on:click={downloadCSV}>
-					<span class="tooltip"
-						><svg
-							class="h-6 w-6 text-gray-800 dark:text-white"
-							aria-hidden="true"
-							xmlns="http://www.w3.org/2000/svg"
-							width="24"
-							height="24"
-							fill="none"
-							viewBox="0 0 24 24"
-						>
-							<path
-								stroke="currentColor"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								d="M12 13V4M7 14H5a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1h-2m-1-5-4 5-4-5m9 8h.01"
-							/>
-						</svg>
-
-						<span class="tooltiptext">Download example CSV</span>
-					</span>
-				</button>
-				<input
-					type="file"
-					accept=".csv"
-					bind:this={fileInput}
-					style="display: none;"
-					on:change={handleFileUpload}
-				/>
-			</div>
-		</div>
-
-		<div class="divider"></div>
-
-		<div class="section">
-			<label for="model">
-				Model
-				<span class="tooltip">
-					<span class="icon-info">i</span>
-					<span class="tooltiptext">Choose the model to use for Named Entity Recognition.</span>
-				</span>
-			</label>
-
-			<div class="custom-dropdown">
-				<button on:click={toggleDropdown} class="dropdown-toggle">
-					{selectedModelName}
-				</button>
-
-				{#if isDropdownOpen}
-					<div class="dropdown-menu">
-						{#each models as model}
-							<button type="button" class="model-item" on:click={() => handleAddModel(model)}>
-								<Huggingface height="30px" width="30px" />
-								<div class="model-details">
-									<div class="model-name">{model.name}</div>
-									<div class="model-description">{model.info}</div>
-								</div>
-							</button>
+					</select>
+					<div class="tags">
+						{#each selectedSourceIds as id}
+							<span class="tag">
+								{id}
+								<button type="button" on:click={() => handleRemoveSource(id)}>&times;</button>
+							</span>
 						{/each}
 					</div>
-				{/if}
+				</div>
 			</div>
-		</div>
 
-		<button type="submit">Start Pipeline</button>
-	</form>
+			<div class="divider"></div>
 
-	<Modal bind:show={showModal} message={modalMessage} />
-</div>
+			<div class="section">
+				<label for="entity-pairs">
+					Entity Pairs <span class="tooltip"
+						><span class="icon-info">i</span>
+						<span class="tooltiptext"
+							>Enter the entity and its types in the below table or upload your CSV</span
+						>
+					</span>
+				</label>
+				<div class="search-container">
+					<Search size="md" style="width: 300px" class="search-btn" />
+					<button type="button" class="add-row-btn" on:click={addRow}>+ Add New Entity Pair</button>
+				</div>
+				<div class="table-container">
+					<table>
+						<thead>
+							<tr>
+								<th>Entity</th>
+								<th>Entity Type</th>
+								<th>Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							{#each entityTable as row, index (row.entity + row.entityType)}
+								<tr>
+									<td>
+										{#if row.editing}
+											<input class="input-field" type="text" bind:value={row.entity} />
+										{:else}
+											{row.entity}
+										{/if}
+									</td>
+									<td>
+										{#if row.editing}
+											<input class="input-field" type="text" bind:value={row.entityType} />
+										{:else}
+											{row.entityType}
+										{/if}
+									</td>
+									<td class="button-cell">
+										{#if row.editing}
+											<button class="save-button" on:click={() => saveRow(index)}>Save</button>
+										{:else}
+											<button class="edit-button" on:click={() => editRow(index)}>Edit</button>
+											<button class="delete-button" on:click={() => deleteRow(index)}>Delete</button
+											>
+										{/if}
+									</td>
+								</tr>
+							{/each}
+						</tbody>
+					</table>
+				</div>
+
+				<div class="button-container">
+					<button type="button" class="open-csv-btn" on:click={openFileInput}
+						>Upload your CSV</button
+					>
+					<button type="button" class="download-csv-btn" on:click={downloadCSV}>
+						<span class="tooltip"
+							><svg
+								class="h-6 w-6 text-gray-800 dark:text-white"
+								aria-hidden="true"
+								xmlns="http://www.w3.org/2000/svg"
+								width="24"
+								height="24"
+								fill="none"
+								viewBox="0 0 24 24"
+							>
+								<path
+									stroke="currentColor"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M12 13V4M7 14H5a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1h-2m-1-5-4 5-4-5m9 8h.01"
+								/>
+							</svg>
+
+							<span class="tooltiptext">Download example CSV</span>
+						</span>
+					</button>
+					<input
+						type="file"
+						accept=".csv"
+						bind:this={fileInput}
+						style="display: none;"
+						on:change={handleFileUpload}
+					/>
+				</div>
+			</div>
+
+			<div class="divider"></div>
+
+			<div class="section">
+				<label for="model">
+					Model
+					<span class="tooltip">
+						<span class="icon-info">i</span>
+						<span class="tooltiptext">Choose the model to use for Named Entity Recognition.</span>
+					</span>
+				</label>
+
+				<div class="custom-dropdown">
+					<button on:click={toggleDropdown} class="dropdown-toggle">
+						{selectedModelName}
+					</button>
+
+					{#if isDropdownOpen}
+						<div class="dropdown-menu">
+							{#each models as model}
+								<button type="button" class="model-item" on:click={() => handleAddModel(model)}>
+									<Huggingface height="30px" width="30px" />
+									<div class="model-details">
+										<div class="model-name">{model.name}</div>
+										<div class="model-description">{model.info}</div>
+									</div>
+								</button>
+							{/each}
+						</div>
+					{/if}
+				</div>
+			</div>
+
+			<button type="submit">Start Pipeline</button>
+		</form>
+
+		<Modal bind:show={showModal} message={modalMessage} />
+	</div>
+{/if}
 
 <style>
 	.form-container {
+		position: relative;
 		display: flex;
 		flex-direction: column;
 		align-items: center;

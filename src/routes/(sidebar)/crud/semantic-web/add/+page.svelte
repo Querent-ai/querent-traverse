@@ -2,6 +2,7 @@
 	import { Breadcrumb, BreadcrumbItem, Heading } from 'flowbite-svelte';
 	import AGNForm from './AGN.svelte';
 	import AgnIcon from './AGNIcon.svelte';
+	export let formOpen = true;
 
 	let activeForm: string | number | null = null;
 
@@ -11,6 +12,11 @@
 
 	function setActiveForm(formKey: string | number | null) {
 		activeForm = formKey === activeForm ? null : formKey;
+		formOpen = activeForm !== null;
+
+		console.log('Form open    ', formOpen);
+		console.log('Active form ', activeForm);
+		console.log('Form key ', formKey);
 	}
 
 	function getFormComponent() {
@@ -25,6 +31,11 @@
 			return AgnIcon;
 		}
 		return null;
+	}
+
+	function handleFormClose() {
+		activeForm = null;
+		formOpen = false;
 	}
 </script>
 
@@ -56,7 +67,7 @@
 			{/each}
 		</div>
 		{#if activeForm}
-			<svelte:component this={getFormComponent()} />
+			<svelte:component this={getFormComponent()} {formOpen} on:close={handleFormClose} />
 		{/if}
 	</div>
 </main>
